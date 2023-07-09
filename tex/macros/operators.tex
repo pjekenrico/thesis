@@ -1,0 +1,102 @@
+%-------------------------------------------------------------------------------
+% Operators:
+%-------------------------------------------------------------------------------
+\newcommand{\Lgr}[2]{\mathcal L^{#1}_{#2}}
+\newcommand{\Abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\card}{\mathrm{card}}
+\newcommand{\fromto}{\rightarrow}
+\newcommand{\tendsto}{\rightarrow}
+\newcommand{\tendstoweak}{\rightharpoonup}
+\newcommand{\forany}{{\forall\;}}
+\newcommand{\seqm}{{(m)}}
+\newcommand{\seq}[1]{\bigl({#1}^\m\bigr)_{m\in\xN}}
+\newcommand{\seqn}[1]{\left({#1}^n\right)_{n\in\xN}}
+\newcommand{\Proj}[1]{\,\mathrm{P}_{#1}\,}
+\newcommand{\Projh}[1]{\,\mathrm{\pi}_{#1}\,}
+\newcommand{\opA}{\mathcal{A}}
+
+\newcommand{\Empty}{\varnothing}
+\newcommand{\Union}{\mathop\bigcup}
+\newcommand{\Inter}{\mathop\bigcap}
+\newcommand{\Interior}[1]{\mathring{#1}}
+\newcommand{\Restrict}[2]{{\left.\kern-\nulldelimiterspace#1\vphantom{\big|}\right|_{#2}}}
+\newcommand{\Comp}[2]{#1\mathop{\circ}#2}
+\newcommand{\Seq}[1]{\bigl(#1\bigr)}
+\newcommand{\Cond}[1]{\mathcal{C}(#1)}
+\newcommand{\Order}[1]{\mathcal{O}\left(#1\right)}
+
+%-------------------------------------------------------------------------------
+% Miscellaneous
+\newcommand{\Grp}[1]{\displaystyle\left({#1}\right)}
+\newcommand{\indic}[1]{\displaystyle{1\!\!1_{#1}}}
+\newcommand{\mean}[1]{\brace\lbrace#1\rbrace\rbrace}
+\newcommand{\jump}[1]{[#1]}
+% @macro diam		diameter
+\newcommand{\diam}{{\mathrm{diam}}}
+
+%-------------------------------------------------------------------------------
+% Derivatives
+\newcommand{\md}{\hspace{.5ex}{\mathrm d}}
+
+% Derivatives
+\newcommand{\dd}{\md}
+\newcommand{\dt}{\dd t}
+\newcommand{\dx}{\dd x}
+\newcommand{\dy}{\dd y}
+\newcommand{\dz}{\dd z}
+\newcommand{\dxx}{\dd\bfx}
+\newcommand{\ddd}[1]{\frac{{\dd}}{{\dd #1}}}
+\newcommand{\ddx}{\ddd{x}}
+\newcommand{\ddy}{\ddd{y}}
+\newcommand{\ddz}{\ddd{z}}
+
+% Partial derivatives
+\newcommand{\pd}[1]{\partial_{#1}\,}
+\newcommand{\pdt}{\pd{t}}
+\newcommand{\pdx}{\pd{x}}
+\newcommand{\pdy}{\pd{y}}
+\newcommand{\pdz}{\pd{z}}
+\newcommand{\pdd}[2]{\frac{{\partial #1}}{{\partial#2}}}
+\newcommand{\pddx}[1]{\pdd{#1}{x}}
+\newcommand{\pddy}[1]{\pdd{#1}{x}}
+\newcommand{\pddz}[1]{\pdd{#1}{x}}
+
+% Surface integral
+\newcommand{\ds}{\md s}
+
+% Time stepping
+\newcommand{\kt}{\delta \hspace{-0.05ex} t}
+
+%-------------------------------------------------------------------------------
+\newcommand{\xDot}{\,{\mathbf\cdot}\,}
+\newcommand{\Cross}{\mathbf X}
+\newcommand{\DualP}[2]{\mathbf{\langle}\;#1\:,\: #2 \;\mathbf{\rangle}}
+\newcommand{\Inner}[2]{{{\scriptstyle\mathbf{(}}\;#1\:,\: #2 \;{\scriptstyle\mathbf{)}}}}
+\newcommand{\InnerP}[3]{{{\scriptstyle\mathbf{(}}\;#1\:,\: #2 \;{\scriptstyle\mathbf{)}}}_{\,#3}}
+\newcommand{\InnerK}[2]{{{\mathbf\langle}\;#1\:,\: #2 \;{\rangle}}}
+\newcommand{\Span}{\mathop{\mathrm{span}}}
+\newcommand{\T}{{^{\mathrm T}}}
+\newcommand{\Trace}[2]{{\mathbf{Tr}}^{(#1)}(#2)}
+\newcommand{\trans}{{^{\mathsmaller{T}}}}
+\newcommand{\Tens}{{\otimes}}
+\newcommand{\Vect}{\wedge}
+
+%-------------------------------------------------------------------------------
+% Differential Operators
+% continuous
+\newcommand{\D}{{\boldsymbol{\mathrm D}}} % gradient
+\newcommand{\Grad}{{\boldsymbol\nabla}} % gradient
+\newcommand{\Gradt}{{\boldsymbol\nabla^\trans}}
+\newcommand{\Gradx}{\Grad_x}
+\newcommand{\GradxR}{\Grad_{\xR}}
+\newcommand{\Div}{{\boldsymbol\nabla\cdot\,}} % divergence
+\newcommand{\Divr}{{\mathrm{div}}}
+\newcommand{\Lap}{{\boldsymbol\Delta}} % laplacian
+\newcommand{\Lapl}{{\boldsymbol\nabla^2}} % laplacian
+\newcommand{\Curl}{{\Grad\boldsymbol\wedge}}
+\newcommand{\AdvB}[2]{{({#1}\cdot\Grad){#2}}}
+%
+\newcommand{\udiv}{(\vec{\bfv}\cdot\nabla)} % advection
+\newcommand{\uhdiv}{(\vec{\bfv_h}^n\cdot\nabla)}
+
+\newcommand{\DualProd}[2]{{\langle #1,\: #2 \rangle}}

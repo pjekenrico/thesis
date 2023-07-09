@@ -1,0 +1,73 @@
+%-------------------------------------------------------------------------------
+% @collection	Finite Volume Method
+% @description
+% @version		1
+% @author		Aurélien Larcher <aurelien.larcher@gmail.com>
+%-------------------------------------------------------------------------------
+% @subcategory	Fluxes
+% @macro fluxK		outward flux from K across edge
+\newcommand{\fluxK}{F_{\edge,K}}
+% @macro fluxL  	outward flux from L across edge
+\newcommand{\fluxL}{F_{\edge,L}}
+% @macro fluxd
+\newcommand{\fluxd}{F_{\edged,\edge}}
+% @macro vs			outward velocity from K across edge
+\newcommand{\vs}{\mathrm{v}_{K,\edge}}
+% @macro vsp		positive part of the outward velocity from K across edge
+\newcommand{\vsp}{\mathrm{v}_{\edge,K}^+}
+% @macro vsm		negative part of the outward velocity from K across edge
+\newcommand{\vsm}{\mathrm{v}_{\edge,K}^-}
+% @macro vspd
+\newcommand{\vspd}{\mathrm{v}_{\edged,\edge}^+}
+% @macro vsmd
+\newcommand{\vsmd}{\mathrm{v}_{\edged,\edge}^-}
+%-------------------------------------------------------------------------------
+% @category		Discrete Operators
+% @macro Graddisc	discrete gradient
+\newcommand{\Graddisc}{\mathop{\boldsymbol\nabla_\discd}}
+% @macro Divdisc 	discrete divergence
+\newcommand{\Divdisc}{\mathop{\boldsymbol\nabla_\discd\cdot}}
+% @macro Lapdisc	discrete Laplace operator
+\newcommand{\Lapdisc}{\mathop{\boldsymbol\Delta_\discd}}
+% @macro DivGdisc	discrete 'Div(#1 Grad)' operator
+\newcommand{\DivGdisc}[1]{\mathop{\boldsymbol\Delta_{\discd,#1}}}
+% @macro GradK		restriction of the discrete gradient on K
+\newcommand{\GradK}[1]{\mathop{\left[\Graddisc(#1)\right]_K}}
+% @macro DivK		restriction of the discrete divergence on K
+\newcommand{\DivK}[1]{\mathop{\left[\Divdisc(#1)\right]_K}}
+% @macro LapK		restriction of the discrete Laplace operator on K
+\newcommand{\LapK}[1]{\mathop{\left[\Lapdisc(#1)\right]_K}}
+% @macro dtphi		discrete time derivative of the test function
+\newcommand{\dtphi}{\partial_{t,\discd}(\varphi)}
+% @macro dtu		discrete time derivative of u
+\newcommand{\dtu}{\partial_{t,\discd}(u)}
+% @macro dedge		variable of integration on edge
+\newcommand{\dedge}{\, {\rm d} \gamma}
+% @macro dtD		discrete derivative
+\newcommand{\dtD}{\partial_{t,\discd}}
+%-------------------------------------------------------------------------------
+% @category		Discrete Spaces
+% @macro xHdisc		finite volume H^1_0 space
+\newcommand{\xHdisc}{{\rm H}_{\mesh}}
+% @macro xHdiscb	finite volume
+\newcommand{\xHdiscb}{\bar {\rm H}_{\mesh}}
+% @macro xHdiscd	finite volume H^1_0 space
+\newcommand{\xHdiscd}{{\rm H}_{\discd}}
+% @macro xHdiscdb	finite volume H^1_0 space
+\newcommand{\xHdiscdb}{\bar {\rm H}_{\discd}}
+% @macro xHdisct	finite volume H^1_0 space
+\newcommand{\xHdisct}{{\rm H}_{\disct}}
+% @macro xHdiscm	finite volume H^1_0 space indexed by mesh
+\newcommand{\xHdiscm}{\xHdisc^\m}
+%-------------------------------------------------------------------------------
+% @category		Discrete Norms and Seminorms
+% @macro normVF		finite volume H^1 norm
+\newcommand{\normVF}[1]{\norm{#1}_{1,\mesh}}
+% @macro normVFn	finite volume W(1,q) norm
+\newcommand{\normVFn}[2]{ \norm{#2}_{ 1,{#1},{\mesh} } }
+% @macro snormVF	finite volume H^1 seminorm
+\newcommand{\snormVF}[1]{\snorm{#1}_{1,\mesh}}
+% @macro snormVFn	finite volume W(1,q) seminorm
+\newcommand{\snormVFn}[2]{\snorm{#2}_{1,#1,\mesh}}
+% @macro normVFmn	finite volume W(-1,n) norm
+\newcommand{\normVFmn}[2]{|\hspace{-.1em}|#2|\hspace{-.1em}|_{-1,#1,\mesh}}

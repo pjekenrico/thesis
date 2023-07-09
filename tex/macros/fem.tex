@@ -1,0 +1,75 @@
+%-------------------------------------------------------------------------------
+% @collection	Finite Element Method
+% @description
+% @version		1
+% @author		Aurélien Larcher <aurelien.larcher@gmail.com>
+%-------------------------------------------------------------------------------
+
+\newcommand{\uh}{{u_h}}
+\newcommand{\vh}{{v_h}}
+\newcommand{\uuh}{{\boldsymbol u}_h}
+\newcommand{\vvh}{{\boldsymbol v}_h}
+\newcommand{\wwh}{{\boldsymbol w}_h}
+\newcommand{\eh}{{e_h}}
+\newcommand{\meshT}{{\mathcal T}_h}
+\newcommand{\sizeT}{h_{\mathcal T}}
+\newcommand{\CellK}{{K}}
+\newcommand{\SpaceP}{{\mathcal P}}
+\newcommand{\DualBasis}{{\Sigma}}
+\newcommand{\RefK}{{\hat \CellK}}
+\newcommand{\RefP}{{\hat \SpaceP}}
+\newcommand{\RefSigma}{{\hat\DualBasis}}
+\newcommand{\FE}{{(\CellK,\SpaceP, \DualBasis)}}
+\newcommand{\RefFE}{{(\RefK,\RefP, \RefSigma)}}
+\newcommand{\Ndof}{{N_{\mathrm dof}}}
+\newcommand{\NxVh}{{N_{\xVh}}}
+\newcommand{\Res}[1]{{\mathcal{R}(#1)}}
+\newcommand{\ResK}[1]{{\mathcal{R}_K(#1)}}
+\newcommand{\Stab}{\mathcal{S}}
+\newcommand{\Etol}{\epsilon_{\mathrm tol}}
+\newcommand{\EindK}{\epsilon_K}
+\newcommand{\EindT}{\epsilon_{\mathcal T}}
+
+\newcommand{\Iop}[1]{\mathop{\mathcal{I}_{#1}}}
+\newcommand{\IopK}[1]{\mathop{\mathcal{I}_{K,#1}}}
+\newcommand{\Lgrh}[1]{\mathop{\mathcal{I}_{h}^{#1}}}
+\newcommand{\LgrK}[1]{\mathop{\mathcal{I}_{K}^{#1}}}
+\newcommand{\Pop}[1]{\mathop{\mathrm{P}_{#1-1}^{#1}}}
+\newcommand{\Rop}[1]{\mathop{\mathrm{R}^{#1-1}_{#1}}}
+
+% @category		Discrete spaces
+%---------------------------------------
+\newcommand{\xM}{{M}}
+\newcommand{\xMh}{{\xM}_h}
+\newcommand{\xMker}{{\xM}_0}
+\newcommand{\xMz}{{\mathrm{\tilde M}}}
+\newcommand{\xMzh}{{\mathrm{\tilde M}_h}}
+\newcommand{\xV}{{V}}
+\newcommand{\xVh}{{\xV}_h}
+%\newcommand{\xVdisc}{{\xV}_h}
+%\newcommand{\xVdiscm}{{\xVdisc}^{(m)}}
+%\newcommand{\xVd}{\boldsymbol{\xV}}
+\newcommand{\xVhd}{\boldsymbol{\xV}_h}
+\newcommand{\xVV}{\boldsymbol{W}}
+\newcommand{\xWd}{\boldsymbol{\xVV}}
+\newcommand{\xWdisc}{{\boldsymbol W}_h}
+\newcommand{\xWdiscm}{{\xWdisc}^{(m)}}
+\newcommand{\xPzero}{{\xP}_0}
+\newcommand{\xPone}{{\xP}_1}
+\newcommand{\xPtwo}{{\xP}_2}
+\newcommand{\xPn}[1]{{\xP}_{#1}}
+\newcommand{\xQone}{{\xQ}_1}
+\newcommand{\xisoQone}{\tilde {\xQ}_1}
+\newcommand{\xQtwo}{{\xQ}_2}
+%-------------------------------------------------------------------------------
+% @category		Operators
+\newcommand{\Ph}{{\Pi_h}}
+\newcommand{\rh}{{r_h}}
+\newcommand{\rhv}{\boldsymbol{r}_h}
+\newcommand{\Gradh}{{\boldsymbol \nabla_h}}
+\newcommand{\Divh}{{\boldsymbol \nabla_h\cdot}}
+\newcommand{\Divrh}{{\mathop{\mathrm div}_h}}
+\newcommand{\Stabh}[1]{{S_h^{#1}}}
+%-------------------------------------------------------------------------------
+\def\snormFE{\norm}
+\newcommand{\refelm}{\hat K}

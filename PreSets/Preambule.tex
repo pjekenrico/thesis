@@ -1,0 +1,84 @@
+
+\usepackage[square,sort&compress,sectionbib,numbers]{natbib}		% Doit être chargé avant babel
+\usepackage{chapterbib}
+	\renewcommand{\bibsection}{\section{Bibliography}}		% Met les références biblio dans un \section (au lieu de \section*)
+		
+\usepackage[english]{babel}
+\usepackage[babel]{csquotes}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\sisetup{per=slash, load=abbr}
+\setcounter{tocdepth}{2}
+\usepackage{graphicx,subfigure,subfigmat}
+\usepackage[format=hang,justification=justified,font={small,it}]{caption}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{longtable}
+\usepackage{appendix}
+\usepackage{minitoc}
+\usepackage{latexsym}
+\usepackage{amsmath,amssymb,amsfonts,nicefrac,bm}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{texdraw,tabularx,supertabular,psfrag,multirow}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{notoccite}
+\usepackage{moreverb}
+\usepackage{siunitx}
+\sisetup{per=slash, load=abbr}
+\usepackage{calligra}
+\usepackage[export]{adjustbox}
+\usepackage{mathrsfs}
+\usepackage{pdfpages}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable, booktabs}
+\usepackage{tikz}
+
+\usepackage[pdftex,pdfborder={0 0 0},
+			colorlinks=true,
+			linkcolor=blue,
+			citecolor=red,
+			pagebackref=true,
+			]{hyperref}	% Créera automatiquement les liens internes au PDF
+
+\usepackage{tocbibind}
+
+%\usepackage[top=2.5cm, bottom=2cm, left=3cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage{geometry}
+
+\usepackage{fancyhdr}			% Entête et pieds de page. Doit être placé APRES geometry
+
+
+
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{patterns,shapes,snakes,positioning,calc}
+%\usepackage{cleveref}
+%\usepackage{subcaption}
+%\usepackage{blindtext}
+%\usepackage{draftwatermark}
+%\SetWatermarkText{Draft}
+%\SetWatermarkScale{2}
+%\SetWatermarkColor[rgb]{0.7,0.7,0.7}
+\usepgfplotslibrary{external}
+%\tikzexternalize[optimize command away=\includepdf ,prefix=TikzPictures/]
+%\tikzsetnextfilename{name_of_resulting_pdf}
+\usetikzlibrary{arrows,positioning} 
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    %Define style for boxes
+    punkt/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           text width=6.5em,
+           minimum height=2em,
+           text centered},
+    % Define arrow style
+    pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}

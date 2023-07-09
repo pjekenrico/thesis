@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\pagestyle{fancy}
+
+\chapter{Title of the Chapter 2}
+\minitoc
+\newpage
+\label{chap.2}
+
+\section{First Section} \label{chap2:sec1}
+
+Vestibulum sollicitudin, justo eget tempor volutpat, felis elit vestibulum neque, id tristique tellus dolor vitae eros. Praesent efficitur rhoncus molestie. Praesent venenatis suscipit justo, vel iaculis lectus congue ut. Suspendisse pharetra, erat ac laoreet vehicula, libero velit scelerisque libero, sit amet consequat tortor elit nec tellus. Praesent efficitur dui eu mi bibendum, nec eleifend enim iaculis. Ut et urna vehicula, volutpat magna finibus, scelerisque ante. Praesent est lorem, blandit eu nibh ut, pretium facilisis lacus. Proin gravida ligula elit, in consequat urna bibendum sed.
+
+\section{Second Section} \label{chap2:sec2}
+
+Ensure that the figure will fit into either one column (Figure \ref{fig1}) or two columns (Figure \ref{fig2}). Images should be of sufficiently high resolution to be easily viewable when printed or on high resolution screens (minimum of 300 dpi).
+
+Every figure should be cited in the text in numerical order (i.e. Figure 2.2 cannot be cited before Figure 2.1). Figures should be referred to as "Figure" not "Fig." Denote figure parts with lowercase letters (e.g. Figure 1a, Figure 1b).
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.3\linewidth]{Pictures/logo_mines_paristech.jpg}
+    \caption{Mines Paris}\label{fig1}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.3\linewidth]{Pictures/logo-institute.jpg}
+    \caption{Institute.}\label{fig2}
+    \end{figure}
+
+\section{Third Section} \label{chap2:sec3}
+
+Un artículo científico se sustenta en trabajo previo y por lo tanto el uso de referencias es muy importante. Las citas en nuestra revista se harán de acuerdo al uso de bibtex integrado en LaTex. En el archivo referencias se presentan algunos ejemplos típicos que se usa en nuestra literatura. Para citar alguna referencia que se encuentra en nuestro archivos referencia solamente hay que usar $\setminus$\texttt{cite\{Referencia\}}, por ejemplo una cita al profesor R. Sagar \cite{article1} o la cita a un libro \cite{Book1}. Con bibtex no tenemos que preocuparnos por la numeración de las referencias. Por lo tanto solamente tenemos que preocuparnos por escribir las referencias en el formato mostrado en el archivo \texttt{Biblio.bib}.
+
+\newpage
+\bibliographystyle{elsarticle-num}
+\bibliography{chapter2/Biblio}

@@ -1,0 +1,195 @@
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.8}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Annotated demo macros for convergence plots.
+%
+% Some info:
+% - lines starting with # are ignored
+% - by default pgfplotstable expects the first line to be a header
+% - no separator between column header labels
+% - by default pgfplotstable uses whitespace characters as column separator
+%
+% Further questions: <aurelien.larcher@gmail.com>
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\plotspecs{licorne}
+\def\timesteplabel{TimeStep}
+\def\meshsizelabel{MeshSize}
+
+\def\suffixDim{:dim}
+\newcommand{\spaceDim}[1]{#1\suffixDim}
+
+\def\suffixSol{:sol}
+\newcommand{\normSol}[2]{#1\suffixSol #2}
+
+\def\suffixErr{:err}
+\newcommand{\normErr}[2]{#1\suffixErr #2}
+
+%------------------------------------------------------------------------------
+% Default axis style
+%------------------------------------------------------------------------------
+\pgfplotsset{
+ylabel style={overlay},
+yticklabel style={overlay},
+every axis/.append style={
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    legend style={font=\tiny}
+}}
+
+% -----------------------------------------------------------------------------
+% Encapsulate table loading
+% #1: shape index N (number of batches)
+% #1: shape index M (number of rows per batch)
+% -----------------------------------------------------------------------------
+
+\newcommand{\loadtable}[2] {
+    \pgfplotstableread[]{#1}{#2}
+}
+
+% -----------------------------------------------------------------------------
+% Style to select only points in given range:
+% #1: start index
+% #2: end index (inclusive)
+% -----------------------------------------------------------------------------
+
+\pgfplotsset{
+    select coords between index/.style 2 args= {
+        x filter/.code= {
+            \ifnum\coordindex<#1\def\pgfmathresult{}\fi
+            \ifnum\coordindex>#2\def\pgfmathresult{}\fi
+        }  
+    }
+}
+
+% -----------------------------------------------------------------------------
+% Style to select only points in given offset and modulus:
+% #1: shape index N
+% #2: shape index M (modulus)
+% -----------------------------------------------------------------------------
+
+\pgfplotsset{
+    select coords modulo index/.style 2 args= {
+        x filter/.code= {
+            % Technically this should work but it fails to compile
+            %\pgfmathparse{int(mod(\coordindex,#2))}
+            %\pgfmathtruncatemacro{\k}{\pgfmathresult}
+            \newcount\k
+            \k=\coordindex
+            \divide\k by #2
+            \multiply\k by #2
+            \multiply\k by -1
+            \advance\k by \coordindex\relax
+            \the\k
+            \ifnum\k=#1\relax\else\def\pgfmathresult{}\fi
+            }  
+    }
+}
+
+% -----------------------------------------------------------------------------
+% Plot data in range (a, b)
+% #1: data handle
+% #2: a
+% #3: b
+% #4: column label for abscissa
+% #5: column label for ordinate
+% -----------------------------------------------------------------------------
+
+\newcommand{\rangeplot}[7] {
+    \addplot plot
+        table [x = #4, y = #5, select coords between index={#2}{#3}] {#1};
+    \if\relax\detokenize{#7}\relax
+			\addlegendentryexpanded{{#6}}\relax
+    \else
+    	\pgfplotstablegetelem{#2}{#7}\of#1
+    	\pgfmathsetmacro{\hn}{\pgfplotsretval}
+    	\addlegendentryexpanded{${#6}_\curve=\hn$}\fi
+}
+
+% -----------------------------------------------------------------------------
+% Plot data by chunk with given (x, y) columns
+% #1: data handle
+% #2: shape index N
+% #3: shape index M
+% #4: column label for abscissa
+% #5: column label for ordinate
+% -----------------------------------------------------------------------------
+
+\newcommand{\multiplot}[7] {
+    \newcount\a
+    \newcount\b
+    \foreach \curve in {1,...,#2} {
+      \pgfmathsetcount{\a}{#3 * (\curve - 1)}
+      \pgfmathsetcount{\b}{\a + #3 - 1}
+      \addplot plot
+          table [x = #4, y = #5, select coords between index={\a}{\b}] {#1};
+      \pgfplotstablegetelem{\a}{#7}\of#1
+      \pgfmathsetmacro{\hn}{\pgfplotsretval}
+      \addlegendentryexpanded{${#6}_\curve=\hn$}
+    }
+}
+
+% -----------------------------------------------------------------------------
+% Plot data by set range set with given (x, y) columns
+% #1: data handle
+% #2: offset
+% #3: shape index M
+% #4: column label for abscissa
+% #5: column label for ordinate
+% -----------------------------------------------------------------------------
+
+\newcommand{\moduloplot}[6] {
+    \addplot plot
+        table [x = #4, y = #5, select coords modulo index={#2}{#3}] {#1};
+    \if\relax\detokenize{#6}\relax
+			\else\addlegendentryexpanded{{#6}}\relax\fi
+    
+    %\addplot [orange, select coords modulo index={#2}{#3}]
+    %    table [x = #4, y ={create col/linear regression={y= #5}}]{#1};
+}
+
+% -----------------------------------------------------------------------------
+% Plot time convergence (shortcut to et TimeStep as default)
+% #1: data handle
+% #2: shape index N
+% #3: shape index M
+% #4: column label
+% -----------------------------------------------------------------------------
+
+\newcommand{\timeconvergence}[4] {
+    \multiplot{#1}{#2}{#3}{\timesteplabel}{#4}{h}{\meshsizelabel}
+}
+
+% -----------------------------------------------------------------------------
+% Example: Plot for $foo, L2 norm ($foo:errL2) and H1 seminorm ($foo:errH1)
+% #1: data handle
+% #2: shape index N
+% #3: shape index M
+% #4: function label
+% -----------------------------------------------------------------------------
+
+\newcommand{\timeLtwoHone}[4] {
+    \begin{minipage}[t]{0.5\textwidth}
+        \begin{tikzpicture}
+            \begin{loglogaxis}[xlabel=$dt$, ylabel=#4 $\xLtwo$ Error, legend
+            pos=north west]
+                \timeconvergence{#1}{#2}{#3}{\normErr{#4}{L2}}
+            \end{loglogaxis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[t]{0.5\textwidth}
+        \begin{tikzpicture}
+            \begin{loglogaxis}[xlabel=$dt$, ylabel=#4 $\xHone_0$ Error, legend
+            pos=north west]
+                \timeconvergence{#1}{#2}{#3}{\normErr{#4}{H1}}
+            \end{loglogaxis}
+        \end{tikzpicture}
+    \end{minipage}
+}
+
+%------------------------------------------------------------------------------

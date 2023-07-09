@@ -1,0 +1,81 @@
+\graphicspath{{./Images/}}
+
+%\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\renewcommand\chaptermark[1]{\markboth{\thechapter\ #1}{}}
+
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+}
+
+
+%\newcommand{\XColorbar}[7][10]{
+%\begin{tikzpicture}
+%\pgfmathsetmacro{\increment}{(#3-#2)/#1+#2}
+%\pgfmathsetmacro{\nbrsample}{int(#1+1)}
+%\node (c) at (#6,#7) {\large #5};
+%\begin{axis}[
+%hide axis,
+%scale only axis,
+%height=0pt,
+%width=0pt,%
+%%colormap/jet,
+%colormap={forge}{rgb255=(255,255,255) rgb255=(0, 0, 0)},
+%colorbar sampled,
+%colorbar horizontal,
+%point meta min=#2,
+%point meta max=#3,
+%colorbar style={
+%scaled x ticks = false,
+%tick label style={/pgf/number format/fixed},
+%samples=\nbrsample,
+%width=#4,
+%xtick={#2,\increment,...,#3}
+%}]
+%\addplot [draw=none] coordinates {(0,0)};
+%\end{axis}
+%\end{tikzpicture}
+%}
+%\newcommand{\YColorbar}[7][10]{
+%\begin{tikzpicture}
+%\pgfmathsetmacro{\increment}{(#3-#2)/#1+#2}
+%\pgfmathsetmacro{\nbrsample}{int(#1+1)}
+%\node[below] (c) at (#6,#7) {\large #5};
+%\begin{axis}[
+%hide axis,
+%scale only axis,
+%height=0pt,
+%width=0pt,%
+%%colormap/jet,
+%colormap={forge}{rgb255=(255,255,255) rgb255=(0, 0, 0)},
+%colorbar sampled,
+%colorbar,
+%point meta min=#2,
+%point meta max=#3,
+%colorbar style={
+%scaled y ticks = false,
+%tick label style={/pgf/number format/fixed},
+%samples=\nbrsample,
+%height=#4,
+%ytick={#2,\increment,...,#3}
+%}]
+%\addplot [draw=none] coordinates {(0,0)};
+%\end{axis}
+%\end{tikzpicture}
+%}
+
+
+%pour gérer les backref dans la bibliographie
+% définir un style pour les backrefs :
+%\newcommand{\mapolicebackref}[1]{
+%    \hspace*{\fill} \mbox{\textit {\small #1}}
+%}
+%\renewcommand*{\backref}[1]{}
+%\renewcommand*{\backrefalt}[4]{%
+%\ifcase #1 \mapolicebackref{pas de citations}
+ %   \or \mapolicebackref{Cited page #2}
+ %   \else \mapolicebackref{#1 citations pages #2}
+%\fi
+%}

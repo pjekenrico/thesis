@@ -1,0 +1,42 @@
+%--- NEWTHEOREM AND ENVIRONMENTS------------------------------------------------
+\usepackage{amsthm}
+% passage des environments en anglais
+%-------------------
+\theoremstyle{plain}
+%-------------------
+\newtheorem{thrm}{Theorem}[section]
+\newtheorem{lmm}[thrm]{Lemma}
+\newtheorem{crllr}[thrm]{Corollary}
+\newtheorem{prpstn}[thrm]{Proposition}
+\newtheorem{crtrn}[thrm]{Criterion}
+\newtheorem{lgrthm}[thrm]{Algorithm}
+%------------------------
+\theoremstyle{definition}
+%------------------------
+\newtheorem{dfntn}[thrm]{Definition}
+\newtheorem{cnjctr}[thrm]{Conjecture}
+\newtheorem{xmpl}[thrm]{Example}
+\newtheorem{prblm}[thrm]{Problem}
+\newtheorem{rmrk}[thrm]{Remark}
+\newtheorem{nt}[thrm]{Note}
+\newtheorem{clm}[thrm]{Claim}
+\newtheorem{smmr}[thrm]{Summary}
+%\newtheorem{cs}[thrm]{Case}
+\newtheorem{bsrvtn}[thrm]{Observation}
+\newtheorem{hypth}[thrm]{Assumption}
+\newtheorem{xrcs}[thrm]{Exercise}
+\newtheorem{sltn}[thrm]{Solution}
+
+\theoremstyle{plain}
+%------------------------------------------------------------------------------
+\newenvironment{acknowledgement}{\par\addvspace{17pt}\small\rmfamily\noindent}{\par\addvspace{6pt}}
+%------------------------------------------------------------------------------
+%
+\def\xProof{
+  \normalfont
+  \medskip
+  {\noindent\itshape Proof.\hspace*{6pt}\ignorespaces}}
+%
+\endinput
+
+%------------------------------------------------------------------------------

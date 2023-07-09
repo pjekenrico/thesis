@@ -1,0 +1,38 @@
+% Algorithms
+
+\RequirePackage{algorithm}
+\RequirePackage{algorithmic}
+
+\newenvironment{cflpseudo}
+{
+	\begin{algorithm}[H]
+	\begin{algorithmic}
+}
+{
+	\end{algorithmic}
+	\end{algorithm}
+}
+
+\newenvironment{cflalgo}[1]
+{
+	\begin{algorithm}
+	\caption{#1}
+	\begin{algorithmic}
+}
+{
+	\end{algorithmic}
+	\end{algorithm}
+}
+
+\newenvironment{cfltable}[1]
+{
+	\begin{center}
+	\bgroup
+	\def\arraystretch{2}
+	\begin{tabular}{#1}
+}
+{
+	\end{tabular}
+	\egroup
+	\end{center}
+}

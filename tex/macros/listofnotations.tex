@@ -1,0 +1,14 @@
+\def\addnotation#1#2#3{\noindent$#1$\hfill \parbox{12cm}{#2 \dotfill}\\}
+% \addnotation \alpha: {some variable that means something to me}{alpha}
+%where : \addnotation    a TeX command you need to have 
+%        \alpha:     the LaTeX code for the symbol. You don't have to add $...$ around math stuff. 
+%                    Non-math symbols? Try it out. Be sure to add a trailing colon : to separate the entries. 
+%        {some variable that means something to me}   the description of the variable, enclosed in curly brackets {} 
+%        {alpha}     a label that you'll use to tag the first occurrence of the symbol. See the example source .tex file below. 
+\def\newnotation#1{\label{#1}}
+\def\listofnotations{\input symbols.tex}
+\def\notations{\newpage\section{Notations}\markboth{List of Notations \hfill}{List of Notations \hfill}\listofnotations}
+\def\NOMnew{\begin{center}\begin{tabular*}{16cm}{|ll@{\extracolsep{\fill}}c|}}
+\def\NOMend{\end{tabular*}\end{center}}
+
+

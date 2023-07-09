@@ -1,0 +1,55 @@
+%-------------------------------------------------------------------------------
+% Turbulence Models
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% Averaging Operators
+\newcommand{\avrg}[1]{{\overline{#1}}}
+
+%-------------------------------------------------------------------------------
+% k-epsilon
+\newcommand{\kk}{k}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\keps}{\kk-\eps}
+\newcommand{\rng}{\mathrm{RNG}}
+\newcommand{\kepsrng}{\keps\ \rng}
+
+% constants
+\newcommand{\Cmu}{C_\mu}
+\newcommand{\Ckp}{C_{k1p}}
+\newcommand{\Ckg}{C_{k1g}}
+\newcommand{\Cke}{C_{k2}}
+\newcommand{\Ceps}[1]{C_{\varepsilon#1}}
+\newcommand{\Cek}{C_{\eps 1}}
+\newcommand{\Cee}{C_{\eps 2}}
+\newcommand{\Cerng}{C_{\eps 3}}
+\newcommand{\Crng}{C_{\rm{rng}}}
+\newcommand{\Cep}{C_{\eps 1}}
+\newcommand{\Cepz}{C^z_{\eps 1}}
+\newcommand{\Cega}{C_{\eps 1ga}}
+\newcommand{\Cegb}{C_{\eps 1gb}}
+\newcommand{\Ceta}{C_{\eta}}
+% source terms
+\newcommand{\sG}{\mathbf{G}}
+\newcommand{\sP}{\mathbf{P}}
+\newcommand{\sS}{\mathbf{S}}
+
+%-------------------------------------------------------------------------------
+% v^2-f
+\newcommand{\vsq}{\avrg{v^2}}
+\newcommand{\ff}{f}
+\newcommand{\vsqf}{\vsq-\ff}
+\newcommand{\kepsvvf}{\keps-\vsqf}
+% constants
+\newcommand{\Cl}{C_{L}}
+\newcommand{\Ct}{C_{T}}
+
+%-------------------------------------------------------------------------------
+\newcommand{\tvisc}{\nu_t}
+\newcommand{\vvisc}{\tilde\nu}
+\newcommand{\vvort}{\tilde S}
+\newcommand{\Cbo}{C_{b1}}
+\newcommand{\Cb}[1]{C_{b #1}}
+\newcommand{\Cw}[1]{C_{w #1}}
+\newcommand{\Cnu}[1]{C_{\nu #1}}
+\newcommand{\Fnu}[1]{f_{\nu #1}}

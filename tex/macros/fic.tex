@@ -1,0 +1,44 @@
+%-------------------------------------------------------------------------------
+% @collection	Multilevel methods
+% @description 
+% @version		1
+% @author		Aurélien Larcher <aurelien.larcher@gmail.com>
+%-------------------------------------------------------------------------------
+% @category		Flux Interface Correction
+%---------------------------------------
+\newcommand{\w}{\omega}
+% *c : coarse , *f: fine
+\newcommand{\iI}{\bar\imath}% 1er indice local ex: faces
+\newcommand{\jJ}{\bar\jmath}% 2e indice local ex: maille
+\newcommand{\Kj}{K^{\jJ}}% maille raffinée
+%%%%%% Set of Cells / Cells
+\newcommand{\setC}{\mathcal{K}}% ensemble de volumes de controle
+%\newcommand{\mesh}{{\cal M}}
+\newcommand{\compmesh}{\underline{\disc}}
+\newcommand{\Csetc}[1]{\mathcal{A}_{#1}}% ens. des volumes grossiers dans \domf
+\newcommand{\Csetf}[1]{\mathcal{K}_{#1}}% ens. des volumes fins dans \domc
+\newcommand{\Cneigh}[1]{\mathcal{N}(#1)}% ens. des voisins de K
+\def\PSperp{\psline[linewidth=0.2pt](-0.15,0)(-0.15,0.15)(0,0.15)}
+%%%%%% Set of Facets / Facets
+\newcommand{\edgesimm}{\edges_{{\rm imm}}}% faces interface immergée
+\newcommand{\Fkl}{K \vert L}% face K|L
+\newcommand{\Fc}{\edge^{\iI}}% face grossière notation locale
+\newcommand{\Ff}{\edge^{\iI,\jJ}}% face fine notation locale
+\newcommand{\yF}{y_\edge}% barycentre face grossière
+\newcommand{\yFc}{\yF^{\iI}}% barycentre face grossière
+\newcommand{\yFf}{\yF^{\iI,\jJ}}% barycentre face fine
+%%%%%% Operateurs
+\newcommand{\oRdef}{\mathbf{R}^{l}_{l+1}}% opérateur de restriction
+\newcommand{\oR}[2]{(\oRdef #1)_{#2}}% restriction appliquée à #1 en #2
+\newcommand{\oPvdef}{\mathbf{P}}% op. de prolongement volumique
+\newcommand{\oPv}[2]{(\oPvdef_{l}^{l+1} #1)_{#2}}% prolongement vol. de #1 en #2
+\newcommand{\oPsdef}{\mathbf{\hat P}^{l+1}_{l}}% op. de prolongement surfacique
+\newcommand{\oPs}[2]{(\opsdef #1)_{#2}}% prolongement de #1 en #2
+\newcommand{\oRfdef}{\mathbf{\hat R}^{l}_{l+1}}% opérateur de restriction
+\newcommand{\oRf}[2]{(\oRfdef #1)_{#2}}% restriction appliquée à #1 en #2
+%%%%%% Espaces belonging to L^2(\Omega)
+\newcommand{\xHc}{{\xHdisc^l}}% esp. des fct. VF sur maillage grossier
+\newcommand{\xHf}{{\xHdisc^{l+1}}}% esp des fct. VF sur maillage fin
+\newcommand{\xHcomp}{{\rm H}_{\compmesh}}% esp des fct. VF sur maillage fin
+\newcommand{\xVc}{\mathcal{V}_l}% espace des appli. lin. de space(\domc) -> \xHc
+\newcommand{\xVf}{\mathcal{V}_{l+1}}% espace des appli. lin. de space(\domf) -> \xHf

@@ -1,0 +1,191 @@
+%-------------------------------------------------------------------------------
+% @collection	Spaces (M2AN style)
+% @description
+% @version		1
+% @author		Aurélien Larcher <aurelien.larcher@gmail.com>
+%-------------------------------------------------------------------------------
+% @category		Sets
+%---------------------------------------
+
+\newcommand{\aevery}{\textit{a.e\/} }
+
+\newcommand{\dual}{^\star}
+\newcommand{\ortho}{^\perp}
+\newcommand{\ball}{\mathfrak B}
+
+\newcommand{\cyl}{\mathrm{Q}} % Q = \dom \times (0,T)
+\newcommand{\dom}{\Omega}
+\newcommand{\domc}{\overline{\Omega}}
+\newcommand{\bound}{{\partial\dom}}
+
+% Integral on the space domain
+\newcommand{\intD}{\int_\dom}
+% Integral on the time interval
+\newcommand{\intI}{\int_0^T}
+
+%-------------------------------------------------------------------------------
+
+\newcommand{\kernel}{\mathfrak N}
+\newcommand{\nilset}{\lbrace 0\rbrace}
+\newcommand{\range}{\mathfrak R}
+\newcommand{\Fam}[1]{{\left\lbrace #1 \right\rbrace}}
+\newcommand{\sFam}[1]{{\lbrace #1 \rbrace}}
+\newcommand{\Set}[1]{{\left\lbrace #1 \right\rbrace}}
+\newcommand{\One}{{\displaystyle{1\!\!1}}}
+\newcommand{\xLin}{\mathcal{L}}
+\newcommand{\Ker}{\mathrm{Ker}}
+\newcommand{\Ima}{\mathrm{Im}}
+\newcommand{\Basis}{\mathcal{B}}
+\newcommand{\Coords}[1]{\left(#1\right)}
+
+\newcommand{\cyldisc}{\mathrm{Q}_\discd}
+\newcommand{\intdisc}[1]{[\hspace{-.02in}[{ #1}]\hspace{-.02in}]}
+
+%-------------------------------------------------------------------------------
+
+\newcommand{\xK}{\mathbb{K}}
+\newcommand{\xR}{\mathbb{R}} %M2AN
+\newcommand{\xQ}{\mathbb{Q}} %M2AN
+\newcommand{\xZ}{\mathbb{Z}} %M2AN
+\newcommand{\xN}{\mathbb{N}} %M2AN
+\newcommand{\xP}{\mathbb{P}} %M2AN
+\newcommand{\xA}{\mathbb{A}} %M2AN
+\newcommand{\xComplex}{\mathbb{C}}
+\newcommand{\xQuaternion}{\mathbb{H}} %M2AN
+\newcommand{\xHil}{H}
+
+% d-dimensional versions
+\newcommand{\xKd}{{\xK^d}}
+\newcommand{\xRd}{{\xR^d}}
+\newcommand{\xQd}{{\xQ^d}}
+\newcommand{\xZd}{{\xZ^d}}
+\newcommand{\xNd}{{\xN^d}}
+\newcommand{\xPd}{{\xP^d}}
+\newcommand{\xAd}{{\xA^d}}
+
+\newcommand{\xRn}{{\xR^n}}
+\newcommand{\xRN}{{\xR^N}}
+
+%-------------------------------------------------------------------------------
+% @category		Space of Matrices
+\newcommand{\xMat}{\mathcal{M}}
+\newcommand{\xMatR}[1]{\mathcal{M}_{#1}(\xR)}
+\newcommand{\xMnR}{{M_n(\xR)}}
+\newcommand{\xMNR}{{M_N(\xR)}}
+\newcommand{\xGL}{\mathop{\mathrm GL\,}\nolimits}
+\newcommand{\xGLnR}{{\mathop{\mathrm GL_n(\xR)\,}\nolimits}}
+\newcommand{\xGLNR}{{\mathop{\mathrm GL_N(\xR)\,}\nolimits}}
+\newcommand{\xSL}{\mathop{\mathrm SL\,}\nolimits}
+\newcommand{\xPSL}{\mathop{\mathrm PSL\,}\nolimits}
+\newcommand{\xSO}{\mathop{\mathrm SO\,}\nolimits}
+\newcommand{\xSU}{\mathop{\mathrm SU\,}\nolimits}
+
+%-------------------------------------------------------------------------------
+% @category		Continuously Differentiable Functions
+\newcommand{\xC}{{\mathrm C}} %M2AN
+\newcommand{\xCzero}{\xC^{0}} %M2AN
+\newcommand{\xCone}{\xC^{1}} %M2AN
+\newcommand{\xCtwo}{\xC^{2}} %M2AN
+\newcommand{\xCinfty}{\xC^{\infty}} %M2AN
+\newcommand{\xCn}[1]{\xC^{#1}} %M2AN
+\newcommand{\xCinfc}{{\xCinfty_c}}
+
+%-------------------------------------------------------------------------------
+% @category		Lebesgue Spaces
+\newcommand{\xL}{{\mathrm L}}
+\newcommand{\xLzero}{\xL^{0}}
+\newcommand{\xLone}{\xL^{1}}
+\newcommand{\xLoneloc}{\xLone_{loc}}
+\newcommand{\nLone}[1]{\norm{#1}_{\xLone(\dom)}}
+\newcommand{\nLoned}[1]{\norm{#1}_{\xLone(\dom)^d}}
+\newcommand{\xLtwo}{\xL^{2}}
+\newcommand{\nLtwo}[1]{\norm{#1}_{\xLtwo(\dom)}}
+\newcommand{\nLtwod}[1]{\norm{#1}_{\xLtwo(\dom)^d}}
+\newcommand{\xLtwoR}[1]{{\xLtwo(#1)/\xR}}
+\newcommand{\xLtwoz}{\xLtwo_0}
+\newcommand{\xLp}[1]{\xL^{#1}}
+\newcommand{\nLp}[2]{\norm{#2}_{\xLp{#1}(\dom)}}
+\newcommand{\xLinfty}{\xL^{\infty}}
+\newcommand{\nLinfty}[1]{\norm{#1}_{\infty}}
+
+%-------------------------------------------------------------------------------
+% @category		Hardy Spaces
+\newcommand{\xH}{{\mathrm H}} %M2AN
+\newcommand{\xHd}{\boldsymbol{\mathrm H}}
+\newcommand{\xHzero}{\xH^{0}} %M2AN
+\newcommand{\xHone}{\xH^{1}} %M2AN
+\newcommand{\xHoned}[1]{{\xHone(#1)^d}}
+\newcommand{\xHonec}{{\xHone_0}}
+\newcommand{\xHonecb}{{\xHone_{0,b}}}
+\newcommand{\xHonecd}[1]{{\xHonec(#1)^d}}
+\newcommand{\xHtwo}{\xH^{2}} %M2AN
+\newcommand{\xHinfty}{\xH^{\infty}} %M2AN
+\newcommand{\xHn}[1]{\xH^{#1}} %M2AN
+\newcommand{\xHmone}{\xH^{-1}}
+\newcommand{\xHmoned}[1]{{\bigl(\xHmone(#1)\bigr)^d}}
+
+%-------------------------------------------------------------------------------
+% @category		Sobolev Spaces
+\newcommand{\xW}{{\mathrm W}} %M2AN
+\newcommand{\xWzero}{\xW^{0}} %M2AN
+\newcommand{\xWone}{\xW^{1}} %M2AN
+\newcommand{\xWoneq}[1]{\xW^{1,#1}}
+\newcommand{\xWtwo}{\xW^{2}} %M2AN
+\newcommand{\xWinfty}{\xW^{\infty}} %M2AN
+\newcommand{\xWn}[1]{\xW^{#1}} %M2AN
+
+%-------------------------------------------------------------------------------
+% @category		Norms
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\snorm}[1]{\lvert #1 \rvert}
+\newcommand{\norminf}[1]{\norm{#1}_{\infty}}
+\newcommand{\normstar}[1]{\norm{#1}_{\ast}}
+\newcommand{\normStar}[1]{\norm{#1}^{\ast}}
+\newcommand{\normz}[1]{\norm{#1}_z}
+\newcommand{\norma}[1]{\norm{#1}_{\mathrm a}}
+\newcommand{\normma}[1]{\norm{#1}_{\mathrm -a}}
+
+%-------------------------------------------------------------------------------
+% @category		Discrete Norms
+\newcommand{\normdisc}[1]{\norm{#1}_{h,\sigma}}
+\newcommand{\snormdisc}[2]{\snorm{#2}_{h,#1}}
+\newcommand{\normh}[1]{\norm{#1}_{h}}
+\newcommand{\snormh}[2]{\snorm{#2}_{h}}
+% JCL-style
+\newcommand{\normLdHmu}[1]{\|#1\|_{\xLtwo(0,T;\, \xHdisc^{-1})}}
+\newcommand{\normLdHu}[1]{\|#1\|_{\xLtwo(0,T;\, \xHdisc^1)}}
+\newcommand{\normLds}[1]{\|#1\|_{\xLtwo(0,T;\, {\mathrm H}_{\ast})}}
+\newcommand{\normLdms}[1]{\|#1\|_{\xLtwo(0,T;\, {\mathrm H}^\ast)}}
+
+%\newcommand{\InnerLtwo}[2]{\InnerP{#1}{#2}{0,\dom}}
+\newcommand{\InnerLtwo}[2]{\InnerP{#1}{#2}{\xLtwo(\dom)}}
+% discrete
+\newcommand{\nLdisc}[2]{\norm{#2}_{h,#1}}
+% norms
+%\newcommand{\InnerHone}[2]{\InnerP{#1}{#2}{1,\dom}}
+\newcommand{\InnerHone}[2]{\InnerP{#1}{#2}{\xHone(\dom)}}
+\newcommand{\nHone}[1]{\norm{#1}_{\xHone(\dom)}}
+\newcommand{\snHone}[1]{\snorm{#1}_{\xHone(\dom)}}
+\newcommand{\nHtwo}[1]{\norm{#1}_{\xHtwo(\dom)}}
+\newcommand{\snHtwo}[1]{\snorm{#1}_{\xHtwo(\dom)}}
+
+\newcommand{\nxHone}[1]{\norm{#1}_{1}}
+\newcommand{\snxHone}[1]{\snorm{#1}_{1}}
+
+\newcommand{\nHoneb}[1]{\norm{#1}_{1,b}}
+\newcommand{\nHonebK}[1]{\norm{#1}_{1,b,K}}
+\newcommand{\snHoneb}[1]{\snorm{#1}_{1,b}}
+% discrete
+\newcommand{\nHmonedisc}[1]{\norm{#1}_{-1,\disc}}
+\newcommand{\snHonedisc}[1]{\snorm{#1}_{1,\disc}}
+\newcommand{\nHnb}[2]{\norm{#1}_{1,#2,b}}
+%---------------------------------------
+% @subcategory	Norms
+\newcommand{\nWmp}[2]{\norm{#1}_{#2}}
+% w-weighted Sobolev spaces
+\newcommand{\nWmpw}[3]{\norm{#1}_{#2;#3}}
+\newcommand{\snWmpw}[3]{\snorm{#1}_{#2;#3}}
+%\newcommand{\nWmp}[2]{\norm{#1}_{#2,\dom}}
+%\newcommand{\nWmpw}[3]{\norm{#1}_{#2,\dom,#3}}
+%\newcommand{\snWmpw}[3]{\snorm{#1}_{#2,\dom;#3}}
+\newcommand{\xE}{{\mathrm E}}
