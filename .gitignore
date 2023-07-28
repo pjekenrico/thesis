@@ -304,3 +304,4 @@ TSWLatexianTemp*
 ./Main.pdf
 Main.pdf
 *.mtc?
+elsarticle-num.bst
