@@ -3,13 +3,59 @@
 \pagestyle{fancy}
 
 \chapter{Title of the Chapter 2}
-\minitoc
-\newpage
-\label{chap.2}
+\minitoc\newpage\label{chap.2}
 
-\section{Flow Diverter Stents}\label{chap2:sec1}
+\section{Flow Diverter Stents}\label{chap2:sec1:subsec1}
 
-Flow Diverter stents (FDs) have become a viable alternative to coiling of IA, especially in cases of giant wide-necked and fusiform aneurysms. The use of coils in those particular cases bears a higher risk of coil compaction or detachment. FDs, on the contrary, gain their stability through the aposition with the parent artery. The operating doctor guides the microcatheter towards a position downstream of the IA. The distal end of the FD is then pushed and expanded, ideally making contact with the complete vessel cross-section. By carefully withdrawing the catheter and pushing the FD, the device is then deployed across the aneurysm. One important criterion for a successful deployment is achieving an optimal wall aposition, i.e.\, setting a stent whose radial force is sufficiently large to ensure a firm anchoring in the artery. Neuroradiologists can control the aposition both with the sizing of the device, as well as with the force exerted during deployment. A compact segment of the stent naturally offers a reduced porosity, which is also exploited if a higher exclusion of the flow is sought at the aneurysm neck. According to the testimony of neuroradiologists and medical students, the 
+Flow Diverter stents (FDs) have become a viable alternative to coiling of IA, especially in cases of giant wide-necked and fusiform aneurysms. The use of coils in those particular cases bears a higher risk of coil compaction or detachment~\cite{Takumi2021}. FDs, on the contrary, gain their stability through the aposition with the parent artery. FD stents are, in most cases, structures of woven wires that, in an unconstrained state, resemble a tube. The specific metal alloys used, for instance, Nickel-Titanium or Cobalt-Chromium are chosen due to their shape memory effects as well as their compatibility with the human body. Mechanically, shape memory alloys allow large elastic deformations without losing their potential to return to an original shape set under certain thermo-mechanical conditions~\cite{Petrini2011}. The shape memory is needed so that the stent may be squeezed through a narrow catheter and later re-expanded in the vessel. Radioopaque wires e.g.~ones made of Platinum-Tungsten alloy, are commonly included in the mesh allowing physicians to track the device through CT imaging. The procedural deployment involves the interventionalist guiding a microcatheter toward a position downstream of the IA. Subsequently, the distal end of the FD is carefully expanded, ideally establishing full contact with the vessel's entire cross-section. By meticulously withdrawing the catheter and advancing the FD, the device is deployed across the aneurysm. One key determinant of a successful deployment is achieving optimal wall apposition, ensuring that the stent's radial force is sufficient for secure anchoring within the artery.
+
+Neuroradiologists can fine-tune the apposition through the device's sizing and the force applied during deployment. This equally impacts the haemodynamic effects on the aneurysm, since more compactly packed wires result in a reduced porosity. The stagnation of blood in the aneurysm after the operation is intended to form a stable thrombus that progressively fills the whole cavity, thereby stabilizing the aneurysm and reducing its risk of rupture. In a successful operation, a thrombus can be observed to form in a matter of days after the intervention~\cite{Dandapat2021}. The FD stent also fulfills the role of providing a scaffold for endothelial cells to adhere and grow over it, forming a tight closure. Under these conditions, the thrombus in the dome can slowly be converted into collagen, causing the formation to shrink.
+
+Both sizing and deployment of the FD stents are complex procedures that require careful consideration due to an array of in- and post-operative complications. For once, the position of the IA or the vascular topology can complicate the procedure. Also, achieving an optimal porosity is not a straightforward task since both too high and too low conditions have proved problematic~\cite{Ravindran2020, Shapiro2014}. In an attempt to aid physicians in their work, engineers have developed models that simulate the deployment with physics-based or geometry-based approaches. While not standardized in medical use, they can prove helpful estimations of lengths and porosities~\cite{Larrabide2012}. One major issue impeding the serialized use of deployment simulators is the quantity of preprocessing steps needed as well as the non-negligible variability while deploying the stent.
+
+For research purposes, however, simulating the stents following an actual intervention can help to more accurately quantify the haemodynamic changes taking place in the IA. In turn, this can give insights into what the main driving factors are in a healing process and into what might have been the causes for poor outcomes in some operations. In the first stage, the target is to find a way of replicating in-silico a stent following an existing medical case. Since, to the best knowledge of the author, no deployment tool is publicly available to use, a deployment pipeline has been coded and will be explained in deal of detail in the following subsections.
+
+
+\subsection{Vessel topology}\label{chap2:sec1:subsec2}
+
+The geometric description of the vasculature surrounding the aneurysm is the first component to explore, since it will provide the scaffold upon which the geometrical deployment will function. Thanks to the extensive and openly available toolkit \href{http://www.vmtk.org/}{vmtk}~\cite{Antiga2008} one can compute the centerlines, average radii, as well as many other characteristics. The toolkit provides a large number of functinoalities and is common seen in articles related to the subject. To have the best possible fit with the meshes used later in the CFD analysis, we employ the preexisting segmentation for the information extraction. The centerlines, being the core component, are found by minimizing the maximal inscribed spheres along a path in the vessel. From there on, the mean radii are calculated which can help sizing the FD later on.
+
+Apart from the positioning, it is equally important to have a notion of the orientation of the vessel, i.e.\,keeping track of the deformation of the centerline to readjust the generation of stent wires. To tackle this challenge, smooth BSplines may be used to generate a continuous centerline curve along the desired path. Take $\vec\gamma(t):[0,1]\rightarrow\mathbb{R}^3$ as to be such a curve composed by cubic BSplines, i.e. $\gamma_{i}(t)\in C^2$. Suppose also that there exists a unique parametrization $s(t)$ such that:
+
+\begin{equation}
+    \norm{\frac{d}{dt}\vec{\gamma}(s(t))}_2^2 = \left(\frac{d}{dt}x(s(t))\right)^2 + \left(\frac{d}{dt}y(s(t))\right)^2 + \left(\frac{d}{dt}z(s(t))\right)^2 = 1,\quad\forall t\in[0,1]
+\end{equation}
+
+
+\begin{figure}[ht]
+    \centering
+    \input{chapter2/Figures/CurveAnalysis.tex}
+    \caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
+\end{figure}
+
+For the generation of the stent, it will be necessary to compute the curve's unit tangent $\vec{T}$ and major radius $\vec{R}$ as well as the orthogonal basis $\vec{e}_1,\,\vec{e}_2$ to generate the struts. $\vec{T}$ denotes the momentaneous velocity direction of the curve and is therefore given by:
+
+\begin{equation}
+    \vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}
+\end{equation}
+
+Since the parametrization $s(t)$ is an arc parametrization we know that the relationship holds:
+
+\begin{equation}
+    \norm{\frac{d \vec{\gamma}(t) }{dt}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}{\frac{ds}{dt}}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}}_2\snorm{\frac{ds}{dt}}=\frac{ds}{dt}
+\end{equation}
+
+The major radius is defined with the help of the Frenet-Serret equations in terms of the arc length parametrization $s(t)$ as:
+
+\begin{equation}
+    \vec{R}(t) = \frac{d\vec{T}(s)}{ds} = \frac{d\vec{T}(t)}{dt} \frac{dt}{ds}
+\end{equation}
+
+\begin{equation}
+    \frac{d\vec{T}(t)}{dt} = \left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}\right)
+\end{equation}
+
+
 
 \newpage
 \bibliographystyle{elsarticle-num}
