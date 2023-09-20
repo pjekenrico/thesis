@@ -16,14 +16,14 @@ Both sizing and deployment of the FD stents are complex procedures that require 
 For research purposes, however, simulating the stents following an actual intervention can help to more accurately quantify the haemodynamic changes taking place in the IA. In turn, this can give insights into what the main driving factors are in a healing process and into what might have been the causes for poor outcomes in some operations. In the first stage, the target is to find a way of replicating in-silico a stent following an existing medical case. Since, to the best knowledge of the author, no deployment tool is publicly available to use, a deployment pipeline has been coded and will be explained in deal of detail in the following subsections.
 
 
-\subsection{Vessel topology}\label{chap2:sec1:subsec2}
+\subsection{Vessel parametrization}\label{chap2:sec1:subsec2}
 
 The geometric description of the vasculature surrounding the aneurysm is the first component to explore, since it will provide the scaffold upon which the geometrical deployment will function. Thanks to the extensive and openly available toolkit \href{http://www.vmtk.org/}{vmtk}~\cite{Antiga2008} one can compute the centerlines, average radii, as well as many other characteristics. The toolkit provides a large number of functinoalities and is common seen in articles related to the subject. To have the best possible fit with the meshes used later in the CFD analysis, we employ the preexisting segmentation for the information extraction. The centerlines, being the core component, are found by minimizing the maximal inscribed spheres along a path in the vessel. From there on, the mean radii are calculated which can help sizing the FD later on.
 
 Apart from the positioning, it is equally important to have a notion of the orientation of the vessel, i.e.\,keeping track of the deformation of the centerline to readjust the generation of stent wires. To tackle this challenge, smooth BSplines may be used to generate a continuous centerline curve along the desired path. Take $\vec\gamma(t):[0,1]\rightarrow\mathbb{R}^3$ as to be such a curve composed by cubic BSplines, i.e. $\gamma_{i}(t)\in C^2$. Suppose also that there exists a unique parametrization $s(t)$ such that:
 
 \begin{equation}
-    \norm{\frac{d}{dt}\vec{\gamma}(s(t))}_2^2 = \left(\frac{d}{dt}x(s(t))\right)^2 + \left(\frac{d}{dt}y(s(t))\right)^2 + \left(\frac{d}{dt}z(s(t))\right)^2 = 1,\quad\forall t\in[0,1]
+    \norm{\frac{d\vec{\gamma}(s)}{ds}}_2^2 = \left(\frac{d}{ds}x(s)\right)^2 + \left(\frac{d}{ds}y(s)\right)^2 + \left(\frac{d}{ds}z(s)\right)^2 = 1,\quad\forall t\in[0,1]
 \end{equation}
 
 
@@ -36,24 +36,41 @@ Apart from the positioning, it is equally important to have a notion of the orie
 For the generation of the stent, it will be necessary to compute the curve's unit tangent $\vec{T}$ and major radius $\vec{R}$ as well as the orthogonal basis $\vec{e}_1,\,\vec{e}_2$ to generate the struts. $\vec{T}$ denotes the momentaneous velocity direction of the curve and is therefore given by:
 
 \begin{equation}
-    \vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}
+    \vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1} = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
 \end{equation}
 
-Since the parametrization $s(t)$ is an arc parametrization we know that the relationship holds:
+Since the parametrization $s$ is an arc parametrization we know that the relationship holds:
 
 \begin{equation}
     \norm{\frac{d \vec{\gamma}(t) }{dt}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}{\frac{ds}{dt}}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}}_2\snorm{\frac{ds}{dt}}=\frac{ds}{dt}
 \end{equation}
 
-The major radius is defined with the help of the Frenet-Serret equations in terms of the arc length parametrization $s(t)$ as:
+The major radius is defined with the help of the Frenet-Serret equations in terms of $s$ as:
 
 \begin{equation}
     \vec{R}(t) = \frac{d\vec{T}(s)}{ds} = \frac{d\vec{T}(t)}{dt} \frac{dt}{ds}
 \end{equation}
 
+\begin{align}
+    \frac{d\vec{T}(t)}{dt} &= \frac{d}{dt}\left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\right)\\
+    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) + \frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\\
+    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-2}_2\frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}_2\\
+    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-3}_2\frac{d}{dt}\vec{\gamma}(t) \left(\frac{d}{dt}\vec{\gamma}(t)\cdot\frac{d^2}{dt^2}\vec{\gamma}(t)\right)
+\end{align}
+
+Therefore, in short-hand notation for the derivatives, the major radius may be expressed as:
+
 \begin{equation}
-    \frac{d\vec{T}(t)}{dt} = \left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}\right)
+    \vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
 \end{equation}
+
+Once the terms for $\vec{T}$ and $\vec{R}$ are found, the Frenet frames for the curve are given by:
+
+\begin{equation}
+    \vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
+\end{equation}
+
+In agreement with publications related to this topic, it is recommended that the fitted centerline curve is moderately smoothed. This prevents overfitting, which could otherwise lead to an exagerated twisting of the local basis $\vec{e}_i$.
 
 
 
