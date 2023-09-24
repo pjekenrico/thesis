@@ -96,8 +96,13 @@ In a first step, consider a set of smoothly evolving wires with major radius $R$
 \begin{align}
     \norm{\vec{dl}}_2 &= dt\sqrt{\left(1 + \frac{r}{R}\cos{\theta}\right)^2 + \left(\frac{rd\theta}{dt}\right)^2 } = Kdt\\
     Kdt &= \pm \frac{rd\theta}{\sqrt{1 -\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)^2}}
+    \label{eqn:winding}
 \end{align}
-The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. With these definitions we can now setup a link
+The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. Equation \eqref{eqn:winding} presents a simple rule that links the winding of a strut with the progression along its length. With the relationship, we can take an undeformend cylindric stent and impose an equal advancement of the wires with a curved one.
+
+\begin{equation}
+    Kdt = K_{cyl}dt_{cyl}
+\end{equation}
 
 
 
