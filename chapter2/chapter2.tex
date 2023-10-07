@@ -73,10 +73,35 @@ Once the terms for $\vec{T}$ and $\vec{R}$ are found, the Frenet-Serret frames f
 In agreement with publications related to this topic, it is recommended that the fitted centerline curve is moderately smoothed. This prevents overfitting, which could otherwise lead to an exagerated twisting of the local basis $\vec{e}_i$.
 
 
-\subsection{Geometric}\label{chap2:sec1:subsec3}
+\subsection{Geometric deployment}\label{chap2:sec1:subsec3}
 
+The stents adopt their nominal lengths and diameters under unconstrained conditions. When radially compressed, the wires bend in axial direction, causing the stent to grow in length and its pores to grow wider. To aid physicians in chosing the correct device, producers add basic information points relating diameter and device length, as well as some porosity estimators. Nevertheless, there are many other factors that influence the stent geometry, such as the deformation of its centerline. Consider of once a stent wrapped around a toroidal segment (see Figure~\ref{fig:ana_stent}). When the centerline is bend along an axis with major radius $R$, the pores are expanded at the outer side and contracted on the inner one. For the stent modelling we would like to focus on these two particular effects based on the vessel geometry. To simplify some aspects of the analysis we will assume that the inter-wire distance $w$ remains constant for each stent and that the overlap effects of the wires are negligible, following the example of~\cite{Bouillot2016}. First, some of the parameters that are convenient for the computation will be expressed in terms that can be more easily extracted from product specifications. The braiding angle $\alpha$ for a stent with $N_w$ wires, an inter-wire distance $w$ and a nominal radius $r$ is given by:
 
-The creation of the FD stent structure relies on the geometric characteristics of the vessel where it will be implanted. In this context, we do not take into account mechanical interactions among the stent wires or with the surrounding environment. Instead, the stent's positioning and extension are determined by a set of equations derived from an idealized stent model wrapped around a toroidal segment~\cite{Bouillot2016}. This approach is applicable to any vessel whenever the its centerline exhibits sufficient smoothness.
+\begin{equation}
+\alpha = \sin^{-1}\left(\frac{2\pi r}{wN_w}\right)
+\end{equation}
+
+Since neither $w$ nor $\alpha$ are commonly provided quantites, it is necessary to compute them from the length-diamter information. Consider a wire of length $l_w$ that evolves around the cylindric stent. Then for different radii $r_1$, $r_2$ and their corresponding lengths $L_1$, $L_2$ we have that:
+\begin{align}
+    l_w = \frac{L_1}{\cos(\alpha(r_1))} &= \frac{L_2}{\cos(\alpha(r_2))}\\
+    L_1\sqrt{1-\left(\frac{2\pi r_2}{wN_w}\right)^2} &= L_2\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}
+    \label{eq:clearing_stent}
+\end{align}
+By clearing Equation~\eqref{eq:clearing_stent} we obtain the following rules for $l_w$ and $w$:
+\begin{equation}
+    w = \frac{\pi}{N_w}\sqrt{\frac{L_1^2r_2^2 - L_2^2r_1^2}{L_1^2-L_2^2}}
+\end{equation}
+\begin{equation}
+    l_w = \frac{L_1}{\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}}
+\end{equation}
+
+Further we can express the porosity as given in~\cite{Rebelo2015} in terms of $w$, confirming the equation used in~\cite{Bouillot2016}:
+
+\begin{equation}
+    \varphi(\alpha) = \left(1-\frac{d_wN_w}{4\pi r\cos(\alpha)}\right)^2 =  \left(1-\frac{d_w}{w\sin(2\alpha)}\right)^2
+\end{equation}
+
+INSERT STUFF WRT POROSITY HERE
 
 \begin{figure}[ht]
     \centering
@@ -84,7 +109,11 @@ The creation of the FD stent structure relies on the geometric characteristics o
     \caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
 \end{figure}
 
-In a first step, consider a set of smoothly evolving wires with major radius $R$ and a minor radius $r$, as shown in Figure~\ref{fig:ana_stent}. By more closely inspecting a short segment of the wires $\vec{dl}$ we can derive a linearized description for its evolution.
+
+
+
+
+In a first step, consider a set of smoothly evolving wires with major radius $R$ and a minor radius $r$, as shown in Figure~\ref{fig:ana_stent}. By more closely inspecting a short segment of the wires $\vec{dl}$ we can derive a linearized description for its evolution on an infinitisimal segment.
 
 \begin{equation}
     \vec{dl} = \begin{pmatrix}
@@ -98,13 +127,22 @@ In a first step, consider a set of smoothly evolving wires with major radius $R$
     Kdt &= \pm \frac{rd\theta}{\sqrt{1 -\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)^2}}
     \label{eqn:winding}
 \end{align}
-The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. Equation \eqref{eqn:winding} presents a simple rule that links the winding of a strut with the progression along its length. With the relationship, we can take an undeformend cylindric stent and impose an equal advancement of the wires with a curved one.
+The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. Equation~\eqref{eqn:winding} presents a simple rule that links the winding of a strut with the progression along its length. With the relationship, we can take an undeformend cylindric stent $(R\rightarrow\infty)$ and impose an equal advancement of the wires with a curved one.
 
 \begin{equation}
-    Kdt = K_{cyl}dt_{cyl}
+    Kdt = [Kdt]_{cyl} = \pm \frac{r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}d\theta_{cyl}
 \end{equation}
 
+Since by construction $K$
+\begin{equation}
+    \int_0^{2\pi}{\frac{r}{\sqrt{1 -\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)^2}}~d\theta} = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}
+\end{equation}
 
+\begin{equation}
+    f(K) = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}} - \int_0^{2\pi}{\frac{K^2r}{\sqrt{K^2 -\left(1 + \frac{r}{R}\cos{\theta}\right)^2}}~d\theta}\label{eq:windingNewton}
+\end{equation}
+
+The above equations can be approximated numerically by first imposing a small wire lenght displacement $\norm{\vec{dl}}_2$ by which we progress on the reference cylinder mesh and the curved one. The cylindric winding factor is a constant and device-dependent parameter which can be computed from the geometric information in the unconstrained state. By estimating an initial segment length $dt$ on the deformed stent we can compute associated winding factor $K$ using the Newtons method on Equation~\eqref{eq:windingNewton}. The winding factor, being an averaged quantity over a cross-section segment can later be used to compute the angle 
 
 
 \newpage
