@@ -75,18 +75,28 @@ In agreement with publications related to this topic, it is recommended that the
 
 \subsection{Geometric deployment}\label{chap2:sec1:subsec3}
 
-The stents adopt their nominal lengths and diameters under unconstrained conditions. When radially compressed, the wires bend in axial direction, causing the stent to grow in length and its pores to grow wider. To aid physicians in chosing the correct device, producers add basic information points relating diameter and device length, as well as some porosity estimators. Nevertheless, there are many other factors that influence the stent geometry, such as the deformation of its centerline. Consider of once a stent wrapped around a toroidal segment (see Figure~\ref{fig:ana_stent}). When the centerline is bend along an axis with major radius $R$, the pores are expanded at the outer side and contracted on the inner one. For the stent modelling we would like to focus on these two particular effects based on the vessel geometry. To simplify some aspects of the analysis we will assume that the inter-wire distance $w$ remains constant for each stent and that the overlap effects of the wires are negligible, following the example of~\cite{Bouillot2016}. First, some of the parameters that are convenient for the computation will be expressed in terms that can be more easily extracted from product specifications. The braiding angle $\alpha$ for a stent with $N_w$ wires, an inter-wire distance $w$ and a nominal radius $r$ is given by:
+The stents adopt their nominal lengths and diameters under unconstrained conditions. When radially compressed, the wires bend in axial direction, causing the stent to grow in length and its pores to grow wider. To aid physicians in chosing the correct device, producers add basic information points relating diameter and device length, as well as some porosity estimators. Nevertheless, there are many other factors that influence the stent geometry, such as the deformation of its centerline. Consider of once a stent wrapped around a toroidal segment (see Figure~\ref{fig:ana_stent}). When the centerline is bend along an axis with major radius $R$, the pores are expanded at the outer side and contracted on the inner one. For the stent modelling we would like to focus on these two particular effects based on the vessel geometry.
+
+\begin{figure}[ht]
+    \centering
+    \input{chapter2/Figures/StentAnalysis.tex}
+    \caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
+\end{figure}
+To simplify some aspects of the analysis we will assume that the inter-wire distance $w$ remains constant for each stent and that the overlap effects of the wires are negligible, following the example of~\cite{Bouillot2016}. First, some of the parameters that are convenient for the computation will be expressed in terms that can be more easily extracted from product specifications. The braiding angle $\alpha$ for a stent with $N_w$ wires, an inter-wire distance $w$ and a nominal radius $r$ is given by:
 
 \begin{equation}
 \alpha = \sin^{-1}\left(\frac{2\pi r}{wN_w}\right)
 \end{equation}
 
 Since neither $w$ nor $\alpha$ are commonly provided quantites, it is necessary to compute them from the length-diamter information. Consider a wire of length $l_w$ that evolves around the cylindric stent. Then for different radii $r_1$, $r_2$ and their corresponding lengths $L_1$, $L_2$ we have that:
-\begin{align}
-    l_w = \frac{L_1}{\cos(\alpha(r_1))} &= \frac{L_2}{\cos(\alpha(r_2))}\\
-    L_1\sqrt{1-\left(\frac{2\pi r_2}{wN_w}\right)^2} &= L_2\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}
+\begin{equation}
+    l_w = \frac{L_1}{\cos(\alpha(r_1))} = \frac{L_2}{\cos(\alpha(r_2))}
+\end{equation}
+
+\begin{equation}
+    L_1\sqrt{1-\left(\frac{2\pi r_2}{wN_w}\right)^2} = L_2\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}
     \label{eq:clearing_stent}
-\end{align}
+\end{equation}
 By clearing Equation~\eqref{eq:clearing_stent} we obtain the following rules for $l_w$ and $w$:
 \begin{equation}
     w = \frac{\pi}{N_w}\sqrt{\frac{L_1^2r_2^2 - L_2^2r_1^2}{L_1^2-L_2^2}}
@@ -95,19 +105,8 @@ By clearing Equation~\eqref{eq:clearing_stent} we obtain the following rules for
     l_w = \frac{L_1}{\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}}
 \end{equation}
 
-Further we can express the porosity as given in~\cite{Rebelo2015} in terms of $w$, confirming the equation used in~\cite{Bouillot2016}:
+Common values for $w$ usually lay around 0.15 to 0.25mm, while $l_w$ is a multiple of the stent length.
 
-\begin{equation}
-    \varphi(\alpha) = \left(1-\frac{d_wN_w}{4\pi r\cos(\alpha)}\right)^2 =  \left(1-\frac{d_w}{w\sin(2\alpha)}\right)^2
-\end{equation}
-
-INSERT STUFF WRT POROSITY HERE
-
-\begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/StentAnalysis.tex}
-    \caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
-\end{figure}
 
 
 
@@ -144,6 +143,15 @@ Since by construction $K$
 
 The above equations can be approximated numerically by first imposing a small wire lenght displacement $\norm{\vec{dl}}_2$ by which we progress on the reference cylinder mesh and the curved one. The cylindric winding factor is a constant and device-dependent parameter which can be computed from the geometric information in the unconstrained state. By estimating an initial segment length $dt$ on the deformed stent we can compute associated winding factor $K$ using the Newtons method on Equation~\eqref{eq:windingNewton}. The winding factor, being an averaged quantity over a cross-section segment can later be used to compute the angle 
 
+
+
+
+
+Further we can express the porosity as given in~\cite{Rebelo2015} in terms of $w$, confirming the equation used in~\cite{Bouillot2016}:
+
+\begin{equation}
+    \varphi(\alpha) = \left(1-\frac{d_wN_w}{4\pi r\cos(\alpha)}\right)^2 =  \left(1-\frac{d_w}{w\sin(2\alpha)}\right)^2
+\end{equation}
 
 \newpage
 \bibliographystyle{elsarticle-num}
