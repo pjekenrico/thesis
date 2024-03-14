@@ -4,155 +4,93 @@
 
 \chapter{Title of the Chapter 2}
 \minitoc\newpage\label{chap.2}
-
-\section{Flow Diverter Stents}\label{chap2:sec1:subsec1}
-
-Flow Diverter stents (FDs) have become a viable alternative to coiling of IA, especially in cases of giant wide-necked and fusiform aneurysms. The use of coils in those particular cases bears a higher risk of coil compaction or detachment~\cite{Takumi2021}. FDs, on the contrary, gain their stability through the aposition with the parent artery. FD stents are, in most cases, structures of woven wires that, in an unconstrained state, resemble a tube. The specific metal alloys used, for instance, Nickel-Titanium or Cobalt-Chromium are chosen due to their shape memory effects as well as their compatibility with the human body. Mechanically, shape memory alloys allow large elastic deformations without losing their potential to return to an original shape set under certain thermo-mechanical conditions~\cite{Petrini2011}. The shape memory is needed so that the stent may be squeezed through a narrow catheter and later re-expanded in the vessel. Radioopaque wires e.g.~ones made of Platinum-Tungsten alloy, are commonly included in the mesh allowing physicians to track the device through CT imaging. The procedural deployment involves the interventionalist guiding a microcatheter toward a position downstream of the IA. Subsequently, the distal end of the FD is carefully expanded, ideally establishing full contact with the vessel's entire cross-section. By meticulously withdrawing the catheter and advancing the FD, the device is deployed across the aneurysm. One key determinant of a successful deployment is achieving optimal wall apposition, ensuring that the stent's radial force is sufficient for secure anchoring within the artery.
-
-Neuroradiologists can fine-tune the apposition through the device's sizing and the force applied during deployment. This equally impacts the haemodynamic effects on the aneurysm, since more compactly packed wires result in a reduced porosity. The stagnation of blood in the aneurysm after the operation is intended to form a stable thrombus that progressively fills the whole cavity, thereby stabilizing the aneurysm and reducing its risk of rupture. In a successful operation, a thrombus can be observed to form in a matter of days after the intervention~\cite{Dandapat2021}. The FD stent also fulfills the role of providing a scaffold for endothelial cells to adhere and grow over it, forming a tight closure. Under these conditions, the thrombus in the dome can slowly be converted into collagen, causing the formation to shrink.
-
-Both sizing and deployment of the FD stents are complex procedures that require careful consideration due to an array of in- and post-operative complications. For once, the position of the IA or the vascular topology can complicate the procedure. Also, achieving an optimal porosity is not a straightforward task since both too high and too low conditions have proved problematic~\cite{Ravindran2020, Shapiro2014}. In an attempt to aid physicians in their work, engineers have developed models that simulate the deployment with physics-based or geometry-based approaches. While not standardized in medical use, they can prove helpful estimations of lengths and porosities~\cite{Larrabide2012}. One major issue impeding the serialized use of deployment simulators is the quantity of preprocessing steps needed as well as the non-negligible variability while deploying the stent.
-
-For research purposes, however, simulating the stents following an actual intervention can help to more accurately quantify the haemodynamic changes taking place in the IA. In turn, this can give insights into what the main driving factors are in a healing process and into what might have been the causes for poor outcomes in some operations. In the first stage, the target is to find a way of replicating in-silico a stent following an existing medical case. Since, to the best knowledge of the author, no deployment tool is publicly available to use, a deployment pipeline has been coded and will be explained in deal of detail in the following subsections.
-
-
-\subsection{Vessel parametrization}\label{chap2:sec1:subsec2}
-
-The geometric description of the vasculature surrounding the aneurysm is the first component to explore, since it will provide the scaffold upon which the geometrical deployment will function. Thanks to the extensive and openly available toolkit \href{http://www.vmtk.org/}{vmtk}~\cite{Antiga2008} one can compute the centerlines, average radii, as well as many other characteristics. The toolkit provides a large number of functinoalities and is common seen in articles related to the subject. To have the best possible fit with the meshes used later in the CFD analysis, we employ the preexisting segmentation for the information extraction. The centerlines, being the core component, are found by minimizing the maximal inscribed spheres along a path in the vessel. From there on, the mean radii are calculated which can help sizing the FD later on.
-
-Apart from the positioning, it is equally important to have a notion of the orientation of the vessel, i.e.\,keeping track of the deformation of the centerline to readjust the generation of stent wires. To tackle this challenge, smooth BSplines may be used to generate a continuous centerline curve along the desired path. Take $\vec\gamma(t):[0,1]\rightarrow\mathbb{R}^3$ as to be such a curve composed by cubic BSplines, i.e. $\gamma_{i}(t)\in C^2$. Suppose also that there exists a unique parametrization $s(t)$ such that:
-
+In the following chapter, the incompressible Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations that are run. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then extended with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally controls the otherwise ocurrring spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on a series of conventional test cases in 2D and 3D. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
+\section{Governing Physics}\label{chap2:sec1}
+The Navier-Stokes equations stem, as mentioned before from the conservation of mass and momentum in an open and bounded domain $\Omega \subset \mathbb {R}^{n}$ in which no material enters or leaves. For the former quantity, the conservation can be expressed through:
 \begin{equation}
-    \norm{\frac{d\vec{\gamma}(s)}{ds}}_2^2 = \left(\frac{d}{ds}x(s)\right)^2 + \left(\frac{d}{ds}y(s)\right)^2 + \left(\frac{d}{ds}z(s)\right)^2 = 1,\quad\forall t\in[0,1]
+	\frac{d}{dt} \int_{\Omega(t)} \rho dV = 0,
+\end{equation}
+imposing that the integral of over the density in the control volume does not change. The derivative over the time-dependent domain can be simplified thanks to the Reynolds transport theorem, named after its discoverer Osborne Reynolds.
+
+\begin{theorem}[Reynolds Transport Theorem]
+	Let $\vec{f}(t, \vec{x})$ be any conservation quantity, then the Reynolds transport theorem states that for a velocity field $\vec{u}$, the following holds:
+	\begin{equation}
+		\frac {d}{dt}\int _{\Omega (t)}\vec {f} \,dV=\int _{\Omega (t)}{\frac {\partial \vec {f} }{\partial t}} + \nabla\cdot(\vec{u}\otimes\vec{f}) \,dV
+	\end{equation}
+\end{theorem}
+\begin{proof}
+
+	\begin{equation}
+		\frac {d}{dt}\int _{\Omega (t)}\vec {f}(t, \vec{x}) \,dV = \lim _{\Delta t\to 0} \frac{1}{\Delta t} \left(\int _{\Omega (t+\Delta t, \vec{x})}\vec{f}(t+\Delta t, \vec{x}) \,dV-\int _{\Omega (t)}\vec{f}(t, \vec{x}) \,dV\right)
+	\end{equation}
+	To drag the derivative into the integral it is necessary to reformulate the problem in terms of a initial position $\vec{X}$ and a mapping $\vec{x}=\vec{\phi}(t, \vec{X})$. With the corresponding derivative $\nabla\vec{\phi} = F(t, \vec{X})$ and the Jacobian $J = \det F$, the integral can be rewritten written in terms of the initial domain $\Omega(0)$ and the contents can therefore be merged:
+
+	\begin{align}
+		\frac {d}{dt}\int _{\Omega (t)}\vec {f} \,dV & = \lim _{\Delta t\to 0} \frac{1}{\Delta t} \int _{\Omega (0)}\left[(\vec{f}\circ\vec{\phi})J\right](t+\Delta t, \vec{X}) - \left[(\vec{f}\circ\vec{\phi})J\right](t, \vec{X})\,dV \\
+		                                             & = \int _{\Omega (0)} \frac{\partial}{\partial t}\left[(\vec{f}\circ\vec{\phi})J\right](t, \vec{X})\,dV                                                                            \\
+		                                             & = \int _{\Omega (0)} \left[J\frac{\partial}{\partial t}(\vec{f}\circ\vec{\phi}) + (\vec{f}\circ\vec{\phi})\frac{\partial J}{\partial t}\right](t, \vec{X})\,dV
+	\end{align}
+	To simplify the derivative of the Jacobian, recall Jacobi's formula.
+	\begin{equation}
+		\frac{\partial J}{\partial t} = J\tr\left(F^{-1}\frac{\partial F}{\partial t}\right)= J\tr\left(\frac{\partial}{\partial\vec{x}}\frac{\partial \vec{\phi}}{\partial t}\right) = J(\nabla\cdot\vec{u})
+	\end{equation}
+	Now the integral can be written back in terms of a time-dependent domain.
+	\begin{equation}
+		\frac {d}{dt}\int _{\Omega (t)}\vec {f} \,dV = \int _{\Omega (t)}\frac{\partial\vec{f}}{\partial t} + (\vec{u}\cdot\nabla)\vec{f} + \vec{f}(\nabla\cdot\vec{u})\,dV = \int _{\Omega (t)}\frac{\partial\vec{f}}{\partial t} + \nabla\cdot(\vec{u}\otimes\vec{f})\,dV
+	\end{equation}
+\end{proof}
+From now on all functions are taken to be time-dependent, as well as dependent on a location $\vec{x}$ in an eulerian framework, unless stated otherwise. The explicit dependencies are omitted for the sake of brevity. Also, the derivatives in time will be denoted by $\partial_{t}$.
+
+Using the transport theorem, the conservation of mass can be expressed as:
+\begin{equation}
+	\int_\Omega \partial_{t}\rho + \nabla\cdot(\rho\vec{u})\,dV = 0
+	\label{eq:massconservation_int}
+\end{equation}
+The present integral form can be reduced to a differential form with a short proof by contradiction. Suppose that the content of the integral from \autoref{eq:massconservation_int} is not zero in $\Omega$, then the integral would be adding positive and negative contributions over the domain. However, since the choice of $\Omega$ is arbitrary, the integral formulation has to hold for any subdomain of $\Omega$, including those in which the integrand is non-zero. With the contradiction, the integrand has to be zero in $\Omega$ and the differential form is obtained:
+\begin{equation}
+	\partial_{t}\rho + \nabla\cdot(\rho\vec{u}) = 0
+	\label{eq:massconservation}
+\end{equation}
+In the same manner, the conservation of momentum is derived from preserving the volume-specific momentum $\rho\vec{u}$, which is modulated by body forces, such as the gravity, and stresses. The latter are the result of the interactions between the fluid particles and are expressed through the stress tensor $\sigma$. The conservation of momentum is then:
+\begin{equation}
+	\partial_t \rho\vec{u} + \nabla\cdot(\rho\vec{u}\otimes\vec{u}) = \nabla\cdot\sigma + \rho\vec{g}
+	\label{eq:momentumconservation_conservative}
+\end{equation}
+The conservative formulation shown in \autoref{eq:momentumconservation_conservative} can be rewritten into the convective form by using the product rule and the conservation of mass.
+\begin{equation}
+	\rho\partial_t\vec{u} + \rho(\vec{u}\cdot\nabla)\vec{u} = \nabla\cdot\sigma + \rho\vec{g}
+	\label{eq:momentumconservation_convective}
+\end{equation}
+The stress tensor $\sigma$ is taken to be the:\\
+\begin{equation}
+	\vec{\sigma}=-pI+\left(\lambda-\frac{2}{3}\mu\right)(\nabla \cdot \vec{u})I+\mu (\nabla \vec{u}+\nabla \vec{u}^T)
+	\label{eq:stress}
 \end{equation}
 
-
-\begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/CurveAnalysis.tex}
-    \caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
-\end{figure}
-
-For the generation of the stent, it will be necessary to compute the curve's unit tangent $\vec{T}$ and major radius $\vec{R}$ as well as the orthogonal basis $\vec{e}_1,\,\vec{e}_2$ to generate the struts. $\vec{T}$ denotes the momentaneous velocity direction of the curve and is therefore given by:
-
+\begin{table}[ht]
+	\begin{center}
+		\begin{tabular}{c|c|c}
+			$p$       & Pressure          & $N/m^2$   \\
+			$\lambda$ & Bulk viscosity    & $kg/(ms)$ \\
+			$\mu$     & Dynamic viscosity & $kg/(ms)$ \\
+		\end{tabular}
+	\end{center}
+	\caption{Physical quantities of stress tensor.}
+\end{table}
+Blood, the medium to be described in the thesis, is formed by around 80\% water\cite{Beilin1966} and thus shares similar densities of around 1056$kg/m^3$ and incompressibility properties. Therefore, the mass conservation~\eqref{eq:massconservation} can be simplified to:
 \begin{equation}
-    \vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1} = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
+	\nabla\cdot \vec{u} = 0,
 \end{equation}
-
-Since the parametrization $s$ is an arc parametrization we know that the relationship holds:
-
+also known as the continuity equation. Applying the continuity equation to the stress tensor~\eqref{eq:stress} cancels the bulk viscosity, related to the stress of compressing a medium. Inserting the stress tensor~\eqref{eq:stress} into the momentum equation~\eqref{eq:momentumconservation_convective} brings us to the final strong form of the Navier-Stokes equations:
 \begin{equation}
-    \norm{\frac{d \vec{\gamma}(t) }{dt}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}{\frac{ds}{dt}}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}}_2\snorm{\frac{ds}{dt}}=\frac{ds}{dt}
+	\begin{split}
+		\rho\partial_t\vec{u} + \rho(\vec{u}\cdot\nabla)\vec{u} + \nabla p - \nabla \cdot \mu (\nabla \vec{u}+\nabla \vec{u}^T) &= \rho\vec{g}\\
+		\nabla\cdot \vec{u} &= 0
+	\end{split}
 \end{equation}
+\section{Blood Rheology}\label{chap2:sec2}
 
-The major radius is defined with the help of the Frenet-Serret equations in terms of $s$ as:
+\section{Third Section}\label{chap2:sec3}
 
-\begin{equation}
-    \vec{R}(t) = \frac{d\vec{T}(s)}{ds} = \frac{d\vec{T}(t)}{dt} \frac{dt}{ds}
-\end{equation}
-
-\begin{align}
-    \frac{d\vec{T}(t)}{dt} &= \frac{d}{dt}\left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\right)\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) + \frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-2}_2\frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}_2\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-3}_2\frac{d}{dt}\vec{\gamma}(t) \left(\frac{d}{dt}\vec{\gamma}(t)\cdot\frac{d^2}{dt^2}\vec{\gamma}(t)\right)
-\end{align}
-
-Therefore, in short-hand notation for the derivatives, the major radius may be expressed as:
-
-\begin{equation}
-    \vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
-\end{equation}
-
-Once the terms for $\vec{T}$ and $\vec{R}$ are found, the Frenet-Serret frames for the curve are given by:
-
-\begin{equation}
-    \vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
-\end{equation}
-
-In agreement with publications related to this topic, it is recommended that the fitted centerline curve is moderately smoothed. This prevents overfitting, which could otherwise lead to an exagerated twisting of the local basis $\vec{e}_i$.
-
-
-\subsection{Geometric deployment}\label{chap2:sec1:subsec3}
-
-The stents adopt their nominal lengths and diameters under unconstrained conditions. When radially compressed, the wires bend in axial direction, causing the stent to grow in length and its pores to grow wider. To aid physicians in chosing the correct device, producers add basic information points relating diameter and device length, as well as some porosity estimators. Nevertheless, there are many other factors that influence the stent geometry, such as the deformation of its centerline. Consider of once a stent wrapped around a toroidal segment (see Figure~\ref{fig:ana_stent}). When the centerline is bend along an axis with major radius $R$, the pores are expanded at the outer side and contracted on the inner one. For the stent modelling we would like to focus on these two particular effects based on the vessel geometry.
-
-\begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/StentAnalysis.tex}
-    \caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
-\end{figure}
-To simplify some aspects of the analysis we will assume that the inter-wire distance $w$ remains constant for each stent and that the overlap effects of the wires are negligible, following the example of~\cite{Bouillot2016}. First, some of the parameters that are convenient for the computation will be expressed in terms that can be more easily extracted from product specifications. The braiding angle $\alpha$ for a stent with $N_w$ wires, an inter-wire distance $w$ and a nominal radius $r$ is given by:
-
-\begin{equation}
-\alpha = \sin^{-1}\left(\frac{2\pi r}{wN_w}\right)
-\end{equation}
-
-Since neither $w$ nor $\alpha$ are commonly provided quantites, it is necessary to compute them from the length-diamter information. Consider a wire of length $l_w$ that evolves around the cylindric stent. Then for different radii $r_1$, $r_2$ and their corresponding lengths $L_1$, $L_2$ we have that:
-\begin{equation}
-    l_w = \frac{L_1}{\cos(\alpha(r_1))} = \frac{L_2}{\cos(\alpha(r_2))}
-\end{equation}
-
-\begin{equation}
-    L_1\sqrt{1-\left(\frac{2\pi r_2}{wN_w}\right)^2} = L_2\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}
-    \label{eq:clearing_stent}
-\end{equation}
-By clearing Equation~\eqref{eq:clearing_stent} we obtain the following rules for $l_w$ and $w$:
-\begin{equation}
-    w = \frac{\pi}{N_w}\sqrt{\frac{L_1^2r_2^2 - L_2^2r_1^2}{L_1^2-L_2^2}}
-\end{equation}
-\begin{equation}
-    l_w = \frac{L_1}{\sqrt{1-\left(\frac{2\pi r_1}{wN_w}\right)^2}}
-\end{equation}
-
-Common values for $w$ usually lay around 0.15 to 0.25mm, while $l_w$ is a multiple of the stent length.
-
-
-
-
-
-
-In a first step, consider a set of smoothly evolving wires with major radius $R$ and a minor radius $r$, as shown in Figure~\ref{fig:ana_stent}. By more closely inspecting a short segment of the wires $\vec{dl}$ we can derive a linearized description for its evolution on an infinitisimal segment.
-
-\begin{equation}
-    \vec{dl} = \begin{pmatrix}
-        d\varphi(R+r\cos{\theta})\\rd\theta
-    \end{pmatrix}= \begin{pmatrix}
-        dt(1+ \frac{r}{R}\cos{\theta})\\rd\theta
-    \end{pmatrix}
-\end{equation}
-\begin{align}
-    \norm{\vec{dl}}_2 &= dt\sqrt{\left(1 + \frac{r}{R}\cos{\theta}\right)^2 + \left(\frac{rd\theta}{dt}\right)^2 } = Kdt\\
-    Kdt &= \pm \frac{rd\theta}{\sqrt{1 -\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)^2}}
-    \label{eqn:winding}
-\end{align}
-The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. Equation~\eqref{eqn:winding} presents a simple rule that links the winding of a strut with the progression along its length. With the relationship, we can take an undeformend cylindric stent $(R\rightarrow\infty)$ and impose an equal advancement of the wires with a curved one.
-
-\begin{equation}
-    Kdt = [Kdt]_{cyl} = \pm \frac{r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}d\theta_{cyl}
-\end{equation}
-
-Since by construction $K$
-\begin{equation}
-    \int_0^{2\pi}{\frac{r}{\sqrt{1 -\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)^2}}~d\theta} = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}
-\end{equation}
-
-\begin{equation}
-    f(K) = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}} - \int_0^{2\pi}{\frac{K^2r}{\sqrt{K^2 -\left(1 + \frac{r}{R}\cos{\theta}\right)^2}}~d\theta}\label{eq:windingNewton}
-\end{equation}
-
-The above equations can be approximated numerically by first imposing a small wire lenght displacement $\norm{\vec{dl}}_2$ by which we progress on the reference cylinder mesh and the curved one. The cylindric winding factor is a constant and device-dependent parameter which can be computed from the geometric information in the unconstrained state. By estimating an initial segment length $dt$ on the deformed stent we can compute associated winding factor $K$ using the Newtons method on Equation~\eqref{eq:windingNewton}. The winding factor, being an averaged quantity over a cross-section segment can later be used to compute the angle 
-
-
-
-
-
-Further we can express the porosity as given in~\cite{Rebelo2015} in terms of $w$, confirming the equation used in~\cite{Bouillot2016}:
-
-\begin{equation}
-    \varphi(\alpha) = \left(1-\frac{d_wN_w}{4\pi r\cos(\alpha)}\right)^2 =  \left(1-\frac{d_w}{w\sin(2\alpha)}\right)^2
-\end{equation}
-
-\newpage
 \bibliographystyle{elsarticle-num}
 \bibliography{chapter2/Biblio}
