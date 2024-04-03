@@ -10,7 +10,10 @@ The Navier-Stokes equations stem, as mentioned before from the conservation of m
 \begin{equation}
 	\frac{d}{dt} \int_{\Omega(t)} \rho dV = 0,
 \end{equation}
-imposing that the integral of over the density in the control volume does not change. The derivative over the time-dependent domain can be simplified thanks to the Reynolds transport theorem, named after its discoverer Osborne Reynolds.
+imposing that the integral of over the density in the control volume does not change.
+
+\subsection{Reynolds Transport Theorem}\label{chap2:sec1:subsec1}
+The derivative over the time-dependent domain can be simplified thanks to the Reynolds transport theorem, named after its discoverer Osborne Reynolds.
 
 \begin{theorem}[Reynolds Transport Theorem]
 	Let $\vec{f}(t, \vec{x})$ be any conservation quantity, then the Reynolds transport theorem states that for a velocity field $\vec{u}$, the following holds:
@@ -40,6 +43,14 @@ imposing that the integral of over the density in the control volume does not ch
 \end{proof}
 From now on all functions are taken to be time-dependent, as well as dependent on a location $\vec{x}$ in an eulerian framework, unless stated otherwise. The explicit dependencies are omitted for the sake of brevity. Also, the derivatives in time will be denoted by $\partial_{t}$.
 
+\begin{figure}[h!]
+	\centering
+	\input{chapter2/Figures/RTT/Figure}
+	\caption{Illustration of the moving domain $\Omega$. In vague terms speaking, by sticking to the domain at time $t$, one needs to adjust the conservation laws to account for the displacement.}\label{fig:reynolds_transport_theorem}
+\end{figure}
+
+
+\subsection{Conservation Equations}\label{chap2:sec1:subsec2}
 Using the transport theorem, the conservation of mass can be expressed as:
 \begin{equation}
 	\int_\Omega \partial_{t}\rho + \nabla\cdot(\rho\vec{u})\,dV = 0
@@ -87,10 +98,30 @@ As will be more thoroughly discussed in the coming section, blood is incompressi
 	\end{split}
 \end{equation}
 
+\subsection{Boundary Conditions}\label{chap2:sec1:subsec3}
+Boundary conditions have been identified by several publications and computing challenges as sensitive components of hemodynamics simulations~\cite{Berg2019, Valen-Sendstad2018}. For that reason, Chapter 3 dedicates a full section to inlet and outlet BCs, providing both measurement-based techniques and heuristics that depend on the vascular topology. Additionally, the modelling effects of using rigid walls versus compliant ones will be shown based on existing literature. In Chapter 4, more detail will be provided on the modelling of endoluminal devices. For now, they will be just shortly introduced in order to carry on with the derivation of the numerical framework.\\
+
+The domain boundaries for segments of the brain arterial system are divided into four groups: inlets $\Gamma_{in}$, outlets $\Gamma_{out}$, walls $\Gamma_{w}$ and endoluminal devices $\Gamma_{fd}$. In general terms, the inflow conditions, \ie~the blood supplied to the portion of the vasculature that is simulated, is imposed through a time-varying velocity profile. In mathematical terms speaking, it is expressed as:
+\begin{equation}
+	\vec{u} = \vec{u}_{in}, \quad (\vec{x}, t) \in \Gamma_{in} \times (0,T]
+\end{equation}
+Outflow conditions on the other hand are related to the flow split caused by the resistance and capacitance of the distal vasculature. The split can be either modelled as an imposed volumetric flow or a normal stress. For now, we will stick to the latter:
+\begin{equation}
+	\sigma \cdot \vec{n} = \vec{h}, \quad (\vec{x}, t) \in \Gamma_{out} \times (0,T]
+\end{equation}
+Arterial walls and endoluminal devices are modelled as rigid, no-slip boundaries. Therefore, in an eulerian framework, the velocity at the vessel wall and the interface of any implanted device will be dictated by:
+\begin{equation}
+	\vec{u} = 0, \quad (\vec{x}, t) \in \Gamma_{w}\cup\Gamma_{fd}  \times (0,T]
+\end{equation}
+The boundary conditions presented so far can be divided into two groups, essential on $\Gamma_{d}$ and natural on $\Gamma_{n}$. These categories are relevant in Finite Element Analysis (FEA), since their imposition leads to different formulations of the problem. Therefore, inflow, walls and any endoluminal devices are essential, while the outflow is natural.\\
+
+The initial conditions to the simulations can be set by previously solving a steady state simulation at the inflow rate of interest. Other approaches, involve solving a potential flow or simply setting the initial solution to zero. For any of the choices, it is required to run simulations for several cardiac cycles to ensure that the initial transient is washed out and a periodic state has been reached.
+\begin{equation}
+	\vec{u} = \vec{u}_0, \quad \vec{x} \in \Omega,\,t=0
+\end{equation}
 
 
-
-\section{Blood Rheology}\label{chap2:sec2}
+\subsection{Blood Rheology}\label{chap2:sec1:subsec4}
 In the preceding section, the Navier-Stokes equations were silently introduced to describe blood as a single-phase flow. Blood however is a suspension consisting to approximately 45\% of cellular components, such as red (erythrocytes), white blood cells (leukocytes), and platelets. The remaining 55\% is blood plasma, a yellowish liquid composed of water, electrolytes, proteins, glucose, lipids, hormones and carbon dioxide. The high fraction of nearly incompressible fluids in blood at physiological conditions justifies modelling it as an incompressible medium at densities slightly above the ones of water ($\rho=1050kg/m^3$ at $310K$)~\cite{Suzuki2021}. Blood plasma exhibits a nearly Newtonian character~\cite{Nader2019} with dynamics viscosities only decreasing by about $0.04\mpas$ between a resting state ($\mu_0 = 1.27\mpas$) and a highly sheared one ($\mu_C =$ 1.23\mpas)~\cite{Rodrigues2022}. The cellular components however, especially the Red Blood Cells (RBCs), have a greater impact on the bulk viscosity of the emulsion. RBCs are characterized as biconcave disks of $8\mu$ diameter in a resting state~\cite{Nader2019, Valen-Sendstad2011}. The cells enclose a hemoglobin solution, the oxygen carrying protein, with a highly deformable membrane. When subjected to shearing forces, the RBCs are capable of reshaping to the point of fitting through capilaries, whose diameter (5$\mu m$) lies well below the size of RBCs~\cite{Nader2019}. Apart from their capabilities of strong deformations and alignment, the RBCs have the tendency to arrange in stacks due to reversible protein interactions when the flow characteristics permit it. These stacks form mostly, during low shearing and dissolve gradually when exposed to higher shearing, giving blood the characteristic shear-thinning behaviour. The stacks, or also called ``rouleaux'', pose a larger impediment to flow, thus yielding a larger friction than when the RBCs are scattered in the blood stream~\cite{Nader2019}. The alingment and reshaping of RBCs likewise influences the macroscopic flow of blood in ways that are not fully understood yet. Thesse effects are naturally scaled by the volume fraction of RBCs in the blood, also called the hematocrit, which commonly dwells around 44\% depending on sex and levels of hydration among others.
 
 In face of the complexity of the blood rheology, a thixotropic and visco-elastic fluid, it is required to narrow down the range of accounted effects to the physically relevant ones in our environment. The latter is given by the main arterial system comprising vessels of diameters above approximately 1\,$mm$. There, the much larger channel size compared to RBCs and other cells permits the modelling of blood as a single phase fluid. The Fåhræus-Lindqvist effect~\cite{fareus1931} describing the dependency of the apparent viscosity on the vessel diameter can therefore be disregarded, since they are only relevant in vessels with diameters below 0.3mm. The flow in arteries is subject to larger shear rates $\dot{\gamma}$ than in arterioles, capilaries or veins overall, allowing us to focus on the behaviour of blood for $\dot{\gamma}>1s^{-1}$. In this regime, blood displays notable shear-thinning effects until $\dot{\gamma}<700s^{-1}$ from which it is usually seens as a Newtonian fluid~\cite{Fung1993}. One of many models that can cope with this behaviour is the well-known Casson model \autoref{eqn:casson}, in which $\tau_y$ representes the yield stress and $\mu_C$ the Casson viscosity.
@@ -121,19 +152,142 @@ The curves were fit using whole blood at $310K$ on patients with IA\@. The HTC v
 One source of uncertainty surrounding the modelling of blood, as suggested in~\cite{Suzuki2021}, is the effect of the anticoagulant, \eg\,heparin, needed for performing the measurements. While the anticoagulant can be more easily characterized, its effect on the complex fluid blood remains hard to describe with certainty.
 
 
-\section{Boundary Conditions}\label{chap2:sec3}
-Boundary conditions have been identified by several publications and computing challenges as sensitive components of hemodynamics simulations~\cite{Berg2019, Valen-Sendstad2018}. For that reason, Chapter 3 dedicates a full section to inlet and outlet BCs, providing both measurement-based techniques and heuristics that depend on the vascular topology. For now, they will be just shortly introduced.
 
-The domain boundaries for segments of the brain arterial system are divided into four groups: inlets $\Gamma_{in}$, outlets $\Gamma_{out}$, walls $\Gamma_{w}$ and endoluminal devices $\Gamma_{fd}$. In general terms, the inflow conditions, \ie~the blood supplied to the portion of the vasculature that is simulated, is imposed through a time-varying velocity profile. In mathematical terms speaking, it is expressed as:
+
+\section{Finite Element Analysis for the incompressible Navier-Stokes Equations}\label{chap2:sec2}
+
+As a reminder, the Sobolev space $H^1(\Omega)$ is the space of functions that belong to the space of square integrable functions $L^2(\Omega)$ and whose first derivatives are also square integrable. In more mathematical terms this can be written as:
 \begin{equation}
-	\vec{u} = g, \quad (\vec{x}, t) \in \Gamma_{in} \times (0,T]
-\end{equation}
-Outflow conditions on the other hand are related to the flow split caused by the resistance and capacitance of the distal vasculature. The split can be either modelled as an imposed volumetric flow or a normal stress. For now, we will stick to the latter:
-\begin{equation}
-	\sigma \cdot \vec{n} = \vec{h}, \quad (\vec{x}, t) \in \Gamma_{out} \times (0,T]
+	\begin{split}
+		H^1(\Omega) &= \left\{ v \in L^2(\Omega) \mid \nabla v \in L^2(\Omega) \right\}\\
+		L^2(\Omega) &= \left\{ v \mid \int_{\Omega} v^2 \,dV < \infty \right\}
+	\end{split}
 \end{equation}
 
-Arterial walls are a matter of discussion when it comes to modelling hemodynamics in the human brain. Compliance of arteries is one essential property that permits a blood circuit as ours to work. The heart, 
+
+\subsection{Stability Issues}\label{chap2:sec2:subsec1}
+One common question for all those starting to work with FE discretizations of the Navier-Stokes equations is why do most schemes include some sort of stabilization. The reason is twofold involving (i) first the compatibilities between the interpolations of velocity and pressures and secondly (ii) the effects of convection dominated flows. We will start by providing an ilustrative example of the first problem arising in the particular case of a P1-P1 coupling.
+
+\subsection{Stable Interpolations in mixed problems}\label{chap2:sec2:subsec1:subsubsec1}
+For showing possible problems arising from using the same order interpolations for velocities and pressures, we will consider the following simple example. Let us consider a 2D domain $\Omega\subset \mathbb{R}^2$ with a square shape and a uniform mesh of splitted rectangular elements (see \autoref{fig:LBB_Violation}). On that domain, it is sought to solve the Stokes problem with homogeneous boundary conditions:
+
+\begin{equation}
+	\begin{split}
+		\nabla p - \nabla\cdot2\mu\varepsilon(\vec{u}) &= \vec{f}\\
+		\nabla \cdot \vec{u} &= 0
+	\end{split}, \quad \vec{x} \in \Omega
+	\label{eqn:short_stokes}
+\end{equation}
+
+Since the Stokes problem admits any constant being added to the pressure, it is said to be unique up to a constant. Therefore, to close the system an auxiliary condition is added constraining the integral constant to fulfill that the volume integral of the pressure is zero:
+\begin{equation}
+	\int_{\Omega} p \,dV = 0
+	\label{eqn:auxiliary}
+\end{equation}
+
+The weak formulation of the problem is obtained by multiplying the equations with discrete test functions $\vec{v}_h$ and $q_h$ and integrating over $\Omega$. The domain itself has a valid partition $\Tau_h$ into triangular elements $K$ on which piecewise linear functions are defined following the classical $\mathbb{P}_1$-Lagrange elements.
+\begin{equation}
+	\begin{split}
+		\int_\Omega \vec{v}_h\cdot\nabla p_h - \vec{v}_h\cdot\left[\nabla\cdot2\mu\varepsilon(\vec{u}_h)\right] \,dV = \int_\Omega \vec{f}\,dV, \quad \vec{v}_h \in V_h&\\
+		\int_\Omega q_h\nabla \cdot \vec{u}_h\,dV = 0, \quad q_h \in Q_h&\\
+		V_h = {\{v_h \in H^1(\Omega) \mid v_{k|K} \in \mathbb{P}_1, \forall K\in \Tau_h\}}&^2\\
+		Q_h = {\{q_h \in L^2(\Omega) \mid q_{k|K} \in \mathbb{P}_1, \forall K\in \Tau_h\}}&\\
+	\end{split}\label{eqn:weak_stokes}
+\end{equation}
+Using the Gau\ss-divergence theorem and the homogeneous boundary conditions, this problem can be rewritten into:
+\begin{equation}
+	\begin{split}
+		\int_\Omega 2\mu\varepsilon(\vec{u}):\varepsilon(\vec{v})\,dV - \int_\Omega p\nabla\cdot\vec{v}\,dV &= \int_\Omega \vec{f}\cdot\vec{v}\,dV\\
+		\int_\Omega q\nabla \cdot \vec{u}\,dV &= 0
+	\end{split}\label{eqn:weak_stokes2}
+\end{equation}
+Assume now that $\hat{p}_h$ as shown in \autoref{fig:LBB_Violation} satisfies the relationship
+\begin{equation}
+	\int_{\Omega} \hat{p}_h\nabla\cdot\vec{v}_h\,dV = 0, \quad \forall \vec{v}_h \in V_h
+	\label{eqn:auxiliary2}
+\end{equation}
+Then it is clear that the solutions to the pressure of \autoref{eqn:weak_stokes2} are not unique, since any real-valued multiple of $\hat{p}_h$ would also satisfy \autoref{eqn:auxiliary2}. In other words, the pressure is not uniquely determined by the velocity field, since for any $\vec{v}_h$ the term vanishes. This can be easily verified by checking the veracity of $\hat{p}_h$ as a possible solution. First, it is clear that $\hat{p}_h\in Q_h$ and that the condition formulated in \autoref{eqn:auxiliary} is satisfied in all $K\in\Tau_h$.
+
+\begin{equation}
+	\int_{\Omega} \hat{p}_h \,dV = \sum_{K\in\Tau_h}	\int_{\Omega} \hat{p}_{h,K}\,dV = \sum_{K\in\Tau_h} (-1+0+1) * \Delta_K = 0
+\end{equation}
+
+Then, it remains showing that the proposed $\hat{p}_h$ is indeed in the kernel:
+
+\begin{align}
+	\int_{\Omega} \hat{p}_h\nabla\cdot\vec{v}_h\,dV & = \sum_{K\in\Tau_h}	\int_{\Omega} \hat{p}_{h,K}\nabla\cdot\vec{v}_{h,K}\,dV      \\
+	                                                & = \sum_{K\in\Tau_h}\nabla\cdot\vec{v}_{h,K} \int_{\Omega} \hat{p}_{h,K}\,dV = 0, \quad \forall \vec{v}_{h} \in V_h
+\end{align}
+Therefore, we can see that for the given mesh there is no uniqueness to the solutions. This is more formally expressed through the Inf-Sup condition, also called the Ladyzhenskaya-Babuska-Brezzi (LBB) condition. The LBB condition is a necessary and sufficient condition for the stability of the mixed finite element method for the Stokes and other problems that take a similar shape, with a bilinear form $a(\cdot,\cdot)$ involving the velocities or displacements and a linear form $b(\cdot,\cdot)$ involving the pressures. The LBB condition is given by:
+
+
+\begin{figure}[htbp]
+	\centering
+	\input{chapter2/Figures/LBB_Violation/Figure}
+	\caption{2D unit square decomposed into triangular elements. The pressures }
+	\label{fig:LBB_Violation}
+\end{figure}
+
+\subsection{Variational Multiscale Method}\label{chap2:sec2:subsec2}
+One strategy that allows for a stable appoximation of the solution of the Navier-Stokes equations for same order Lagrange elements under the presence of large convection terms is the Variational Multiscale method (VMS). More precisely, one can generate a VMS-type discretization of the Navier-Stokes equations by splitting the solution into a resolved large scales $\vec{U}_h$ and a subgrid contributions $\vec{U}'$. This idea shares many similarities with other turbulence models used in finite difference and finite volume methods such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes (RANS). In fact, it can be shown, that the stabilization technique that is going to be introduced can be seen an LES approach~\cite{Hughes2017}.
+
+\vspace*{3cm}
+Complete!!
+\vspace*{3cm}
+
+For the derivation of the VMS-type method that is going to be used in the hemodynamics simulations farther below, the problem in its strong form is going to be rewritten. The variables, $\vec{u}$ and $p$ are bundled into a single vector $\vec{U} = {[\vec{u}, p]}^T$. We introduce also the Navier-Stokes operator $\mathcal{L}$ and the right-hand side $\vec{F}$.
+\begin{equation}
+	\mathcal{L}(\vec{u}_{conv}, \vec{U}) = \begin{bmatrix}
+		\rho\partial_t \vec{u} + \rho(\vec{u}_{conv}\cdot\nabla)\vec{u} + \nabla p - \nabla\cdot2\mu\varepsilon(\vec{u}) \\
+		\nabla \cdot \vec{u}
+	\end{bmatrix}, \qquad
+	\vec{F} = \begin{bmatrix}
+		\rho\vec{g} \\
+		0
+	\end{bmatrix}
+\end{equation}
+
+Therefore, the strong form of the Navier-Stokes Equations  can be equally written as:
+\begin{equation}
+	\begin{split}
+		\mathcal{L}(\vec{u}_{conv}, \vec{U}) &= \vec{F}, \quad (\vec{x}, t) \in \Omega \times (0,T]\\
+		\vec{u} &= \vec{u}_0, \quad \vec{x} \in \Omega, t=0\\
+		\sigma \cdot \vec{n} &= \vec{h}, \quad (\vec{x}, t) \in \Gamma_{n} \times (0,T]\\
+		\vec{u} &= \vec{u}_d, \quad (\vec{x}, t) \in \Gamma_{d} \times (0,T]
+	\end{split}
+	\label{eqn:short_strong}
+\end{equation}
+The weak form of the Navier-Stokes equations can be obtained by multiplying the strong form \autoref{eqn:short_strong} with tests functions $\vec{V} = {[\vec{w}, q]}^T$ contained in the Sobolev space $H^1(\Omega)$.
+
+The multiplication of \autoref{eqn:short_strong} with the test functions $\vec{V}$ is subsequently integrated over $\Omega$.
+\begin{equation}
+	\int_{\Omega} \vec{V} \cdot \mathcal{L}(\vec{u}_{conv}, \vec{U}) \,dV = \int_{\Omega} \vec{V} \cdot \vec{F} \,dV, \quad \forall \vec{V} \in {[H^1(\Omega)]}^d
+\end{equation}
+
+
+
+
+
+VMS-type methods now introduce a decomposition of the solution into a resolved part $\vec{U}_h$ and a subgrid part $\vec{U}'$. The coarse scales are solved on the existing mesh with, in our case linear elements, while the subgrid scales are the (potentially) infinite-dimensional and will be modelled instead. The same decomposition is applied to the test functions $\vec{V}$. The function spaces
+
+\begin{equation}
+	\vec{U} = \vec{U}_h + \vec{U}', \qquad \vec{U} \in V_h =: \left\{ \vec{u}, p \in H^1(\Omega) \mid \vec{u} = \vec{u}_d\,\text{on}\,\Gamma_{d} \right\}
+\end{equation}
+\begin{equation}
+	\vec{V} = \vec{V}_h + \vec{V}'
+\end{equation}
+Where
+\begin{equation}
+	\begin{split}
+		\vec{U}_h, \vec{V}_h \in \vec{W_h} \oplus \vec{W'} =: \vec W\\
+		\vec{W} \backslash \vec{W_h} = \vec{W'}
+	\end{split}
+\end{equation}
+
+
+\subsection{Subscale Modelling}\label{chap2:sec2:subsec3}
+
+
 
 \bibliographystyle{elsarticle-num}
 \bibliography{chapter2/Biblio}

@@ -201,3 +201,49 @@
   volume          = {9},
   year            = {2018}
 }
+
+
+@article{Forti2015,
+  abstract        = {In this paper, we propose a semi-implicit approach for the time discretization of the Navier-Stokes equations with Variational Multiscale-Large Eddy Simulation turbulence modeling (VMS-LES). For the spatial approximation of the problem, we use the Finite Element method, while we employ the Backward Differentiation Formulas (BDF) for the time discretization. We treat the nonlinear terms arising in the variational formulation of the problem with a semi-implicit approach leading to a linear system associated to the fully discrete problem which needs to be assembled and solved only once at each discrete time instance. We solve this linear system by means of the GMRES method by employing a multigrid (ML) right preconditioner for the parallel setting. We validate the proposed fully discrete scheme towards the benchmark problem of the flow past a squared cylinder at high Reynolds number and we show the computational efficiency and scalability results of the solver in a High Performance Computing framework.},
+  author          = {Forti, Davide and Ded{\`{e}}, Luca},
+  doi             = {10.1016/j.compfluid.2015.05.011},
+  file            = {:home/admin-pjekenrico/.var/app/com.elsevier.MendeleyDesktop/data/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Forti, Ded{\`{e}} - 2015 - Semi-implicit BDF time discretization of the Navier-Stokes equations with VMS-LES modeling in a High Performanc(2).pdf:pdf},
+  issn            = {00457930},
+  journal         = {Computers and Fluids},
+  keywords        = {Backward differentiation formulas,Finite element method,High performance computing,Large eddy simulation,Navier-Stokes equations,Variational multiscale modeling},
+  mendeley-groups = {VMS},
+  pages           = {168--182},
+  publisher       = {Elsevier Ltd},
+  title           = {{Semi-implicit BDF time discretization of the Navier-Stokes equations with VMS-LES modeling in a High Performance Computing framework}},
+  url             = {http://dx.doi.org/10.1016/j.compfluid.2015.05.011},
+  volume          = {117},
+  year            = {2015}
+}
+
+
+@book{Hughes2017,
+  abstract        = {Abstract This chapter presents an introduction to multiscale and stabilized methods, which represent unified approaches to modeling and numerical solution of fluid dynamic phenomena. Finite-element applications are emphasized but the ideas are general and apply to other numerical methods as well. (They have been used in the development of finite difference, finite volume, and spectral methods, in addition to finite-element methods.) The analytical ideas are first illustrated for time-harmonic wave-propagation problems in unbounded fluid domains governed by the Helmholtz equation. This leads to the well-known Dirichlet-to-Neumann formulation. A general treatment of the variational multiscale method in the context of an abstract Dirichlet problem is then presented, which is applicable to advective?diffusive processes and other processes of physical interest. It is shown how the exact theory represents a paradigm for subgrid-scale models and a posteriori error estimation. Hierarchical p-methods and bubble function methods are examined in order to understand and ultimately approximate the ?fine-scale Green's function? that appears in the theory. Relationships among the so-called residual-free bubbles, element Green's functions, and stabilized methods are exhibited. These ideas are then generalized to a class of nonsymmetric, linear evolution operators formulated in space?time. The variational multiscale method also provides guidelines and inspiration for the development of stabilized methods [e.g., SUPG (streamline upwind Petrov?Galerkin) and GLS (Galerkin least squares)) that have attracted considerable interest and have been extensively utilized in engineering and the physical sciences. An overview of stabilized methods for advective?diffusive equations is presented. A variational multiscale treatment of incompressible viscous flows, including turbulence, is also described. This represents an alternative formulation of large-eddy simulation, which provides a simplified theoretical framework of LES with potential for improved modeling.},
+  author          = {Hughes, Thomas J. R. and Scovazzi, Guglielmo and Franca, Leopoldo P.},
+  booktitle       = {Encyclopedia of Computational Mechanics Second Edition},
+  doi             = {10.1002/9781119176817.ecm2051},
+  file            = {:home/admin-pjekenrico/.var/app/com.elsevier.MendeleyDesktop/data/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Hughes, Scovazzi, Franca - 2017 - Multiscale and Stabilized Methods.pdf:pdf},
+  isbn            = {9781119176817},
+  mendeley-groups = {VMS},
+  pages           = {1--64},
+  title           = {{Multiscale and Stabilized Methods}},
+  year            = {2017}
+}
+
+
+@article{Codina2002,
+  abstract = {In this paper we present a stabilized finite element method to solve the transient Navier-Stokes equations based on the decomposition of the unknowns into resolvable and subgrid scales. The latter are approximately accounted for, so as to end up with a stable finite element problem which, in particular, allows to deal with convection-dominated flows and the use of equal velocity-pressure interpolations. Three main issues are addressed. The first is a method to estimate the behavior of the stabilization parameters based on a Fourier analysis of the problem for the subscales. Secondly, the way to deal with transient problems discretized using a finite difference scheme is discussed. Finally, the treatment of the nonlinear term is also analyzed. A very important feature of this work is that the subgrid scales are taken as orthogonal to the finite element space. In the transient case, this simplifies considerably the numerical scheme. © 2002 Elsevier Science B.V. All rights reserved.},
+  author   = {Ramon Codina},
+  doi      = {10.1016/S0045-7825(02)00337-7},
+  issn     = {00457825},
+  issue    = {39-40},
+  journal  = {Computer Methods in Applied Mechanics and Engineering},
+  pages    = {4295-4321},
+  title    = {Stabilized finite element approximation of transient incompressible flows using orthogonal subscales},
+  volume   = {191},
+  year     = {2002}
+}
