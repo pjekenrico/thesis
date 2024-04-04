@@ -156,6 +156,9 @@ One source of uncertainty surrounding the modelling of blood, as suggested in~\c
 
 \section{Finite Element Analysis for the incompressible Navier-Stokes Equations}\label{chap2:sec2}
 
+To properly understand the content of the following section, it is important to get familiar with some basics required Finite Element Analysis (FEA) for those who are not yet familiar with them. Contrary to finite differences and volumes, where the strong form of the equations can be used to start the discretization, finite elements base themselves on a weak formulation of the problem.
+
+
 As a reminder, the Sobolev space $H^1(\Omega)$ is the space of functions that belong to the space of square integrable functions $L^2(\Omega)$ and whose first derivatives are also square integrable. In more mathematical terms this can be written as:
 \begin{equation}
 	\begin{split}
@@ -201,7 +204,15 @@ Using the Gau\ss-divergence theorem and the homogeneous boundary conditions, thi
 		\int_\Omega q\nabla \cdot \vec{u}\,dV &= 0
 	\end{split}\label{eqn:weak_stokes2}
 \end{equation}
-Assume now that $\hat{p}_h$ as shown in \autoref{fig:LBB_Violation} satisfies the relationship
+
+\begin{figure}[htbp]
+	\centering
+	\input{chapter2/Figures/LBB_Violation/Figure}
+	\caption{2D unit square decomposed into triangular elements. The pressures }
+	\label{fig:LBB_Violation}
+\end{figure}
+
+Assume now that $\hat{p}_h$ as shown in \autoref{fig:LBB_Violation} satisfies the relationship:
 \begin{equation}
 	\int_{\Omega} \hat{p}_h\nabla\cdot\vec{v}_h\,dV = 0, \quad \forall \vec{v}_h \in V_h
 	\label{eqn:auxiliary2}
@@ -215,18 +226,75 @@ Then it is clear that the solutions to the pressure of \autoref{eqn:weak_stokes2
 Then, it remains showing that the proposed $\hat{p}_h$ is indeed in the kernel:
 
 \begin{align}
-	\int_{\Omega} \hat{p}_h\nabla\cdot\vec{v}_h\,dV & = \sum_{K\in\Tau_h}	\int_{\Omega} \hat{p}_{h,K}\nabla\cdot\vec{v}_{h,K}\,dV      \\
+	\int_{\Omega} \hat{p}_h\nabla\cdot\vec{v}_h\,dV & = \sum_{K\in\Tau_h}	\int_{\Omega} \hat{p}_{h,K}\nabla\cdot\vec{v}_{h,K}\,dV                                         \\
 	                                                & = \sum_{K\in\Tau_h}\nabla\cdot\vec{v}_{h,K} \int_{\Omega} \hat{p}_{h,K}\,dV = 0, \quad \forall \vec{v}_{h} \in V_h
 \end{align}
-Therefore, we can see that for the given mesh there is no uniqueness to the solutions. This is more formally expressed through the Inf-Sup condition, also called the Ladyzhenskaya-Babuska-Brezzi (LBB) condition. The LBB condition is a necessary and sufficient condition for the stability of the mixed finite element method for the Stokes and other problems that take a similar shape, with a bilinear form $a(\cdot,\cdot)$ involving the velocities or displacements and a linear form $b(\cdot,\cdot)$ involving the pressures. The LBB condition is given by:
+Therefore, we can see that for the given mesh there is no uniqueness to the solutions, posing a major problem. This phenomenon is due to the inherent compatibility of equal order interpolations on some meshes, although it is not necessary, that for all triangulations this pressure problem arises. This is more formally expressed through the Inf-Sup condition, also called the Ladyzhenskaya-Babuska-Brezzi (LBB) condition. The LBB condition is a necessary and sufficient condition for the stability of the mixed finite element method for the Stokes and other problems that take a similar shape. The LBB condition is met if there exist a mesh independent factor $\beta > 0$ such that the following inequality holds:
 
+\begin{equation}
+	\exists \beta > 0:\quad \inf_{q_h\in Q_h} \sup_{\vec{v}_h\in V_h} \frac{\int_{\Omega} q_h\nabla\cdot\vec{v}_h\,dV}{\norm{q_h}_{L^2}\norm{\vec{v}_h}_{H^1}} \geq \beta > 0
+	\label{eqn:LBB}
+\end{equation}
 
-\begin{figure}[htbp]
-	\centering
-	\input{chapter2/Figures/LBB_Violation/Figure}
-	\caption{2D unit square decomposed into triangular elements. The pressures }
-	\label{fig:LBB_Violation}
-\end{figure}
+The condition \autoref{eqn:LBB} is satisfied inconditionally for some pairings, such as the Taylor-Hood (P2-P1), but clearly not for P1-P1 pairings. The stabilization techniques introduced later however mitigate this inherent issue.
+
+\subsection{Convection dominated processes}\label{chap2:sec2:subsec1:subsubsec2}
+Compared to the Stokes problem, the Navier-Stokes equations introduce the complexity of a non-linear convection term $(\vec{u}\cdot\nabla)\vec{u}$. In physical terms speaking it describes how certain information is carried by a velocity field throughout the domain. To understand the challenges it involves it suffices again to consider a much simpler example. Let us consider the stationary advection-diffusion equation in 1D for any scalar field $\varphi$ and a small constant diffusion coefficient $\varepsilon$. Take $u$ to be a constant positive velocity.
+\begin{equation}
+	\begin{split}
+		u \partial_x \varphi - \varepsilon\partial_{xx}\varphi= f\\
+		\varphi(\Gamma_0) = \varphi(\Gamma_1) = 0
+	\end{split}
+	\label{eqn:advection_diffusion}
+\end{equation}
+For a better interpretation take $\varphi$ as to be a temperature that is convected through a pipe to transport heat between sources and sinks given by $f$. The boundaries are set to the reference temperature $0$. Here again we compute the weak formulation:
+\begin{equation}
+	\int_{\Omega} u\psi\partial_x\varphi + \varepsilon\partial_x\varphi\partial_x\psi\,dx = \int_{\Omega} f\psi\,dx, \quad \forall \psi\in H^1_0(\Omega)
+	\label{eqn:weak_advection_diffusion}
+\end{equation}
+The bilinear operator $a(\cdot,\cdot)$ of \autoref{eqn:weak_advection_diffusion} can be written as:
+\begin{equation}
+	a(\varphi, \psi) = \int_{\Omega} u\psi\partial_x\varphi + \varepsilon\partial_x\varphi\partial_x\psi\,dx
+	\label{eqn:bilinear_advection_diffusion}
+\end{equation}
+With this bilinear form, we are going to show that for the standart Galerkin discretization some necessary criteria for existence and uniqueness are not met when $\varepsilon\rightarrow0$. Before continuing, the Lax-Milgram theorem is stated:
+
+\begin{theorem}[Lax-Milgram]
+	Let $V$ be a Hilbert space and $a(\cdot,\cdot)$ a bilinear form on $V$ that satisfies:
+	\begin{align*}
+		\text{Continuity:} & \quad \exists C\in \mathbb{R}^+ : |a(u,v)| \leq C\norm{u}_V\norm{v}_V, \quad \forall u,v\in V \\
+		\text{Coercivity:} & \quad \exists \alpha\in \mathbb{R}^+ : a(u,u) \geq \alpha\norm{u}_V^2, \quad \forall u\in V
+	\end{align*}
+
+	Then there exists a unique solution $u\in V$ for a bounded linear form $f(v)$ to the variational problem:
+	\begin{equation*}
+		a(u, v) = f(v), \quad \forall v\in V
+	\end{equation*}
+\end{theorem}
+In the convection-diffusion equation, the coercivity condition reads as followed:
+\begin{align}
+	a(\varphi, \varphi) & = \int_{\Omega} u\varphi\partial_x\varphi + \varepsilon{(\partial_x\varphi)}^2\,dx                                 \\
+	                    & = \int_{\Omega} \frac{u}{2}\partial_x\varphi^2 + \varepsilon{(\partial_x\varphi)}^2\,dx                            \\
+	                    & = \frac{u}{2}{\left[\varphi^2\right]}^{\Gamma_1}_{\Gamma_0} + \int_{\Omega} \varepsilon{(\partial_x\varphi)}^2\,dx \\
+	                    & = \varepsilon \norm{\varphi}^2_{H^1(\Omega)}
+\end{align}
+Therefore, for $\varepsilon\rightarrow0$ or in other words, for pure convection the coercivity condition is not met and uniqueness and existence cannot be guaranteed. This phenomenon can also be observed in finite differences when central schemes are used for the space discretization of convective terms. In fact, a discretization with central finite differences of the convection-diffusion problem will lead to the same linear system with first order Lagrange elements. For that reason, the FEA approach is oftentimes seen as a central scheme. In finite difference discretizations, the problem is usually tackled by exchanging higher order central schemes by upwind schemes. These, as the name suggests, employ the data found upwind of the flow velocity to discretize spatial gradients.
+\begin{equation}
+	\partial_x\varphi =
+	\begin{cases} \frac{\varphi(x) - \varphi(x-\Delta x)}{\Delta x}, \quad u > 0 \\
+		\frac{\varphi(x+\Delta x) - \varphi(x)}{\Delta x}, \quad \text{else}
+	\end{cases} +\mathcal{O}(\Delta x)
+\end{equation}
+An interesting note is, that these schemes can also be interpreted as central differences with added diffusion terms. Consider for example the case $u>0$:
+\begin{equation}
+	\begin{split}
+		\partial_x\varphi &= \frac{\varphi(x+\Delta x) - \varphi(x-\Delta x)}{2\Delta x} + \mathcal{O}(\Delta x^2)\\ &\approx \frac{\varphi(x) - \varphi(x-\Delta x)}{\Delta x} + \frac{\Delta x}{2}\left(\frac{\varphi(x+\Delta x) - 2\varphi(x) + \varphi(x - \Delta x)}{\Delta x^2}\right)\\
+		&= \frac{\varphi(x) - \varphi(x-\Delta x)}{\Delta x}  + \mathcal{O}(\Delta x)\\
+		\partial_{x}^{UD}\varphi &= \partial_{x}\varphi - \varepsilon\partial_{xx}\varphi, \quad \varepsilon = \frac{\Delta x}{2}
+	\end{split}
+	\label{eqn:upwind}
+\end{equation}
+Thus, a first order upwinding scheme can be seen as a central scheme with an added diffusion term of the order $\varepsilon$ to satisfy the coercivity constraint. Luckily, the VMS-type stabilization that we will employ later does also tackle this problem. While the compatibility constraint is aleviated through a relaxation of the mass balance, the convection phenomena are handled by a resulting shift in the test function. This shift, as will be seen later, is proportional to the convective velocity and acts in a similar way to a flux delimiter.
 
 \subsection{Variational Multiscale Method}\label{chap2:sec2:subsec2}
 One strategy that allows for a stable appoximation of the solution of the Navier-Stokes equations for same order Lagrange elements under the presence of large convection terms is the Variational Multiscale method (VMS). More precisely, one can generate a VMS-type discretization of the Navier-Stokes equations by splitting the solution into a resolved large scales $\vec{U}_h$ and a subgrid contributions $\vec{U}'$. This idea shares many similarities with other turbulence models used in finite difference and finite volume methods such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes (RANS). In fact, it can be shown, that the stabilization technique that is going to be introduced can be seen an LES approach~\cite{Hughes2017}.
