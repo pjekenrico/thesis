@@ -6,21 +6,17 @@
 \chapter{Title of the Chapter 4}
 \minitoc\newpage\label{chap.4}
 
+After an introduction into the computation of hemodynamics in human brain arterial systems, we now will dwell into the modelling of one of the available tools to treat IA, flow diverter stents. The chapter first provide a brief description of the stents, their field of application and outline the areas of remaining research questions. Then a comprehensive guide on how to generate virtual stents based on geometrical constraints will be given. The tool is then validated against deployments found in literature, in-vitro experiments conducted in the course of this work and lastly against a real patient case. The last case is exploited to describe an accessible option to embedd thin devices, such as flow diverter stents, into unstructured tetraahedral meshing using anisotropic meshing and level-set methods. The contents of this chapter are largely based on the work of the author and have been published in XXX during the course of the phd work.
+
 \section{Flow Diverter Stents}\label{chap4:sec1:subsec1}
 
-Flow Diverter stents (FDs) have become a viable alternative to coiling of IA, especially in cases of giant wide-necked and fusiform aneurysms. The use of coils in those particular cases bears a higher risk of coil compaction or detachment~\cite{Takumi2021}. FDs, on the contrary, gain their stability through the aposition with the parent artery. FD stents are, in most cases, structures of woven wires that, in an unconstrained state, resemble a tube. The specific metal alloys used, for instance, Nickel-Titanium or Cobalt-Chromium are chosen due to their shape memory effects as well as their compatibility with the human body. Mechanically, shape memory alloys allow large elastic deformations without losing their potential to return to an original shape set under certain thermo-mechanical conditions~\cite{Petrini2011}.
+Since their introduction in the early 2000s, Flow-Diverter stents (FD) have exhibited a heterogeneous performance, posing challenges to overall assessment~\cite{Dmytriw2019, Maragkos2020}. Initially, these devices were introduced as supplementary tools for neuroradiologists tackling complex Intracranial Aneurysms (IA), especially those in which other treatments were inapplicable or would most likely pose a large risk to the patient. Examples include wide-neck or fusiform aneurysms where conventional coils struggle to secure attachment and are likely to cause complications. In contrast, FD stents are braided tubular structures deployed within the parent artery to cover the IA neck thereby redirecting the flow away from it. Subsequently, the intra-aneurysmal flow is reduced, promoting thrombus formation, reducing the rupture risk and facilitating the contraction of the aneurysmal bulge. The effectivity of the device is commonly assessed through its Metal Coverage Ratio (MCR), with values around 30\% being optimal~\cite{Jou2016, Maragkos2020}. Studies and meta-analyses indicate occlusion rates ranging from 49\% to 100\%, with around 60\% of cases experiencing bulge reabsorption (see~\cite{Dmytriw2019, Maragkos2020, Ngoepe2018} and therein). The substantial variations in success rates across treatment centres, IA locations, and device types have spurred engineers to delve into FDs' mechanical and hemodynamic interactions to optimize their efficacy. Since the beginning of the decade, computational fluid and solid dynamics have provided valuable insights into the localized effects of FD deployment without posing additional risks to patients. While simulations offer detailed hemodynamic information compared to experimental flow estimations, their accuracy relies on precisely segmenting the patient's lumen and, crucially, a physiologically accurate representation of the FD device.
 
-INSERT INFO ABOUT MAKING A STENT AND IMAGES
+Among the pioneering works in this field is the Virtual Stent Deployment (VSD) technique introduced by Mut \etal~(2009)~\cite{Mut2009} and Cebral \etal~(2005)~\cite{Cebral2005}. In this approach, the FD is modelled as an elastic membrane that deforms in the vessel to accommodate internal smoothing forces and external attractive forces. The wires are then winded regularly in the computed hull without accounting for compaction effects due to bending. Cebral \etal~(2011)~\cite{Cebral2011} then uses this method to study several stented giant aneurysms to explore reasons for rupture occurrences. They identified increased pressure resulting from the coverage of other branching vessels as a potential causal factor. In 2012, Ma \etal~\cite{Ma2012} employed Finite Element analysis (FE) to simulate the complete FD deployment process, validating their results through an in-vitro experiment with favourable outcomes. Simultaneously, Larrabide \etal~(2012)~\cite{Larrabide2012} introduced a constrained simplex deformable model, and validated it via ink density tracking in both experimental and simulated cases, yielding satisfactory results. While highly versatile, this method's drawback lies in the modelling errors in IA neck sections as well as tortuous geometries, where determining an initial condition for stent expansion proves challenging, following the author's statements. Subsequently, Ouared \etal~(2016)~\cite{Ouared2016} utilized this method to investigate 12 patient cases treated with FD stents, indicating that a minimal flow reduction of one-third relative to unstented hemodynamics is necessary for successful occlusion. Among the latest contributions, Zavodszky \etal~(2020)~\cite{Zavodszky2020} modelled the stent through a system of damped springs, enabling a comprehensive application of the push-and-pull technique~\cite{Shapiro2014a}. Contrary to most publications, this method was thoroughly validated in different deployment scenarios yielding mostly satisfying results over the whole device length excepting the neck area. Unfortunately, the kinks inherent to the spring-based discretization are problematic on a fluid mechanical level potentially causing adverse turbulent effects.
 
-The shape memory is needed so that the stent may be squeezed through a narrow catheter and later re-expanded in the vessel. Radioopaque wires e.g.~ones made of Platinum-Tungsten alloy, are commonly included in the mesh allowing physicians to track the device through CT imaging. The procedural deployment involves the interventionalist guiding a microcatheter toward a position downstream of the IA\@. Subsequently, the distal end of the FD is carefully expanded, ideally establishing full contact with the vessel's entire cross-section. By meticulously withdrawing the catheter and advancing the FD, the device is deployed across the aneurysm. One key determinant of a successful deployment is achieving optimal wall apposition, ensuring that the stent's radial force is sufficient for secure anchoring within the artery.
+Geometry-based approaches have also been introduced, such as the one of Janiga \etal~(2013)~\cite{Janiga2013}, where Free-Form Deformations (FFD) are used to model the deployed stent's hull. The stent wires are then generated over the deformed hull following angle measurements from post-operative images. The latter method has undergone validation using patient CT images and has been employed in subsequent studies~\cite{Berg2016, Sindeev2018}, including the illustrative review by Berg \etal~(2017)~\cite{Berg2017}. Furthermore, Bouillot \etal~(2016)~\cite{Bouillot2016} made a significant contribution by addressing the challenge of wire compaction due to bending, a common phenomenon observed with FD devices~\cite{Shapiro2014a}. They derived a set of analytical equations describing this phenomenon, which exhibited robustness and demonstrated good agreement with experimental data.
 
-Neuroradiologists can fine-tune the apposition through the device's sizing and the force applied during deployment. This equally impacts the haemodynamic effects on the aneurysm, since more compactly packed wires result in a reduced porosity. The stagnation of blood in the aneurysm after the operation is intended to form a stable thrombus that progressively fills the whole cavity, thereby stabilizing the aneurysm and reducing its risk of rupture. In a successful operation, a thrombus can be observed to form in a matter of days after the intervention~\cite{Dandapat2021}. The FD stent also fulfills the role of providing a scaffold for endothelial cells to adhere and grow over it, forming a tight closure. Under these conditions, the thrombus in the dome can slowly be converted into collagen, causing the formation to shrink.
-
-Both sizing and deployment of the FD stents are complex procedures that require careful consideration due to an array of in- and post-operative complications. For once, the position of the IA or the vascular topology can complicate the procedure. Also, achieving an optimal porosity is not a straightforward task since both too high and too low conditions have proved problematic~\cite{Ravindran2020, Shapiro2014}. In an attempt to aid physicians in their work, engineers have developed models that simulate the deployment with physics-based or geometry-based approaches. While not standardized in medical use, they can prove helpful estimations of lengths and porosities~\cite{Larrabide2012}. One major issue impeding the serialized use of deployment simulators is the quantity of preprocessing steps needed as well as the non-negligible variability while deploying the stent.
-
-For research purposes, however, simulating the stents following an actual intervention can help to more accurately quantify the haemodynamic changes taking place in the IA\@. In turn, this can give insights into what the main driving factors are in a healing process and into what might have been the causes for poor outcomes in some operations. In the first stage, the target is to find a way of replicating in-silico a stent following an existing medical case. Since, to the best knowledge of the author, no deployment tool is publicly available to use, a deployment pipeline has been coded and will be explained in deal of detail in the following subsections. We will start by giving a comprehensive introduction to the parametrization of vessels, followed by basic geometric characteristics of stents. Both topics are the building blocks of the latter geometrical deployment.
-
-FINISH SECTION OVERVIEW
+In this work, we propose several enhancements to improve the accuracy of virtual flow diverter deployment. Building on prior research and addressing identified shortcomings, our approach includes: (i) introducing a rotation-minimizing vessel parametrization, (ii) deriving and validating a new winding rule through literature examples and conducted experiments, (iii) applying Free-Form Deformation (FFD) of the stent to the vessel walls, and (iv) providing a comprehensive integration into 3D volumetric meshes using accessible, open-source tools. It is important to highlight that these advancements aim to facilitate the use of embedded devices in fluid dynamics simulations, thus enhancing the reliability and effectiveness of stent deployment in clinical applications. Finally, we propose several validations first against literature examples, then in-vitro experiments, and patient data, in order to demonstrate the robustness and accuracy of the proposed approach.
 
 
 \subsection{Vessel parametrization}\label{chap4:sec1:subsec2}
@@ -30,53 +26,53 @@ The geometric description of the vasculature surrounding the aneurysm is the fir
 Apart from the positioning, it is equally important to have a notion of the orientation of the vessel, i.e.\,keeping track of the deformation of the centerline to readjust the generation of stent wires. To tackle this challenge, smooth BSplines may be used to generate a continuous centerline curve along the desired path. Take $\vec\gamma(t):[0,1]\rightarrow\mathbb{R}^3$ as to be such a curve composed by cubic BSplines, i.e. $\gamma_{i}(t)\in C^2$. Suppose also that there exists a unique parametrization $s(t)$ such that:
 
 \begin{equation}
-    \norm{\frac{d\vec{\gamma}(s)}{ds}}_2^2 = {\left(\frac{d}{ds}x(s)\right)}^2 + {\left(\frac{d}{ds}y(s)\right)}^2 + {\left(\frac{d}{ds}z(s)\right)}^2 = 1,\quad\forall t\in[0,1]
+	\norm{\frac{d\vec{\gamma}(s)}{ds}}_2^2 = {\left(\frac{d}{ds}x(s)\right)}^2 + {\left(\frac{d}{ds}y(s)\right)}^2 + {\left(\frac{d}{ds}z(s)\right)}^2 = 1,\quad\forall t\in[0,1]
 \end{equation}
 
 
 \begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/CurveAnalysis.tex}
-    \caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
+	\centering
+	\input{chapter4/Figures/CurveAnalysis.tex}
+	\caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
 \end{figure}
 
 For the generation of the stent, it will be necessary to compute the curve's unit tangent $\vec{T}$ and major radius $\vec{R}$ as well as the orthogonal basis $\vec{e}_1,\,\vec{e}_2$ to generate the struts. $\vec{T}$ denotes the momentaneous velocity direction of the curve and is therefore given by:
 
 \begin{equation}
-    \vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1} = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
+	\vec{T}(t) = \frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1} = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
 \end{equation}
 
 Since the parametrization $s$ is an arc parametrization we know that the relationship holds:
 
 \begin{equation}
-    \norm{\frac{d \vec{\gamma}(t) }{dt}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}{\frac{ds}{dt}}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}}_2\snorm{\frac{ds}{dt}}=\frac{ds}{dt}
+	\norm{\frac{d \vec{\gamma}(t) }{dt}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}{\frac{ds}{dt}}}_2 = \norm{\frac{d\vec{\gamma}(s)}{ds}}_2\snorm{\frac{ds}{dt}}=\frac{ds}{dt}
 \end{equation}
 
 The major radius is defined with the help of the Frenet-Serret equations in terms of $s$ as:
 
 \begin{equation}
-    \vec{R}(t) = \frac{d\vec{T}(s)}{ds} = \frac{d\vec{T}(t)}{dt} \frac{dt}{ds}
+	\vec{R}(t) = \frac{d\vec{T}(s)}{ds} = \frac{d\vec{T}(t)}{dt} \frac{dt}{ds}
 \end{equation}
 
 \begin{align}
-    \frac{d\vec{T}(t)}{dt} &= \frac{d}{dt}{\left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\right)}\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) + \frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-2}_2\frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}_2\\
-    &= \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-3}_2\frac{d}{dt}\vec{\gamma}(t) {\left(\frac{d}{dt}\vec{\gamma}(t)\cdot\frac{d^2}{dt^2}\vec{\gamma}(t)\right)}
+	\frac{d\vec{T}(t)}{dt} & = \frac{d}{dt}{\left(\frac{d}{dt}\vec{\gamma}(t)\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\right)}                                                                                                                                \\
+	                       & = \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) + \frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2                                                                   \\
+	                       & = \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-2}_2\frac{d}{dt}\vec{\gamma}(t) \frac{d}{dt}\norm{\frac{d}{dt}\vec{\gamma}(t)}_2                               \\
+	                       & = \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-1}_2\frac{d^2}{dt^2}\vec{\gamma}(t) - \norm{\frac{d}{dt}\vec{\gamma}(t)}^{-3}_2\frac{d}{dt}\vec{\gamma}(t) {\left(\frac{d}{dt}\vec{\gamma}(t)\cdot\frac{d^2}{dt^2}\vec{\gamma}(t)\right)}
 \end{align}
 
 Therefore, in short-hand notation for the derivatives, the major radius may be expressed as:
 
 \begin{equation}
-    \vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
-    \label{eq:major_R}
+	\vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
+	\label{eq:major_R}
 \end{equation}
 
 Once the terms for $\vec{T}$ and $\vec{R}$ are found, the Frenet-Serret frames for the curve are given by:
 
 \begin{equation}
-    \vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
-    \label{eq:frenet}
+	\vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
+	\label{eq:frenet}
 \end{equation}
 
 In agreement with publications related to this topic, it is recommended that the fitted centerline curve is moderately smoothed. This prevents overfitting, which could otherwise lead to an exagerated twisting of the local basis $\vec{e}_i$.
@@ -85,47 +81,47 @@ In agreement with publications related to this topic, it is recommended that the
 \subsection{Stent properties}\label{chap4:sec1:subsec3}
 The stents adopt their nominal lengths and diameters under unconstrained conditions. When radially compressed, the wires bend in axial direction, causing the stent to grow in length and its pores to grow wider. To aid physicians in chosing the correct device, producers add basic information points relating diameter and device length, as well as some porosity estimators. Nevertheless, there are many other factors that influence the stent geometry, such as the deformation of its centerline.
 \begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/StentOverview.tex}
-    \caption[short]{Sketch of a stent bent into a toroidal envelope.}\label{fig:overview_stent}
+	\centering
+	\input{chapter4/Figures/StentOverview.tex}
+	\caption[short]{Sketch of a stent bent into a toroidal envelope.}\label{fig:overview_stent}
 \end{figure}
 To simplify some aspects of the analysis we will assume that the inter-wire distance $w$ remains constant for each stent and that the overlap effects of the wires are negligible, following the example of~\cite{Bouillot2016}. First, some of the parameters that are convenient for the computation will be expressed in terms that can be more easily extracted from product specifications. The braiding angle $\alpha$ for a stent with $N_w$ wires, an inter-wire distance $w$ and a nominal radius $r$ is given by:
 
 \begin{equation}
-\alpha = \sin^{-1}{\left(\frac{2\pi r}{wN_w}\right)}
-\label{eq:winding_angle}
+	\alpha = \sin^{-1}{\left(\frac{2\pi r}{wN_w}\right)}
+	\label{eq:winding_angle}
 \end{equation}
 
 Since neither $w$ nor $\alpha$ are commonly provided quantites, it is necessary to compute them from the length-diamter information. Consider a wire of length $l_w$ that evolves around the cylindric stent. Then for different radii $r_1$, $r_2$ and their corresponding lengths $L_1$, $L_2$ we have that:
 \begin{equation}
-    l_w = \frac{L_1}{\cos(\alpha(r_1))} = \frac{L_2}{\cos(\alpha(r_2))}
+	l_w = \frac{L_1}{\cos(\alpha(r_1))} = \frac{L_2}{\cos(\alpha(r_2))}
 \end{equation}
 
 \begin{equation}
-    L_1\sqrt{1-{\left(\frac{2\pi r_2}{wN_w}\right)}^2} = L_2\sqrt{1-{\left(\frac{2\pi r_1}{wN_w}\right)}^2}
-    \label{eq:clearing_stent}
+	L_1\sqrt{1-{\left(\frac{2\pi r_2}{wN_w}\right)}^2} = L_2\sqrt{1-{\left(\frac{2\pi r_1}{wN_w}\right)}^2}
+	\label{eq:clearing_stent}
 \end{equation}
 By clearing Equation~\eqref{eq:clearing_stent} we obtain the expressions for $l_w$ and $w$. Common values for $w$ usually lay around 0.15 to 0.25\,\si{mm}, while $l_w$ is a multiple of the stent length.
 \begin{equation}
-    w = \frac{2\pi}{N_w}\sqrt{\frac{L_1^2r_2^2 - L_2^2r_1^2}{L_1^2-L_2^2}}
+	w = \frac{2\pi}{N_w}\sqrt{\frac{L_1^2r_2^2 - L_2^2r_1^2}{L_1^2-L_2^2}}
 \end{equation}
 \begin{equation}
-    l_w = \frac{L_1}{\sqrt{1-{\left(\frac{2\pi r_1}{wN_w}\right)}^2}}
+	l_w = \frac{L_1}{\sqrt{1-{\left(\frac{2\pi r_1}{wN_w}\right)}^2}}
 \end{equation}
 
 With these clearly defined quantites we can also set up an expression for the local porosity of the structure. The porosity $\varphi$ is a factor describing the ratio between the uncovered area and the total area of the flow diverter. It depends not only on the wire thickness $d_w$, which is typically 30$\mu m$, but also on the number of wires $N_w$ and the vessel radius. For its definition we use the formula provided by~\cite{Rebelo2015}.
 
 \begin{equation}
-    \varphi(\alpha) = {\left( 1 - \frac{N_w d_w}{4\pi r \cos{\alpha}} \right)}^2 \overset{\eqref{eq:winding_angle}}{=} {\left( 1 - \frac{d_w}{w\sin{2\alpha}} \right)}^2
+	\varphi(\alpha) = {\left( 1 - \frac{N_w d_w}{4\pi r \cos{\alpha}} \right)}^2 \overset{\eqref{eq:winding_angle}}{=} {\left( 1 - \frac{d_w}{w\sin{2\alpha}} \right)}^2
 \end{equation}
 
 INSERT TABLE WITH EXAMPLES OF NW, DW, L, D
 \begin{table}
-    \centering
-    \begin{tabular}[]{l|c|c|c|c|l|l}
-        Producer & Name & $N_w$ & $d_w$ & $w$ & Nominal diameters & Nominal lengths\\
-    \end{tabular}
-    \caption{Example FD stents with their respective properties.}\label{tab:stent_props}
+	\centering
+	\begin{tabular}{l|c|c|c|c|l|l}
+		Producer & Name & $N_w$ & $d_w$ & $w$ & Nominal diameters & Nominal lengths \\
+	\end{tabular}
+	\caption{Example FD stents with their respective properties.}\label{tab:stent_props}
 \end{table}
 
 
@@ -134,46 +130,46 @@ INSERT TABLE WITH EXAMPLES OF NW, DW, L, D
 Consider of once a stent wrapped around a toroidal segment (see Figure~\ref{fig:ana_stent}). When the centerline is bend along an axis with major radius $R$, the pores are expanded at the outer side and contracted on the inner one. For the stent modelling we would like to focus on these two particular effects based on the vessel geometry.
 
 \begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/StentAnalysis.tex}
-    \caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
+	\centering
+	\input{chapter4/Figures/StentAnalysis.tex}
+	\caption[short]{Left: Sketch of a stent bent into a toroidal envelope. Right: Zoom view showing a wire's progression with infinitisimal geometric quantities.}\label{fig:ana_stent}
 \end{figure}
 
 
 In a first step, consider a set of smoothly evolving wires with major radius $R$ and a minor radius $r$, as shown in Figure~\ref{fig:ana_stent}. By more closely inspecting a short segment of the wires $\vec{dl}$ we can derive a linearized description for its evolution on an infinitisimal segment.
 
 \begin{equation}
-    \vec{dl} = \begin{pmatrix}
-        d\varphi(R+r\cos{\theta})\\rd\theta
-    \end{pmatrix}= \begin{pmatrix}
-        dt(1+ \frac{r}{R}\cos{\theta})\\rd\theta
-    \end{pmatrix}
+	\vec{dl} = \begin{pmatrix}
+		d\varphi(R+r\cos{\theta}) \\rd\theta
+	\end{pmatrix}= \begin{pmatrix}
+		dt(1+ \frac{r}{R}\cos{\theta}) \\rd\theta
+	\end{pmatrix}
 \end{equation}
 \begin{align}
-    \norm{\vec{dl}}_2 &= dt\sqrt{{\left(1 + \frac{r}{R}\cos{\theta}\right)}^2 + {\left(\frac{rd\theta}{dt}\right)}^2 } = Kdt\\
-    Kdt &= \pm \frac{rd\theta}{\sqrt{1 -{\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)}^2}}
-    \label{eqn:winding}
+	\norm{\vec{dl}}_2 & = dt\sqrt{{\left(1 + \frac{r}{R}\cos{\theta}\right)}^2 + {\left(\frac{rd\theta}{dt}\right)}^2 } = Kdt \\
+	Kdt               & = \pm \frac{rd\theta}{\sqrt{1 -{\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)}^2}}
+	\label{eqn:winding}
 \end{align}
 The newly introduced winding factor $K$ is a per-cross section constant value which describes how much a uniform length wire segment bends around the minor radius if the torus. Equation~\eqref{eqn:winding} presents a simple rule that links the winding of a strut with the progression along its length. With the relationship, we can take an undeformend cylindric stent $(R\rightarrow\infty)$ and impose an equal advancement of the wires with a curved one.
 
 \begin{equation}
-    Kdt = {\left[Kdt\right]}_{cyl} = \pm \frac{r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}d\theta_{cyl}
+	Kdt = {\left[Kdt\right]}_{cyl} = \pm \frac{r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}d\theta_{cyl}
 \end{equation}
 
 Since by construction $K$
 \begin{equation}
-    \int_0^{2\pi}{\frac{r}{\sqrt{1 -{\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)}^2}}~d\theta} = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}
+	\int_0^{2\pi}{\frac{r}{\sqrt{1 -{\left(\frac{1 + \frac{r}{R}\cos{\theta}}{K}\right)}^2}}~d\theta} = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}}
 \end{equation}
 
 \begin{equation}
-    f(K) = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}} - \int_0^{2\pi}{\frac{K^2r}{\sqrt{K^2 -{\left(1 + \frac{r}{R}\cos{\theta}\right)}^2}}~d\theta}\label{eq:windingNewton}
+	f(K) = \frac{2\pi r_{cyl}}{\sqrt{1 - K^{-2}_{cyl}}} - \int_0^{2\pi}{\frac{K^2r}{\sqrt{K^2 -{\left(1 + \frac{r}{R}\cos{\theta}\right)}^2}}~d\theta}\label{eq:windingNewton}
 \end{equation}
 
 The above equations can be approximated numerically by first imposing a small wire lenght displacement $\norm{\vec{dl}}_2$ by which we progress on the reference cylinder mesh and the curved one. For each of these segments we rerieve a mean vessel radius $r$ and the magnitude of the major radius $R$ (as computed in Equation~\eqref{eq:major_R}). The cylindric winding factor is a constant and device-dependent parameter which can be computed from the geometric information in the unconstrained state. By estimating an initial segment length $dt$ on the deformed stent we can compute associated winding factor $K$ using the Newtons method on Equation~\eqref{eq:windingNewton}. Then $K$ can be inserted into Equation~\eqref{eq:winding_angle} integrate numerically the angular position $\theta$ of each of the wires independently. To correctly map the angles to the wire positions, we recall the computed orthogonal basis~\eqref{eq:frenet}:
 
 \begin{equation}
-    \vec{x} = r\vec{e}_1\cos(\theta) + r\vec{e}_2\sin(\theta)
-    \label{eq:deployrule}
+	\vec{x} = r\vec{e}_1\cos(\theta) + r\vec{e}_2\sin(\theta)
+	\label{eq:deployrule}
 \end{equation}
 
 In an effort of refining the approach of~\cite{Bouillot2016}, we will add a smooth adaptation of the vessel radius to achieve a more realistic deployment. In a step before computing the wire centerpoints, the distance between the centerline and the vessel wall is computed for a number of axial and radial points. A suitable routine to compute the required ray-triangle intersections is the Möller-Trumbore algorithm for instance. With the obtained points, a smooth bivariate spline can be fitted, substituting Equation~\eqref{eq:deployrule} by $r(t, \theta)$. We pursued the more sophisticated approach shown in~\cite{Janiga2013}, but did not obtain significatly better results for a larger computation time. It is important to note that by retrospectively modifying the deployment radius, we lose the exact preservation of the wire length.
@@ -187,47 +183,47 @@ In summary, Algortihm REFERENCE ALGORITHM, yields a set of points
 
 \newpage
 \begin{enumerate}
-    \item Generate tangent vectors to the centerline with:
-    \begin{equation}
-        \vec{T}(t) = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
-    \end{equation}
-    \item Generate one initial orthogonal basis using additionally the major radius:
-    \begin{equation}
-        \vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
-    \end{equation}
-    \begin{equation}
-        \vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
-    \end{equation}
-    \item Transport the basis across $\gamma$ without twist by applying Rodriguez rotation $M_R$:
-    \begin{equation}
-        \begin{split}
-            \vec{k} &= \vec{T}(t+\Delta t) \times \vec{T}(t)\\[1em]
-            s &= \vec{T}(t+\Delta t) \cdot \vec{T}(t)\\[1em]
-            K &= \begin{pmatrix}
-                0 & -k_3 & k_2\\
-                k_3 & 0 & -k_1\\
-                -k_2 & k_1 & 0\\
-            \end{pmatrix}\\[1em]
-            M_R &= sI + \sqrt{1-s^2}K + (1-s)\vec{k}\otimes\vec{k}
-        \end{split}
-    \end{equation}
-    \item With coordinate basis sample distances from centerline in regular intrevals $\Delta t, \Delta \theta$ using the Möller-Trumbore ray-triangle intersection algorithm (for instance)
-    \item Compute an continuous affine transformation $(t, \theta) \rightarrow r$ by fitting a smoothing bi-Bspline $r(t,\theta)$
-    \item Preserve centerline information, such as the phase angle $\varphi = \angle \vec{R}, \vec{e}_1$ and the curvature $\kappa$
+	\item Generate tangent vectors to the centerline with:
+	      \begin{equation}
+		      \vec{T}(t) = \dot{\vec{\gamma}}(t)\norm{\dot{\vec{\gamma}}(t)}^{-1}
+	      \end{equation}
+	\item Generate one initial orthogonal basis using additionally the major radius:
+	      \begin{equation}
+		      \vec{R}(t) = \norm{\dot{\vec{\gamma}}(t)}^{-2}_2\ddot{\vec{\gamma}}(t) - \norm{\dot{\vec{\gamma}}(t)}^{-4}_2\dot{\vec{\gamma}}(t) \left\langle \dot{\vec{\gamma}}(t),\ddot{\vec{\gamma}}(t) \right\rangle
+	      \end{equation}
+	      \begin{equation}
+		      \vec{e}_1 = \vec{R} \norm{\vec{R}}^{-1}_2, \qquad \vec{e}_2 = \vec{T} \times \vec{e}_1
+	      \end{equation}
+	\item Transport the basis across $\gamma$ without twist by applying Rodriguez rotation $M_R$:
+	      \begin{equation}
+		      \begin{split}
+			      \vec{k} &= \vec{T}(t+\Delta t) \times \vec{T}(t)\\[1em]
+			      s &= \vec{T}(t+\Delta t) \cdot \vec{T}(t)\\[1em]
+			      K &= \begin{pmatrix}
+				      0    & -k_3 & k_2  \\
+				      k_3  & 0    & -k_1 \\
+				      -k_2 & k_1  & 0    \\
+			      \end{pmatrix}\\[1em]
+			      M_R &= sI + \sqrt{1-s^2}K + (1-s)\vec{k}\otimes\vec{k}
+		      \end{split}
+	      \end{equation}
+	\item With coordinate basis sample distances from centerline in regular intrevals $\Delta t, \Delta \theta$ using the Möller-Trumbore ray-triangle intersection algorithm (for instance)
+	\item Compute an continuous affine transformation $(t, \theta) \rightarrow r$ by fitting a smoothing bi-Bspline $r(t,\theta)$
+	\item Preserve centerline information, such as the phase angle $\varphi = \angle \vec{R}, \vec{e}_1$ and the curvature $\kappa$
 
 
 \end{enumerate}
 
 
 \begin{figure}[ht]
-    \centering
-    \input{chapter2/Figures/CurveAnalysis.tex}
-    \caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
+	\centering
+	\input{chapter4/Figures/CurveAnalysis.tex}
+	\caption[short]{Left: Sketch of vessel with parametrized centerline (dashed line) with the unit tangent vector $\vec{T}$ and major radius $\vec{R}$. Right: Cross-section view of vessel with mean inscribed radius $\overline{r}$ and with orthogonal basis $\vec{e}_1,\,\vec{e}_2$.}
 \end{figure}
 
 
 
 
 \newpage
-\bibliographystyle{elsarticle-num}
-\bibliography{chapter2/Biblio}
+\bibliographystyle{tex/mybib}
+\bibliography{chapter4/Biblio}
