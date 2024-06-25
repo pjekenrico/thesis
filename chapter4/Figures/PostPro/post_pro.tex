@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+	% Left image
+	\node (left_image) at (0,0) {\includegraphics[width=0.475\textwidth]{chapter4/Figures/PostPro/stent.png}};
+	% Circle on left image
+	\draw[customRed,thick] (left_image) ++ (2.75, 1.1) circle (0.15);
+	% Zoomed-in version of left image
+	\node[anchor=south west, yshift=0cm, xshift=-4cm] (zoom_picture) at (left_image.south east) {\includegraphics[width= 0.2\textwidth]{chapter4/Figures/PostPro/wire_cut.png}};
+	\draw[customRed, ultra thick] (zoom_picture) ++ (0.0, 0.0) circle (1.5);
+	% Right image
+	\node[right=0.25cm of left_image.east] (right_image) {\includegraphics[width=0.475\textwidth]{chapter4/Figures/PostPro/porosity.png}};
+\end{tikzpicture}

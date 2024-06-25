@@ -19,8 +19,9 @@
 \usepackage{latexsym}
 \usepackage{amsmath,amssymb,amsfonts,nicefrac,bm}
 \usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage[noend]{algpseudocode}
+% \usepackage{algorithmic}
+% \usepackage{algorithmicx}
+\usepackage{algpseudocode}
 \usepackage{texdraw,tabularx,supertabular,psfrag,multirow}
 \usepackage[table,dvipsnames]{xcolor}
 \usepackage{notoccite}
@@ -88,3 +89,4 @@
 \hbadness=10000
 \vbadness=10000
 \let\orgautoref\autoref\renewcommand{\autoref}[1]{\def\equationautorefname{Eq.}\def\figureautorefname{Fig.}\orgautoref{#1}}
+\definecolor{customRed}{HTML}{aa0000}
