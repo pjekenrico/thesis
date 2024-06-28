@@ -389,9 +389,7 @@ To assess the deployment, the centerlines of the vessel and the guide wires were
         % Include the PNG image with a manual shift
         \node (png) at (pdf.west) [xshift=3.5cm, yshift=-0.25cm] {\includegraphics[width=2.9cm]{chapter4/Figures/val_exp/stent_wires.png}};
     \end{tikzpicture}
-    \caption{Comparison of measured and virtually predicted radii and angles.
-    Left: Plot of stent radius $r$ over $t$, including a preview of the vasculature with the implanted stent and red segmented wires.
-    Right: Plot comparing measured and computed angles in degrees.}\label{fig:experiment_1}
+    \caption{Comparison of measured and virtually predicted radii and angles. Left: Plot of stent radius $r$ over $t$, including a preview of the vasculature with the implanted stent and red segmented wires. Right: Plot comparing measured and computed angles in degrees.}\label{fig:experiment_1}
 \end{figure}
 The stented section can be divided into 3 groups, (i) the proximal basilar artery, (ii) the bifurcation and (iii) the distal P1 segment. In the former, the computed MCR remains nearly constant at 32.1\% while the measured one is on average 31.4\%. Similarly, in section (iii) the winding is largely constant at yielding an MCR of 26.3\% due to the smaller vessel calibre.
 At the bifurcation (ii), the stent experiences compaction of the wires at the inner side of the curve and proportional expansion at the outer side. The largest dissent between the experiment and the computed stent is found at the end of this section. The numerical model adjusts the winding immediately to the curvature of the centerline, while the physical stent adapts more slowly. Nevertheless, the angle Mean Absolute Error (MAE) remained below $3.5^{\circ}$ for all four guidewires. The radial extension of the wires was not perfectly uniform across the experiment due to accumulated segmentation errors and increased sensitivity to the position of the vessel centerline. The latter had a smaller influence on the angle results due to the (quasi-) translational invariance of the extraction method.
@@ -435,9 +433,7 @@ Several other publications from diverse groups report similar flow reduction sco
 \begin{figure}[ht!]
     \centering
     \input{chapter4/Figures/val_cell/val_cell}
-    \caption{Left: Cut view of the computational mesh generated based on the in-vivo recordings.
-    The red circle shows a zoomed-in area with isotropic refinement around the wires and the unstructured boundary layers.
-    Right: Volume representation of the velocity at systole with the blent-in stent.}\label{fig:circle_and_zoom}
+    \caption{Left: Cut view of the computational mesh generated based on the in-vivo recordings. The red circle shows a zoomed-in area with isotropic refinement around the wires and the unstructured boundary layers. Right: Volume representation of the velocity at systole with the blent-in stent.}\label{fig:circle_and_zoom}
 \end{figure}
 
 \section{Discussion}

@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	% Left image
+	\node (left_image) at (0,0) {\includegraphics[width=0.475\textwidth]{chapter4/Figures/val_cell/mesh_view.png}};
+	% Circle on left image
+	\draw[customRed,thick] (left_image) ++ (-1.73,1.69) circle (0.21);
+	% Zoomed-in version of left image
+	\node[anchor=south west, yshift=0cm, xshift=-4.25cm] (zoom_picture) at (left_image.south east) {\includegraphics[width=0.28\textwidth]{chapter4/Figures/val_cell/zoom_mesh-modified.png}};
+	\draw[customRed, ultra thick] (zoom_picture) ++ (0.0,0.0) circle (2.1);
+	% Right image
+	\node[right=0.5cm of left_image.east] (right_image) {\includegraphics[width=0.475\textwidth]{chapter4/Figures/val_cell/volume_stent.png}};
+	% Nodes with text at the bottom of the right picture
+	\node[anchor=south, yshift=0.6cm, xshift=1.4cm] at (right_image.south) {\footnotesize Velocity $[m/s]$};
+	\node[anchor=south, yshift=0.24cm, xshift=0cm] at (right_image.south) {\footnotesize 0};
+	\node[anchor=south, yshift=0.24cm, xshift=2.9cm] at (right_image.south) {\footnotesize 1};
+\end{tikzpicture}
