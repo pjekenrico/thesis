@@ -1,8 +1,7 @@
 
-\usepackage[square,sort&compress,sectionbib,numbers]{natbib}		% Doit être chargé avant babel
+\usepackage[square,sort&compress,sectionbib,numbers]{natbib}
 \usepackage{chapterbib}
-	\renewcommand{\bibsection}{\section{Bibliography}}		% Met les références biblio dans un \section (au lieu de \section*)
-		
+\renewcommand{\bibsection}{\section{Bibliography}}
 \usepackage[english]{babel}
 \usepackage[babel]{csquotes}
 \usepackage[utf8]{inputenc}
@@ -39,11 +38,11 @@
 \DeclareMathOperator{\tr}{tr}
 
 \usepackage[pdftex,pdfborder={0 0 0},
-			colorlinks=true,
-			linkcolor=blue,
-			citecolor=red,
-			pagebackref=true,
-			]{hyperref}	% Créera automatiquement les liens internes au PDF
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=red,
+	pagebackref=true,
+]{hyperref}	% Créera automatiquement les liens internes au PDF
 
 \usepackage{tocbibind}
 
@@ -66,24 +65,24 @@
 \usepgfplotslibrary{external}
 %\tikzexternalize[optimize command away=\includepdf ,prefix=TikzPictures/]
 %\tikzsetnextfilename{name_of_resulting_pdf}
-\usetikzlibrary{arrows,positioning} 
+\usetikzlibrary{arrows,positioning}
 \tikzset{
-    %Define standard arrow tip
-    >=stealth',
-    %Define style for boxes
-    punkt/.style={
-           rectangle,
-           rounded corners,
-           draw=black, very thick,
-           text width=6.5em,
-           minimum height=2em,
-           text centered},
-    % Define arrow style
-    pil/.style={
-           ->,
-           thick,
-           shorten <=2pt,
-           shorten >=2pt,}
+	%Define standard arrow tip
+	>=stealth',
+	%Define style for boxes
+	punkt/.style={
+			rectangle,
+			rounded corners,
+			draw=black, very thick,
+			text width=6.5em,
+			minimum height=2em,
+			text centered},
+	% Define arrow style
+	pil/.style={
+			->,
+			thick,
+			shorten <=2pt,
+			shorten >=2pt,}
 }
 
 \hbadness=10000
