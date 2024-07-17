@@ -35,7 +35,7 @@ def plot_eigenvals_eigenvecs(eigvals, eigvecs, ctr, ax):
         scale_units="xy",
         angles="xy",
         width=0.005,
-        label=r"$\tilde\lambda_1$" + f": {eigvals[0]:.2f}"
+        label=r"$\tilde\lambda_1$" + f": {eigvals[0]:.2f}",
     )
     ax.quiver(
         *origin,
@@ -45,7 +45,7 @@ def plot_eigenvals_eigenvecs(eigvals, eigvecs, ctr, ax):
         scale_units="xy",
         angles="xy",
         width=0.005,
-        label=r"$\tilde\lambda_2$" + f": {eigvals[1]:.2f}"
+        label=r"$\tilde\lambda_2$" + f": {eigvals[1]:.2f}",
     )
     ax.set_aspect("equal")
     # Add a legend
@@ -105,6 +105,10 @@ pretty_axes(ax[1])
 # pretty_axes(ax[2])
 ax[0].set_xlim(-1.25, 1.25)
 ax[0].set_ylim(-1.5, 2)
+ax[0].set_xlabel("")
+ax[0].set_ylabel("")
+ax[1].set_xlabel("")
+ax[1].set_ylabel("")
 plt.tight_layout()
 plt.show()
 

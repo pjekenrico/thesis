@@ -142,51 +142,137 @@ The initial conditions to the simulations can be set by previously solving a ste
 	\vec{u} = \vec{u}_0, \quad \vec{x} \in \Omega,\,t=0
 \end{equation}
 
+\section{Blood Rheology}\label{chap2:sec1:subsec4}
+Blood is a complex dense suspension comprising approximately 40--45\% cellular components, including Red Blood Cells (RBCs), white blood cells (leukocytes), and platelets. The remainder of blood is called plasma, a faint yellow substance made up of water (90\% of plasma \cite{Fung1993}), electrolytes, proteins, glucose, lipids, hormones, and carbon dioxide. Due to the high water content, both in cells and plasma, blood is generally considered incompressible, with a density of 1056\,kg/m$^3$\,\cite{Suzuki2021}. Likewise, plasma exhibits a nearly Newtonian characteristics~\cite{Nader2019}  with dynamic viscosities that only decrease from $\mu_\text{plasma}$\,=\,1.27\,mPa$\cdot$\,s in a resting state to $\mu_{plasma}$\,=\,1.23\,mPa$\cdot$\,s under high shearing\,\cite{Rodrigues2022}.
 
-\subsection{Blood Rheology}\label{chap2:sec1:subsec4}
-In the preceding section, the Navier-Stokes equations were silently introduced to describe blood as a single-phase flow. Blood however is a suspension consisting to approximately 45\% of cellular components, such as red (erythrocytes), white blood cells (leukocytes), and platelets. The remaining 55\% is blood plasma, a yellowish liquid composed of water, electrolytes, proteins, glucose, lipids, hormones and carbon dioxide. The high fraction of nearly incompressible fluids in blood at physiological conditions justifies modelling it as an incompressible medium at densities slightly above the ones of water ($\rho=1050kg/m^3$ at $310K$)~\cite{Suzuki2021}. Blood plasma exhibits a nearly Newtonian character~\cite{Nader2019} with dynamics viscosities only decreasing by about $0.04\mpas$ between a resting state ($\mu_0 = 1.27\mpas$) and a highly sheared one ($\mu_C =$ 1.23\mpas)~\cite{Rodrigues2022}.
-The cellular components however, especially the Red Blood Cells (RBCs), have a greater impact on the bulk viscosity of the suspension.
-RBCs are characterized as biconcave disks of $8\mu m$ diameter in a resting state~\cite{Nader2019, Valen-Sendstad2011}. The cells enclose a hemoglobin solution, the oxygen carrying protein, with a highly deformable membrane.
-When subjected to shearing forces, the RBCs are flexible and are capable of changing their shape to some extend. When blood flows, especially in areas of high shear stress, RBCs tend to elongate along the flow direction, allowing them to flow through narrow vessels. This adaptability is particularly valuable in capillaries, whose diameter of 5$\mu m$ lies well below the size of RBCs~\cite{Nader2019}. Apart from their capabilities of strong deformations and alignment, the RBCs have the tendency to arrange in stacks due to reversible protein interactions when the flow characteristics permit it. These stacks form mostly, during low shearing and dissolve gradually when exposed to higher shearing, giving blood the characteristic shear-thinning behaviour. The stacks, or also called ``rouleaux'', pose a larger impediment to flow, thus yielding a larger friction than when the RBCs are scattered in the blood stream~\cite{Nader2019}. The alingment and reshaping of RBCs likewise influences the macroscopic flow of blood in ways that are not fully understood yet. These effects are naturally scaled by the volume fraction of RBCs in the blood, also called the hematocrit (HCT), which commonly dwells around 44\% depending on sex and levels of hydration among others.
+RBCs make up more than 99\% of the cells found in a blood stream and play the pivotal role of transporting oxygen in the body\,\cite{Fung1993}. Their interior is filled with hemoglobin, an iron-rich protein with the capacity to store and release oxygen based on pressure levels and the chemistry of its environment. These cells are optimised for their transport task to the point in which they eject their nucleus to accommodate more space for hemoglobin and improve their flexibility. While resting, RBCs attain a biconcave disk shape ($d$\,=\,8\,$\mu$m), as displayed in \autoref{fig:rbc}, but can change their shape considerably under stress. When blood flows, especially in areas of high shear stress, RBCs tend to elongate along the flow direction, allowing them to traverse narrow vessels. This adaptability is particularly valuable in capillaries, whose diameter of 5\,$\mu$m lies well below the size of RBCs~\cite{Nader2019}.
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+
+		% Position for the large image on the left
+		\node[anchor=north west] (largeImage) at (0,0)
+		{\includegraphics[width=0.5\textwidth]{chapter2/Figures/Plot_Visco/rbcs.jpeg}};
+
+		% Position for the first small image on the right
+		\node[anchor=north west] (smallImage1) at (10,0)
+		{\includegraphics[width=0.25\textwidth, clip, trim= 1cm 1.25cm 17cm 1.75cm ]{chapter2/Figures/Plot_Visco/RedBloodCell_Scheme.JPG}};
+
+		\node[anchor=north west] (smallImage2) at (smallImage1.south west)
+		{\includegraphics[width=0.25\textwidth, clip, trim= 18cm 1.5cm 0 1.5cm ]{chapter2/Figures/Plot_Visco/RedBloodCell_Scheme.JPG}};
+
+		% Diameter line (Vertical) for smallImage1
+		\draw[<->,thick] ([xshift=-0.2cm, yshift=-0.25cm]smallImage1.north east) -- ([xshift=-0.2cm, yshift=0.25cm]smallImage1.south east);
+		\node[rotate=90] at ([xshift=0.1cm]smallImage1.east) {8\,$\mu$m};
+
+		% Thickness line (Vertical) for smallImage2
+		\draw[<->,thick] ([xshift=-0.2cm, yshift=-1.6cm]smallImage2.north east) -- ([xshift=-0.2cm, yshift=0.75cm]smallImage2.south east);
+		\node[rotate=90] at ([xshift=0.1cm, yshift=-0.45cm]smallImage2.east) {2\,$\mu$m};
+
+		% Labels under each drawing
+		\node at ([yshift=-0.35cm]smallImage1.north west) {\textbf{a}};
+		\node at ([yshift=-0.35cm]smallImage2.north west) {\textbf{b}};
+	\end{tikzpicture}
+	\caption{Red Blood Cells (RBC): Left - Microscope image of whole blood from \cite{Marenkov2017}, Right - Red Blood Cell Scheme: (a) Top View, (b) Cross-Section View}
+	\label{fig:rbc}
+\end{figure}
+
+\subsection{Shear-thinning behaviour}
+Whole blood can display a complex flow behaviour due to the multiple and diverse components that it carries. At a macroscopic level, \ie\,considering blood a single-phase medium, the apparent viscosity $\mu$ grows in the presence of more RBCs, like in most suspensions. The concentration of RBCs is formally called hematocrit (Hct) and is given as a percentage of total blood volume. The Hct typically lays around 40--45\%, depending on sex, but may rise or fall in an individual based on hydration levels and age factors. Chien confirmed the upward trend in viscosity for higher concentrations of RBCs experimentally, which we display in \autoref{fig:ShearThin}. The apparent viscosity was also shown to be clearly shear-thinning in the tested range, with changes of about one order of magnitude. The answer to what causes this behaviour is multifaceted and could, when thoroughly addressed, cover whole books. Here, we will limit ourselves to briefly discussing some of the key points that are relevant in the flow regime that is studied afterwards, the brain arteries.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\linewidth]{chapter2/Figures/Plot_Visco/htc.pdf}
+	\caption{Relative apparent viscosity $\mu_r\,=\,\mu/\mu_{plasma}$ of human RBCs in suspension in plasma, as a function of volume concentration, also called hematocrit (Hct), and shear rate\,\cite{Chien1971}. The grey areas mark common Hct values for healthy adults. Women on average a concentration that is 4\% lower than in man.}
+	\label{fig:ShearThin}
+\end{figure}
+
+The unique rheology of blood, essential for the circulation, is primarily governed by the deformability and dynamics of RBCs, along with their reciprocal interactions and the vascular environment. They possess the ability to deform and align under flow conditions, often aggregating into stacks known as ``rouleaux'' through reversible protein interactions. These rouleaux contribute significantly to blood's rheological properties, imparting a non-zero apparent yield stress and contributing to shear-thinning viscosity and hysteresis. This behaviour classifies blood as a elasto-viscoplastic fluid, where the structural integrity of rouleaux depends on plasma protein fibrinogen, crucial for cell-cell interactions~\cite{Chien1975}.
+
+At low shear rates ($\dot{\gamma}<0.01$ s$^{-1}$), numerous "rouleaux" stacks form in the suspension, leading to a significant increase in viscosity, up to 10 times higher compared to suspensions without aggregates\,\cite{Chien1970}. In the intermediate shear rate range (0.01<$\dot{\gamma}<10$ s$^{-1}$), blood undergoes shear thinning due to the disintegration of the rouleaux stacks. Beyond a shear rate of approximately 5-6\,s$^{-1}$, the viscosity curves of whole blood and RBC suspensions overlap, suggesting that viscosity is no longer primarily influenced by the aggregation of RBCs (see \autoref{fig:cy_model_chien}). Further shear-thinning occurs at higher shear rates ($\dot{\gamma}>100$ s$^{-1}$), even after the rouleaux are disaggregated, as RBCs deform and align with the shear. This deformation contributes to rheofluidification in suspensions without aggregates and strongly depends on hematocrit, as shown by experiments in \autoref{fig:ShearThin}. Well above those higher shear rates ($\dot{\gamma}>1000$ s$^{-1}$), the blood behaves as a Newtonian fluid.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/carreau-yasuda_chien.pdf}
+	\caption{Measurement data from Chien \etal\,\cite{Chien1970} for heparin treated whole blood (Hct\,=\,45\%) and for RBC in an 11\% albumin-Ringer solution. This solution commonly used to treat patients after or during a strong blood loss, reduces RBC aggregation and thus reduces the apparent viscosity at low shear rates.}
+	\label{fig:cy_model_chien}
+\end{figure}
+
+In the human body shear rates vary strongly on the location and type of vessel. The largest shearing occurs typically in arterioles, where 1591 s$^{-1}$ are commonly observed\,\cite{Lipowsky1978, Lipowsky1980}. Although this might sound counter-intuitive, the rough estimate using Poiseuille's law reveales that the shear rate is inversely proportional to the cube of the vessel radius $r$ $\dot{\gamma} \propto 1/r^3$, thus suggesting higher shearing in small caliber vessels. In this regime, blood displays the characteristic Fåhræus-Lindqvist effect\,\cite{fareus1931} causing a drop in the apparent viscosity due to RBCs accumulating in the vessel centre and leaving a cell-free layer at the vessel wall. In this work, we do not consider this effect and restrict ourselves to vessels clearly above the critical 0.3\,mm diameter mark. The largest artery in the body, the aorta features shear rates around 148\,s$^{-1}$, while its venous counterpart, the vena cava, only presents $\dot{\gamma}$\,=9\,s$^{-1}$ due to its overall smaller flow velocity\,\cite{Lipowsky1978, Lipowsky1980}. In the case of brain arteries, Reynolds numbers and shear rates lay within the range spanned by arterioles and the aorta. Maximal values for shearing are usually observed at bifurcations, which are very common in the brain. When considering aneurysms however, the lower bound for $\dot\gamma$ falls by an order of mangitude. In the cases of giant side-wall aneurysms ($>$ 20\,mm), as will be shown farther below in Chapter 5, the flow can become notoriously slow leading to shear rates in the range of 1-10\,s$^{-1}$. In this regime assuming a constant viscosity is arguably problematic and is best avoided by considering a more complex rheology model.
+
+
+
+\subsection{Rheological Models}
+In practice, blood rheology in and around intracranial aneurysms can modelled through a number of mathematical models. The flexibility in the modelling is due to the range of shear rates that we consider, which as a reminder roughly lays between 1\,s$^{-1}$ and 600\,s$^{-1}$. Any model that can be fitted on a smoothly decaying viscosity in that range is theoretically fit for modelling the rheology. For a better display, \autoref{fig:ranges_visc} shows how the two models that we will discuss further below behave over a spectrum of shear rates and, particularly, over the range of expected values for the simulations. We will also briefly discuss the otherwise omnipresent Newtonian assumption on IA simulations for completeness.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/ranges.pdf}
+	\caption{Comparison of Newtonian, Carreau-Yasuda, and Modified Casson models in the shear rate range of $1 , \text{s}^{-1}$ to $500 , \text{s}^{-1}$. Lower shear rates (1 to 10 $\text{s}^{-1}$) are typical in aneurysms, while higher shear rates (10 to 500 $\text{s}^{-1}$) occur in arteries. The models converge at higher shear rates but differ significantly at lower shear rates, highlighting the importance of model selection for accurate blood rheology predictions.}
+	\label{fig:ranges_visc}
+\end{figure}
+
+
+
+\subsubsection*{Newtonian Model}
+The simplest model to describe fluid behaviour is the Newtonian model, which assumes that the viscosity remains constant regardless of the shear rate $\mu = \text{constant}$. Newtonian behaviour is adopted by the overwhelming majority of simulation studies, both in large vessels and in aneurysms. Common values for the employed viscosity are between 3.5 and 4\,\mpas\,\cite{Valen-Sendstad2018, Berg2019, Berg2019_rev}. In literature, several publications have addressed the question whether Newtonian assumptions are reasonable or not for computing the Wall Shear Stress (WSS) in IA with mixed conclusions. One part of the community\cite{Lynch2022, Suzuki2021, Xiang2012}, argues that prescribing a constand viscosity despite physical evidence against it leads to relevant hemodynamic changes, even in aortas. In the aneurysm studies, changes were mostly of quantitative nature, with WSS being underestimated by 30\% in slow flow regions. Khan \etal\,\cite{Khan2017} challenged this idea and conducted an analysis including the comparison of first order solvers and their higher order solver \textit{Oasis}. While confirming some of the trends in WSS from the other publications, they reported that the solver choice played a larger role in the WSS prediction. The concerns about the simulation fidelities are very valid, as well as the implications of boundary conditions on the hemodynamics. However, in the quest of tackling shear-thinning models, there seems to be a missinterpretation of the phenomena causing the drop of viscosity. The authors seem to suggest that the aggregation of RBCs is the leading cause for the shear thinning behaviour in aneurysm hemodynamics. However, as already described by Chien \etal\,\cite{Chien1970}, the aggregation of RBCs is a phenomenon that occurs at very low shear rates, typically below 1\,s$^{-1}$. In the range of shear rates that are common for aneurysms, the viscosity of blood is mostly guided by the alignment of RBCs and not by their aggregation. While transient phenomena of the viscosity are surely an important topic, this criticism here rather seems unjustified. Nevertheless, Khan \etal\,\cite{Khan2017} mention that the Newtonian assumption is probably not well suited for treated IA, where flow velocities are substantially smaller. This, together with a lack of well structured criticism against a non-Newtonian model and a nearly negligible computational overhead, makes the use of a non-Newtonian model a reasonable choice for the simulations in this work.
+
+
+\subsubsection*{Carreau-Yasuda}
+One of the widely used models to describe the non-Newtonian behaviour of blood is the Carreau-Yasuda model. This model captures the shear-thinning behaviour through the following equation:
+
+\begin{equation}
+	\mu(\dot{\gamma}) = \mu_\infty + (\mu_0 - \mu_\infty){\left({1+{(\lambda\dot{\gamma})}^2}\right)}^{(n-1)/2}
+	\label{eq:carreau}
+\end{equation}
+
+The parameter $\mu_\infty$ denotes the viscosity at an infinite shear rate, which is the minimum viscosity the fluid can attain. Conversely, $\mu_0$ is the viscosity at zero shear rate, representing the maximum viscosity. The parameter $\lambda$ is the relaxation time, which indicates how quickly the viscosity responds to changes in the shear rate. The power-law index $n$ determines the degree of shear-thinning behaviour if $n$ is less than 1, or shear-thickening behaviour if $n$ is greater than 1. For $n$\,=\,1, the model reduces to a Newtonian fluid behaviour, where viscosity remains constant regardless of the shear rate.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/carreau-yasuda_gambaruto.pdf}
+	\caption{Fitted Carreau-Yasuda model with data from Gambaruto \etal\,\cite{Gambaruto2011}. The experimental data (in red) were obtained from a patient with an hematocrit of 40\%.}
+	\label{fig:cy_model_gamb}
+\end{figure}
+For the specific case of blood, the constants provided are $\mu_\infty$\,=\,0.0032\,Pa$\cdot$s, $\mu_0$ = 0.0456\,Pa$\cdot$s, $\lambda$\,=\,10.03\,s, and $n$\,=\,0.344. These values were determined through experimental measurements (Hct\,=\,40\%) and were obtained by non-linear least squares fit from viscosity data\,\cite{Gambaruto2011}.
+
+\subsubsection*{Casson}
+An alternative to Carreau-Yasuda is the Casson model represented by the following equation:
+
+\begin{equation*}
+	\mu = \frac{{\left(\sqrt{\tau_y} + \sqrt{\dot{\gamma}\mu_C}\right)}^2}{\dot{\gamma}}
+\end{equation*}
+
+In this model, $\tau_y$ represents the yield stress and $\mu_C$ the Casson viscosity. This model provides a good fit for the viscoplastic behaviour of blood, where a certain threshold stress $\tau_y$ must be exceeded before the fluid starts to flow. To address numerical challenges, such as division by zero at very low shear rates, a modified version of the Casson model has been introduced. The modified Casson model incorporates a new parameter, $m$, which acts as an apparent relaxation time, governing the transition of viscosity as the shear rate tends to zero:
+
+\begin{equation}
+	\mu = {\left( \sqrt{\mu_C} + \sqrt{\tau_y\frac{(1-\exp{(-m\dot{\gamma})})}{\dot{\gamma}}} \right)}^2\label{eqn:casson}
+\end{equation}
+
+The parameter $m$ ensures a smooth transition and avoids singularities in the model. A larger value of $m$ implies a longer apparent relaxation time, leading to a slower decrease in viscosity with increasing shear rate, akin to a slower response of the material to applied shear stress.
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/casson_model.pdf}
-	\caption{Casson model for blood viscosity including the expectable shear-rate in the human brain arteries, as well as the Newtonian glycerol/water solution that is used as an analog during experiments.}\label{fig:casson_model}
+	\caption{Experimental measurement by \textcolor{magenta}{cite the experimental paper!} and fitted Casson model by Suzuki \textit{et al.}\,\cite{Suzuki2021} for three example Hematocrit values (Hct). The colorbar on the right describes the hematocrit of the extracted samples, who belong to different patients with intracranial aneurysms.}\label{fig:casson}
 \end{figure}
 
-In face of the complexity of the blood rheology, a shear-thinning and visco-elastic fluid, it is required to narrow down the range of accounted effects to the relevant ones in our environment. The latter is given by the main arterial system comprising vessels of diameters above approximately 1\,$mm$. There, the much larger channel size compared to RBCs and other cells permits the modelling of blood as a single phase fluid. The Fåhræus-Lindqvist effect~\cite{fareus1931} describing the dependency of the apparent viscosity on the vessel diameter can therefore be disregarded, since they are only relevant in vessels with diameters below $0.3\,mm$.
-The shear rates $\dot{\gamma}$ vary significantly in different parts of the circulatory system. For example, in arteries, the shear rates range from 148 s$^{-1}$ in the descending aorta to 274 s$^{-1}$ in conduit arteries, and up to 1591 s$^{-1}$ in arterioles, while in veins, they are lower, ranging from 113 s$^{-1}$ in large veins to 9 s$^{-1}$ in the vena cava~\cite{Lipowsky1978,Lipowsky1980}. This variation allows us to focus on the behaviour of blood for $\dot{\gamma}>1$ s$^{-1}$. In this regime, blood displays notable shear-thinning effects until $\dot{\gamma}<700$ s$^{-1}$ from which it is usually seen as a Newtonian fluid~\cite{Fung1993}. One of many models that can cope with this behaviour is the well-known Casson model \autoref{eqn:casson}, in which $\tau_y$ represents the yield stress and $\mu_C$ the Casson viscosity.
-\begin{equation}
-	\label{eqn:casson}
-	\mu = \frac{{\left(\sqrt{\tau_y} + \sqrt{\dot{\gamma}\mu_C}\right)}^2}{\dot{\gamma}}
-\end{equation}
-Another version of the Casson model was introduced to avoid a division by zero during numerical tests. It is called the modified Casson and it provides a simple ramp to the shear rate using a new model parameter $m>100s$ that acts as an apparent relaxation time. More precisely, it governs the transition of viscosity ($\mu$) as the shear rate ($\dot{\gamma}$) tends to zero~\cite{pham1994,Suzuki2021}. A larger value of $m$ implies a longer apparent relaxation time, leading to a slower decrease in viscosity with increasing shear rate, akin to a slower response of the material to applied shear stress.
-\begin{equation}
-	\label{eqn:modified_casson}
-	\mu = {\left( \sqrt{\mu_C} + \sqrt{\tau_y\frac{(1-\exp{(-m\dot{\gamma})})}{\dot{\gamma}}} \right)}^2
-\end{equation}
-Apart from $m$, the values for $\tau_y$ and $\mu_C$ have been obtained during rheological tests in several publications, considering dependencies on the constitution of blood in each of the cases. One illustrative recent one~\cite{Suzuki2021}, provides the following values for the Casson model depending on the HTC, as \%, fitted on a total of 33 healthy patients:
+Arguably, for our flow regime the Carreau-Yasuda model can replicate the Casson (see \autoref{fig:ranges_visc}). The reason for still considering this new model is the well-documented fitting of its parameters to the Hct and their thorough validation in a recent study~\cite{Suzuki2021}. There samples of whole blood of 15 IA patients at $310K$ were analyzed and the dependencies shown in \autoref{eqn:casson_fit} were obtained. The Hct values found in the study range from 32\% to 44\%, and should therefore be taken with consideration for larger concentrations. In \autoref{fig:casson}, the measurements and three sample curves at different Hct are plotted.
+
 \begin{equation}
 	\begin{split}
-		\mu_C &= (0.073\cdot\text{HTC} + 0.599) \mpas\\
-		\tau_y &= (0.888\cdot\text{HTC} - 23.753) \mpa
+		\mu_C &= (0.073\cdot\text{Hct} + 0.599) \mpas\\
+		\tau_y &= (0.888\cdot\text{Hct} - 23.753) \mpa
 	\end{split}
+	\label{eqn:casson_fit}
 \end{equation}
-The curves were fitted using whole blood at $310K$ on patients with IA\@. The HTC values found in the study range from 32\% to 44\%, and should therefore be taken with consideration for larger concentrations. In \autoref{fig:casson_model}, three examples using several HTC values (43\% \- common, 36\% \- lower threshold for women and 50\% \- upper threshold for men).
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{chapter2/Figures/Plot_Visco/rbcs.jpeg}
-	\caption{Microscore image if whole blood from~\cite{Marenkov2017}. RBCs are seen in a red-pinkish tone and neutrophils, a certain type of leukocytes, can be distinguished by the blue-pink grains in their translucid interior.}\label{fig:RBCs}
-\end{figure}
-One source of uncertainty surrounding the modelling of blood, as suggested in~\cite{Suzuki2021}, is the effect of the anticoagulant, \eg\,heparin, needed for performing the measurements. While the anticoagulant can be more easily characterized, its effect on the complex fluid blood remains hard to describe with certainty.
 
 
+\subsection{Remarks}
+Blood rheology is a complex subject due to (i) the complexity of the material and (ii) the difficulties recording its properties. As mentioned by experimental publications~\cite{Suzuki2021}, even the anticoagulants used to prevent thrombosis in the extracted samples can have a noticeable impact on the viscosity of blood. Even though these effects perturb recording the viscoelastic properties of the suspension, its effects at least seem to be minor in the treated regime. For the further study, both the Carreau-Yasuda and the Casson model will be considered, with the latter being the preferred choice whenever Hct measurements are given.
 
 
 \section{Finite Element Analysis for the incompressible Navier-Stokes Equations}\label{chap2:sec2}
-
-To properly understand the content of the following section, it is important to revise some basics required in Finite Element Analysis (FEA) for those who are not yet familiar with them. Contrary to finite differences and volumes, where the strong form of the equations can be used to start the discretization, finite elements base themselves on a weak formulation of the problem. This means that the strong form of the PDEs, like for instance \autoref{eqn:navier_stokes} is multiplied by a set of test functions from a suitable function space and integrated over the domain $\Omega$. By applying the chain rule of differentiation and the Gau\ss-divergence theorem, one can conveniently shift derivatives from the solution functions to the newly added test functions. The resulting integral formulations therefore require the solutions and test functions to be contained in a suitable function space, which is usually a Sobolev space. As a reminder, the Sobolev space $H^1(\Omega)$ is the space of functions that belong to the space of square integrable functions $L^2(\Omega)$ and whose first derivatives are also square integrable. In more mathematical terms this can be written as:
+To properly understand the content of the following section, it is important to revise some basics required in Finite Element Analysis (FEA) for those who are not yet familiar with them. Contrary to finite differences and volumes, where the strong form of the equations can be used to start the discretization, finite elements base themselves on a weak formulation of the problem. This means that the strong form of the PDEs, like for instance \autoref{eqn:navier_stokes} is multiplied by a set of test functions from a suitable function space and integrated over the domain $\Omega$. By applying the chain rule of differentiation and the Gau\ss-divergence theorem, one can conveniently shift derivatives from the solution functions to the newly added test functions. The resulting integral formulations therefore require the solutions and test functions to be contained in a suitable function space, which is usually a Sobolev space. As a reminder, the Sobolev space $H^1(\Omega)$ is the space of square integrable functions whose first derivatives are also square integrable. In more mathematical terms this can be written as:
 \begin{equation}
 	\begin{split}
 		H^1(\Omega) &= \left\{ v \in L^2(\Omega) \mid \nabla v \in L^2(\Omega) \right\}\\
@@ -464,7 +550,7 @@ In~\cite{Codina2002}, it is shown that by neglecting the boundary contributions 
 \end{equation}
 Through this derivation, the subscales have been modelled as piece-wise constant functions that act on each element individually. Therefore, they can be interpreted as bubble functions enriching the space of the large scales with their modelled effects.
 
-\subsubsection{Reference Element Stabilization Tensor}
+\subsubsection*{Reference Element Stabilization Tensor}
 The mean value frequency is an unknown, yet existing frequency for which the subscales are ideally solved. It is intuitive to think that it is related to some quantity proportional a derivative operator. These are proportional to the inverse meshsize along the direction of the gradient. In~\cite{Codina2002}, $\vec{k}_0$ is given as a product of the inverse mesh size measured by the perimeter of the element and a mesh independent factor. In other studies~\cite{Principe2010}, the derivation is done right away from a reference domain, in this case the unit-reference element, obtaining an expression of the shape:
 \begin{equation}
 	\tau_M = \left[\rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}
@@ -571,7 +657,7 @@ Then the metrics change to:
 \end{equation}
 It can be seen clearly, that $G$ attains different values for the same physical triangle. This issue is best seen in simulations of lowRe\,flows, where $G:G$ is the dominant factor in the stabilization. The pressure field has a notable irregularity that however does not compromise stability. It has been observed, that this phenomenon is quickly masked, when the timesteps become smaller or when convection starts dominating.
 
-\subsubsection{Proposal: Principal Component Stabilization Tensor}
+\subsubsection*{Proposal: Principal Component Stabilization Tensor}
 In face of the previously explained inconsistency, a new tensor is proposed, whose main  purpose is to eliminate the dependency of the nodal enumeration of the previous tensor $G$, while preserving the shape and orientation information that is exploited by the stabilization. To develop the latter statement further, take for instance ${\vec{u}}^T G\vec{u}$. When evaluated, this term will yield a scalar quantity proportional to the square of the velocity projected over the meshsize in its direction.
 
 
@@ -615,7 +701,7 @@ Another execution of the transformation can be seen in \autoref{fig:ellipses}, w
 In the implementation of this method, the timestep component, which would influence $\tau_C$ through $\tau_M$ is omitted, since in neither of the cases the derivation would yield such a term. In a latter subsection, this proposed model will be investigated in a reference case comparing it to more established methods, such as the one that follows.
 
 
-\subsubsection{Velocity projected meshsize}
+\subsubsection*{Velocity projected meshsize}
 Another validated stabilization parameter is presented in works of Tezduyar \etal~\cite{Tezduyar1986, Tezduyar2000}. It bases on a velocity projected meshsize, much like before, but is instead computed using the gradient of the test functions $\nabla \varphi_k$ of each node in an element:
 \begin{equation}
 	h = \frac{\norm{\vec{u}_h}}{\sum_{k\in K} \abs{\vec{u}_h \cdot \nabla \varphi_k}}
@@ -740,7 +826,7 @@ For that reason, solving the problem can be seen as solving any system of the sh
 	\partial_t u = f(t, u)
 \end{equation}
 
-\subsubsection{Time Integration}
+\subsubsection*{Time Integration}
 A classic scheme used in hemodynamics simulations is the Backward Differentiation Formula (BDF). It is a per-definition implicit time scheme, \ie~it uses a right hand side that is defined at the unknown timestep $t^{n+1}$ ($t^{n} = n\dt$). The order of convergence of the scheme depends on the number of terms that are considered of $u$ to build the derivative. For a simple first order BDF1 scheme, also simply called Backwards Euler method, develope a Taylor series around $u^{n}$ considering the information known at $u^{n+1}$:
 \begin{equation}
 	\begin{split}
@@ -765,7 +851,7 @@ The obtained integration scheme is implicit and A-stable, or in simpler terms sp
 \end{equation}
 BDF2 has some major benefits that motivate its choice in this work. First, its computational cost is minimal, involving only the storage of one additional history variable and few addition and multiplication operations. As a second order method, it maintains an overall small diffusive effect over the fluid dynamics. Lastly, it also benefits the solution of the linear system since it enforces the diagonal dominance on the $A_{\vec{u}, \vec{w}}$ block over BDF1 for instance.
 
-\subsubsection{Treatment of the non-linearities}
+\subsubsection*{Treatment of the non-linearities}
 Using implicit schemes benefits stability, but requires handling non-linear terms. In the stabilized Navier-Stokes equations there are several non-linearities involving shear-dependent viscosities, SUPG test functions and lastly, and most importantly, the non-linear velocity convection. The problem can be rewritten as a root-finding problem for $\vec{f}(\vec{u})$, where $A$ is the fully discretized system of equations and $b$ the right-hand side.
 \begin{equation}
 	\vec{f}(\vec{u}) = A(\vec{u})\vec{u} - \vec{b}
@@ -823,7 +909,7 @@ The Newton-Gregory backward polynomial (\autoref{eqn:newton_gregory}), if used, 
 
 
 \section{Validation Cases}
-In the previous section, a VMS-type method has been derived using common models from literature and a new proposal for a stabilization parameter. Further, well-known time integration schemes and treatment options for the non-linearities have been shown and briefly discussed with regards to their stability, convergence and implementation. To actually display the theoretical thoughts, two test cases, have been examined during the course of this work. The simulation framework bases on an in-house C++ library that provides mesh handling tools, a message parsing interface parallelization and a series of FEM solvers, including one for the incompressible Navier-Stokes equations. In the frame of this thesis, the latter was extended by the second order BDF scheme, the Newton-Gregory extrapolation, as well as the complete computation of the tensor-based stabilizations (\autoref{eqn:new_metric}, \autoref{eqn:tensor_based_stab}).
+In the previous section, a VMS-type method has been derived using common models from literature and a new proposal for a stabilization parameter. Further, well-known time integration schemes and treatment options for the non-linearities have been shown and briefly discussed with regards to their stability, convergence and implementation. To actually display the theoretical thoughts, two test cases, have been examined during the course of this work. The simulation framework bases on an in-house C++ library that provides mesh handling tools, a message parsing interface parallelization and a series of FEM solvers, including one for the incompressible Navier-Stokes equations\,\cite{Hachem2010, Coupez2013}. In the frame of this thesis, the latter was extended by the second order BDF scheme, the Newton-Gregory extrapolation, as well as the complete computation of the tensor-based stabilizations (\autoref{eqn:new_metric}, \autoref{eqn:tensor_based_stab}).
 
 
 
@@ -916,22 +1002,22 @@ The corresponding plots displaying both lift and drag for both studied Re are se
 \end{itemize}
 
 \subsection{FDA Nozzle}
-The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a simplified, idealized medical device geometry used for benchmarking CFD codes. It shares characteristics with various blood-carrying medical devices, such as catheters and syringes. The nozzle includes a radial step, sharp edges, and a cross-sectional stenosis to induce shear stresses and simulate conditions like hemolysis~\cite{Pauli2013}. The axisymmetric design features a 0.04 m long stenotic throat with a 20-degree connecting cone at one end and a step change in diameter at the other (see \autoref{fig:design_FDA} for more details).
+The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a simplified, idealized medical device geometry used for benchmarking CFD codes. It shares characteristics with various blood-carrying medical devices, such as catheters and syringes. The nozzle includes a radial step, sharp edges, and a cross-sectional stenosis to induce shear stresses and simulate conditions like hemolysis~\cite{Pauli2013}. The axisymmetric design features a 0.04\,m long stenotic throat with a 20-degree connecting cone at one end and a step change in diameter at the other (see \autoref{fig:design_FDA} for more details).
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.9\linewidth]{chapter2/Figures/FDA/FDA_Design.png}
+	\includegraphics[width=\linewidth]{chapter2/Figures/FDA/FDA_Design.png}
 	\caption{Design of the FDA Nozzle. Taken from~\cite{Bergersen2019}.}\label{fig:design_FDA}
 \end{figure}
-This configuration creates regions of accelerating and decelerating flow, shear stress variations, and recirculating flow, mimicking the flow dynamics observed in medical devices. Although medical devices are not part of the context of this thesis, this case presents interesting CFD challenges to tackle. The numerous studies handling it present a didactic explanation on how different approaches, such as turbulence models, influence the obtained results within different Re regions. For the analysis, throat Reynolds numbers of Re=500 and Re=2000 will be considered. The prior lays in a similar range as the bloodflow in brain arteries and presents a fully laminar flow. For that reason it is easier to validate the computational framework, since transient turbulent effects are not present. The case of Re=2000 on the other hand sheds light into the solvers behaviour in the transition zone. Here, in some cases the jet breaks down in the rear end of the Nozzle causing turbulent effects. The appearance of this breakdown depends on the used turbulence models, mesh refinement and experimental setup, and is thus introduces an interesting discussion about to what degree it is reasonable or not to refine the computations.
+This configuration creates regions of accelerating and decelerating flow, shear stress variations, and recirculating flow, mimicking the flow dynamics observed in medical devices. Although medical devices are not part of the context of this thesis, this case presents interesting CFD challenges to tackle. The numerous studies handling it provide a didactic explanation on how different approaches, such as turbulence models, influence the obtained results within different Re regions. For the analysis, throat Reynolds numbers of Re=500 and Re=2000 will be considered. The prior lays in a similar range as the bloodflow in brain arteries and showcasing a fully laminar flow. For that reason it is easier to validate the computational framework, since transient turbulent effects are not present. The case of Re=2000 on the other hand sheds light into the solvers behaviour in the transition zone. Here, in some cases the jet breaks down in the rear end of the Nozzle causing turbulent effects. The appearance of this breakdown depends on the used turbulence models, mesh refinement and experimental setup, and is thus introduces an interesting discussion about to what degree it is reasonable or not to refine the computations.
 
-\subsubsection{Case Setup}
-The FDA Nozzle has been experimentally tested by~\cite{Stewart2012} for a blood-like solution containing water, glycerin, and sodium iodide with a density of 1056~\kgm. The viscosity of the Newtonian fluid is reported to be 3.5\mpas, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
+\subsubsection*{Case Setup}
+The FDA Nozzle has been experimentally tested by~\cite{Stewart2012} for a blood-like solution containing water, glycerin, and sodium iodide with a density of 1056~\kgm. The viscosity of the Newtonian fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
 \begin{equation}
 	\dot{Q}_{\Rey500} = 5.21\cdot10^{-6}\,\volflow,\qquad \dot{Q}_{\Rey2000} = 2.08\cdot10^{-5} \,\volflow
 \end{equation}
 The walls of the Nozzle are set to no-slip conditions and the outlet is rendered traction-free. The Nozzle has been generated for an axial extension of 0.168\,m ranging from $z$ = -0.088\,m to $z$ = 0.08\,m. The interior of the Nozzle was meshed with unstructured tetrahaedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the Nozzle, elements are generated with an edgelength of 0.0002mm and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The techniques needed to generate the anisotropy will be thoroughly discussed in Chapter XXX. The time discretization is done using BDF2 with regular timesteps at \dt\'= 0.5\ms\,and \dt\,= 0.1\ms\,for Re = 500 and Re = 2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. This was usually achieved after less than 10 iterations. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
 
-\subsubsection{Results}
+\subsubsection*{Results}
 The simulations have been analyzed after converging to a steady flow profile in both cases. Results were extracted along the main axe of the Nozzle, recording the axial velocity $u_z$, pressure and massflow. The latter was transformed into a percentile error using the theoretically imposed value as suggested in~\cite{Stewart2012}:
 \begin{equation}
 	E_Q = 100\% \times \frac{\dot{Q} - \dot{Q}_{theory}}{\dot{Q}_{theory}}
@@ -971,7 +1057,7 @@ Similarly to before, the first four sections confirm a good match between theory
 \end{figure}
 
 
-\subsubsection{Discussion}
+\subsubsection*{Discussion}
 As stated before, this case serves two purposes. First, validating the numerical framework for a more simple, fully laminar setup at Re=500, and secondly providing a perspective on the performance in a more complex flow regime, Re=2000. The fully laminar matches experimental data and other reported results from laminar simulations\cite{Stewart2012}, reassuring us about the validity of our method. Hereby, it is worth noting that the obtained results base on a mesh that is far from the resolutions that are otherwise used for benchmarking the FDA Nozzle\cite{Jain2020, Bergersen2019}. This is important to consider since simulations of hemodynamics cannot in general afford exploding computational demands.
 
 For Re\,numbers of 2000 and above there has been a large effort from turbulence research to better understand the missmatch among cutting edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminute perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen. Two highly recommendable studies~\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \etal~\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement in appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
