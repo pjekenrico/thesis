@@ -5,44 +5,171 @@
 \chapter{Patient Study}\minitoc\newpage\label{chap.5}
 With the presented chapters on theory of fluid dynamics, the brain arterial system and the description of a new virtual stent deployment method, one complex patient study is going to be analyzed. The case has already been used in the stent deployment to assess the performance of the method. Here we will further develop on the hemodynamic effects in it and explore the implications of the FDS treatment, which, sadly, can be related to the cause of death of the patient. To support our and the clinicians understanding, we will evaluate pre- and poststented configurations in regards to common remodelling indicators and lastly consider a novel simulation including wall compliance. The latter simulation has been done in cooperation with Aurèle Goetz, whose work is dedicated to the Fluid-Structure Interaction (FSI) modelling of intracranial aneurysms.
 
-\section{Patient medical record}\label{chap5:sec1}
-The patient is a woman born in January 1963, with no history of smoking, hypertension, nor family history of intracranial aneurysms. Vertigo along with anxiety and a strange sensation lead her to seek consultation of a neurologist. After a first consultation, she was appointed to do an MRI examination of the crane, revealing a giant intracranial aneurysm compressing of the left temporal lobe\footnote{Temporal lobes: Regions of the brain situated on both halves above the ears.}. Her neurologist referred her to a neuro-interventionalist in the same month for further evaluation. A cerebral arteriography confirmed the existance of a giant aneurysm in the supra-clinoid segment of the left ICA. The englobing of the parent artery by the aneurysm cause a delayed opacification of the left middle cerebral artery. The small anterior communicating artery was visible during compression of the left ICA. 
+\section[Literature]{Medical background}\label{chap5:sec1}
 
-Based on the presence of symptoms and a menace of rupture, endovascular treatment was proposed to the patient, to which she agreed during the following medical consultation. One week before the procedure, she began taking aspirin (75 mg/day) and prasugrel\footnote{Prasugrel: Platelet aggregation inhibitor medication.} (10 mg/day) to reduce the risk of blood clots. The procedure started with a balloon test occlusion, where a balloon was temporarily inflated in the artery to block blood flow. A guiding catheter was placed in both the right and left internal carotid arteries. A Scepter XC 4--11 balloon was positioned in the left ICA upstream of the aneurysm and inflated to stop blood flow. Contrast injection via the right catheter showed a delay of over one second in the opacification of the left cerebral veins compared to the right, indicating that the left carotid artery could not be safely occluded. Therefore, preserving and reconstructing the left carotid artery with a flow-diverting stent was necessary. A $3\times21$\,mm FRED Jr flow-diverter was deployed from the left carotid terminus to the left internal carotid artery upstream of the aneurysm, immediately causing contrast stasis in the aneurysm sac. Upon waking up, the patient showed no neurological deficits and continued antiplatelet therapy. At her follow-up 1.5 months later, her clinical exam returned normal results. Six months after the procedure, a follow-up cerebral arteriography showed a patent\footnote{Patent (stent): Maintaining the openness and integrity of the vessel or structure where it has been placed.} stent with slight narrowing at its origin and unchanged opacification of the aneurysm sac. Continued dual antiplatelet therapy was advised, with a repeat arteriography scheduled for ten months post-procedure.
+\subsection{Patient medical record}\label{chap5:sec1:subsec1}
+The patient is a woman born in January 1963, with no history of smoking, hypertension, nor family history of intracranial aneurysms. Vertigo along with anxiety and a strange sensation lead her to seek consultation of a neurologist. After a first consultation, she was appointed to do an MRI examination of the crane, revealing a giant intracranial aneurysm compressing of the left temporal lobe\footnote{Temporal lobes: Regions of the brain situated on both halves above the ears.}. Her neurologist referred her to a neuro-interventionalist in the same month for further evaluation. A cerebral arteriography confirmed the existance of a giant aneurysm in the supra-clinoid segment of the left ICA. The englobing of the parent artery by the aneurysm cause a delayed opacification of the left middle cerebral artery. The small anterior communicating artery was visible during compression of the left ICA.
+
+Based on the presence of symptoms and a menace of rupture, endovascular treatment was proposed to the patient, to which she agreed during the following medical consultation. One week before the procedure, she began taking aspirin (75 mg/day) and prasugrel\footnote{Prasugrel: Platelet aggregation inhibitor medication.} (10 mg/day) to reduce the risk of blood clots. The procedure started with a balloon test occlusion, where a balloon was temporarily inflated in the artery to block blood flow. A guiding catheter was placed in both the right and left internal carotid arteries. A Scepter XC 4--11 balloon was positioned in the left ICA upstream of the aneurysm and inflated to stop blood flow. Contrast injection via the right catheter showed a delay of over one second in the opacification of the left cerebral veins compared to the right, indicating that the left carotid artery could not be safely occluded. Therefore, preserving and reconstructing the left carotid artery with a flow-diverting stent was necessary. A $3$\,mm FRED Jr flow-diverter was deployed from the left carotid terminus to the left ICA upstream of the aneurysm, immediately causing contrast stasis in the aneurysm sac. Upon waking up, the patient showed no neurological deficits and continued antiplatelet therapy. At her follow-up 1.5 months later, her clinical exam returned normal results. Six months after the procedure, a follow-up cerebral arteriography showed a patent\footnote{Patent (stent): Maintaining the openness and integrity of the vessel or structure where it has been placed.} stent with slight narrowing at its origin and unchanged opacification of the aneurysm sac. Continued dual antiplatelet therapy was advised, with a repeat arteriography scheduled for ten months post-procedure.
 
 Eighth months after the intervention, the patient reported a sudden headache. A brain CT scan revealed spontaneous hyperdensity in the aneurysm, suggesting thrombosis (blood clot). A week later, she suffered a sudden coma, with a Glasgow Coma Scale score of 4, indicating severe brain injury. A CT scan revealed subarachnoid hemorrhage (bleeding in the space surrounding the brain), intraventricular hemorrhage, and a left temporal hematoma\footnote{Hematoma: A solid swelling of clotted blood within the tissues.}. Cerebral arteriography showed persistent aneurysm opacification, a patent stent, and active contrast leakage from the aneurysm sac's postero-inferior part. A microcatheter was placed in the aneurysm sac through the stent mesh, and the sac was occluded with coils, halting the bleeding and completely occluding the aneurysm. Sadly, the patient passed away five days after this second intervention.
 
+\begin{figure}[htb]
+	\centering
+	\begin{minipage}[t]{0.475\linewidth}
+		\centering
+		\begin{tikzpicture}
+			\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\linewidth]{chapter5/Figures/Medical/cellario_preop_2.png}};
+			\begin{scope}[x={(image.south east)},y={(image.north west)}]
+				\draw[white, very thick] (0.87, 0.1) -- (0.95, 0.3) node[near start, left, xshift=0.2cm, yshift=-0.6cm] {OA};
+				\draw[white, very thick] (0.9, 0.9) -- (0.93, 0.8) node[near start, above left, xshift=0.2cm, yshift=0.1cm] {ACA};
+				\draw[white, very thick] (0.35, 0.75) -- (0.5, 0.9) node[near start, left, xshift=-0.2cm, yshift=-0.3cm] {AChA};
+				\draw[white, very thick] (0.67, 0.55) -- (0.55, 0.55) node[near end, left, xshift=-0.275cm, yshift=0.05cm] {Stenosis};
+			\end{scope}
+		\end{tikzpicture}
+		\caption{Annotated DSA image of the preoperative IA.}\label{fig:stenosis}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.476\linewidth}
+		\centering
+		\begin{tikzpicture}
+			\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\linewidth]{chapter5/Figures/Medical/cellario_postop_2.png}};
+			\begin{scope}[x={(image.south east)},y={(image.north west)}]
+				\draw[white, very thick] (0.5, 0.32) -- (0.72, 0.48) node[near start, left, xshift=-0.3cm, yshift=-0.3cm] {FDS guide wires};
+				\draw[white, very thick] (0.5, 0.2) -- (0.775, 0.235) node[near start, left, xshift=-0.4cm, yshift=0.0cm] {FDS flares};
+				\draw[customRed, very thick] (0.18, 0.5) circle (0.05);
+				\draw[customRed, very thick] (0.18, 0.55) -- (0.15, 0.77) node[near end, above, xshift=-0.2cm, yshift=0.3cm] {\textcolor{white}{Rupture}};
+			\end{scope}
+		\end{tikzpicture}
+		\caption{Annotated DSA image of the postoperative IA.}\label{fig:stenosis2}
+	\end{minipage}
+\end{figure}
 
-\subsection{Full vs cut stent}
-Bulge pressure on the full stent:
+
+\subsection{Artery topography}\label{chap5:sec1:subsec2}
+\subsubsection*{Circle of Willis}
+An MRA scan confirmed that the present CoW to be incomplete, missing the posterior communication ipsilateral to the aneurysm. The contralateral one, which appears to have a fetal nature, contributes most of the blood to the left posterior circulation. The anterior communication, although present, has a small, possibly hypoplastic size which was confirmed during a clamp test. The aneurysm is found at the C7 section of the ICA, 4mm before the terminal bifurcation of the vessel. The Anterior Choroidal Artery (AChA) emanates from it, however its flow is barely noticeable on DSA scans, as seen on the left of \autoref{fig:stenosis}.
+
+\subsubsection*{Stenoses}
+An important factor considering this case is the presence of a stenosic section proximal to the aneurysm neck. The ICA has a diameter of 4.4\,mm in the cavernous section (C2), falling in line with common values\,\cite{Baz2021}. It experiences a continuous tampering over the communicating and ophtalmic segments (C) leading to a narrow, nearly elliptical cross-section. This atypical cross-section translates into a  60\% stenosis with respect to the proximal diameter. After the FDS deployment, the vessel is widened, reducing the stenosis to 43\%. This value corresponds to the natural tampering (40\%) of the distal ICA sections\,\cite{Baz2021}.
+
+
+\subsection{Aneurysm morphology and movement}\label{chap5:sec1:subsec3}
+The aneurysm contained part of its parent vessel prior to the operation. It has a nearly round shape with a diameter of appoximately 25\,mm and a volume of 7170\,mm$^3$. In the course of the eight months after the intervention, the aneurysm underwent changes, similarly to the vasculature. The most notable changes are the size reduction on its lower and left sides, which rendered its shape heart-like. The FDS also reshaped the parent vessel, transforming it into a circular artery with the aneurysm neck being now clearly visible (instead of the vessel traversing the aneurysm). The next rotational angiographic images stem from the hours after rupture, showing a small blood leakage at the tip of the aneurysm, as shown in \autoref{fig:stenosis2}. The rupture site is adjacent to the third ventricle, which permits an extensive movement of the aneurysm at this site. The displacement of the aneurysm wall induced by the cardiac pulse, could only clearly be seen after rupture. The whole aneurysm movement can be described similarly to an inflating and deflating balloon, with no noticeable displacement at the neck and a progressively bigger movement towards the tip. During systole, the rupture zone moved by an estimated 10\% of the aneurysm length.
+
+
+
+\section{Methods}\label{chap5:sec2}
+
+\subsection{Case setup}
+
+\subsubsection*{CFD setup}
+For the CFD study, there are two 3D angiography images available, taken before the stent deployment and after rupture. Both DSA images were segmented following the guidelines described in the previous chapter and meshed with a more refined mesh size (0.25\,mm). The obtained preoperative mesh contains nearly 11M elements due to the considerable size of the aneurysm, whereas the (stented) ruptured case presented 9.5M. Due to the increased flow velocities at the stenosis, the preoperative case was run implicitly with a timestep of 0.5\,ms, requiring 2--5 non-linear subiterations. The convection-related instabilities at peak systole that motivate this strategy were not observed in the stented case, ruling them unnecessary there.
+
+The inflow conditions were imposed through parabolic profiles according to averaged waveforms for people in the same age group as the patient\,\cite{Tanaka2006}. We assumed the inflow conditions to remain the same pre- and postoperatively\,\cite{Cebral2011}, but we acknowledge this to be a potential source of bias. Outlets where modelled using resistance models fit as described in Chapter 3. The targeted flow was chosen to depend on the cube of the MCA and ACA diameters, meeting Murray's Law. Walls were treated as rigid for the
+
+\subsubsection*{FSI setup}
+
+
+
+\section{Results}\label{chap5:sec2}
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{chapter5/Figures/Convergence/cut_full_comparison.pdf}
-	\renewcommand{\arraystretch}{1.4}
-	\setlength{\tabcolsep}{10pt}
-	\begin{tabular}{cccccc}
-		\toprule
-		\multicolumn{2}{c}{\textbf{Comparison}} & \textbf{Mean}     & \textbf{Std} & \textbf{Min} & \textbf{Max}           \\
-		\midrule
-		\multirow{2}{*}{Full stent}             & $p\,$[\pa]        & 3257.65      & 2376.46      & 337.604      & 7708.38 \\
-		                                        & $\bar{u}$\,[mm/s] & 37.5429      & 14.8827      & 16.9161      & 64.1167 \\
-		\midrule
-		\multirow{2}{*}{Cut stent}              & $p\,$[\pa]        & 3236.66      & 2361.91      & 333.288      & 7653.89 \\
-		                                        & $\bar{u}$\,[mm/s] & 37.4279      & 14.7269      & 17.1103      & 63.5877 \\
-		\bottomrule
-	\end{tabular}
-	\caption[Comparison between cut and full stents]{Comparison between the hemodynamics of using a full stent section and using a stent reduced to the areas exposed to neck and branches. The variables considered are the intra-aneurysmal velocity magnitude $\bar{u}$ (black), the pressure (red) and the Pulsatility Index (PI) given in the legend. These quantities are integrated over the aneurysm sack and normalized by the sack volume.}\label{fig:fullvscut}
+	\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/Pressure_curves.pdf}
+	\caption[Centerline Pressures]{Pressures along the centerlines of the ICA and its daughter vessels ACA and MCA in the pre-stented (top) and post-stented (bottom) scenario. The shows the pressure prorgession in the centerline leading to the MCA whereas the right column does the same for the ACA. Note that here we only display the centerline pressure. It is fairly constant along the vessel cross-section excepting at the ICA terminus, where the flow split and the inertia can cause differences of up to 200 Pa on one slice.}\label{fig:ctrl_p}
 \end{figure}
 
-\begin{equation}
-	\text{PI} = \frac{\max(\bar{u}) - \min(\bar{u})}{\text{mean}(\bar{u})}
-\end{equation}
+\section{Discussion}\label{chap5:sec3}
 
 
-\section{Second Section}\label{chap5:sec2}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \begin{circuitikz}
+            % Define coordinates
+            \coordinate (B) at (0,0);
+            \coordinate (C) at (2,0);
+            \coordinate (D) at (4.25,0);
+            \coordinate (E) at (6.25,0);
 
-\section{Third Section}\label{chap5:sec3}
+            % Draw voltage source
+            \draw (0, -0.4) node[below]{$p_i$} to[short, o-] (B);
+
+            % Draw resistors
+            \draw (B) to[R=$R_{Stenosis}$] (C);
+
+            % Draw parallel R and C for Aneurysm with additional resistance
+            \draw (C) to[short] ++(0,1) coordinate (C1);
+            \draw (C) to[short] ++(0,-1) coordinate (C3);
+            \draw (C1) to[R=$R_{Vessel}$] ++(2.25,0) coordinate (C2);
+            \draw (C3) to[R=$R_{Aneu}$, l_=$R_{Aneu}$] ++(1.5,0) coordinate (C5);
+            \draw (C5) to[C=$C_{Aneu}$, l_=$C_{Aneu}$] ++(0.75,0) coordinate (C4);
+            \draw (C2) to[short] (D);
+            \draw (C4) to[short] (D);
+
+            % Draw single distal resistor
+            \draw (D) to[R=$R_{distal}$] (E);
+
+            % Draw ground
+            \draw (E) to[ground] ++ (0,0) node[ground](GND){};
+        \end{circuitikz}
+    \end{minipage}
+    \hspace{0.01\textwidth} % Adjust horizontal space between figure and table
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \begin{tabular}{l c c c}
+            \hline
+              & Preop & Postop 1 & Postop 2\\
+            \hline
+            $R_{Stenosis}$ & high & 0 & 0 \\
+            $R_{Vessel}$ & $\infty$ & low & low \\
+            $R_{Aneu}$ & high & high & high\\
+            $C_{Aneu}$ & 0 & high & high \\
+            $R_{distal}$ & low & high & low\\
+            \hline
+        \end{tabular}
+    \end{minipage}
+    \caption{Schematic representation of the circuit with parallel and series resistances and capacitances, and corresponding dummy values for each component.}
+    \label{fig:circuit}
+\end{figure}
+
+\subsection{Literature cases}\label{chap5:sec1:subsec4}
+
+Summary Hirato\cite{Hirato2023}:
+- FDS assisted coiling
+- ICA giant ~20-14mm
+- Rupture after 3 days (!)
+- No geometrical changes
+- No information about rupture site or thrombosis started
+-> Two main reasons are cited, of which the first seems more likely in their case
+1) Pressure increase due to removal of the stenosis and autoregulation
+2) Wall necrosis due to
+
+Summary Kulscar\cite{Kulcsar2011}:
+- analyzed 13 ruptured aneurysms (giant, saccular and fusiform)
+- Observed thrombus formation and subsequent rupture
+- patients had headaches before rupture
+- Patients in the late rupture group (n=3) had rupture before 5 months
+Conclusion:
+- Extensive thrombosis can lead to a sped up rupture and autolysis of the aneurysm walls
+-> Doesnt necessarily apply here because of no thrombosis + our ruptures later
+
+Summary Cebral\cite{Cebral2011}:
+- 3 giant aneurysms ruptured within days after stenting
+- 2 of them had stenosed sections at the aneurysm neck
+- Assumes unchanged inflow conditions, thus seeing a pressure increase after stenosis liberation
+- no PComs visible!
+- NEED TO CHECK KROU
+
+
+Summary Rouchaud\cite{Rouchaud2016}:
+Literature review study showing results for aneurysm rupture and delayed intraparenchymal hemorrhages following FDS treatment.
+- Overall no new information, but probabilities.
+- All categories of our aneurysm fit well with the most common cases EXCEPT the delay time to the rupture, which is higher in our case.
+
+
 
 \bibliographystyle{elsarticle-num}
 \bibliography{chapter5/Biblio}
