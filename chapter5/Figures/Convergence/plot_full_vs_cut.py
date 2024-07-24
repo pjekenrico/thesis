@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.rcParams["text.usetex"] = True
-plt.rcParams["font.family"] = "modern"
 text_kwargs = dict(fontsize=12)
 
 

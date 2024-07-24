@@ -301,8 +301,8 @@ TSWLatexianTemp*
 #*Notes.bib
 
 # USer defined ignores
-./Main.pdf
-Main.pdf
+# ./Main.pdf
+# Main.pdf
 *.mtc?
 Main.mtc
 elsarticle-num.bst
