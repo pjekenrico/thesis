@@ -2,12 +2,11 @@
 \newpage
 \pagestyle{fancy}
 
-\chapter{Patient Study}\minitoc\newpage\label{chap.5}
-In the previous chapters, we have dealt with the numerical principles behind CFD computations using finite elements. Then we have applied and adapted the framework to model hemodynamics in the human brain arterial system, including a sensitivity study to the modelling over different extends of the brain vasculature. Next we studied Flow-Diverter Stents (FDS) and how to model them based on geometrical constraints. With a thorough validation in ecxperimental and in-vivo cases, we now move towards putting the framework to use. For that we will study 3 patient cases displaying two variations of intracranial aneurysms, each posing very unique challenges to the clinicians. These overall showcase the situations in which FDS treatment is considered the most promising tool, even though fatality rates are still high. First we will deal with the giant aneurysm case that has been subject of research in the previous chapter. The case will be thoroughly discussed considering medical and anatomical aspects before diving into the simulation of pre- nand postoperative hemodynamics. The second case involves blister-like aneurysms, formations barely seen on CT imaging characterized by critically thin and fragile walls. Both disease types are poorly understood and require further research to improve the prospective treatment to those in need of it. We will contribute to this search by analyzing the blood flow and relating the findings to existing theory in an attempt to support or disclaim the current understanding of the disease. 
+\chapter{Patient Studies}\minitoc\newpage\label{chap.5}
+In the previous chapters, we have dealt with the numerical principles behind CFD computations using finite elements. Then we have applied and adapted the framework to the brain arterial system, including a sensitivity study to the modelling over different extends of the vasculature. Next we studied Flow-Diverter Stents (FDS) and how to model them based on geometrical constraints. With a thorough validation in experimental and in-vivo cases, we now move towards putting the framework to use. For that we will study 3 patient cases displaying two variations of intracranial aneurysms each posing very unique challenges to the clinicians. These showcase some situations in which FDS treatment is considered the most promising tool, even though fatality rates are still high. First we will deal with the giant aneurysm case that has been subject of research in the previous chapter. The case will be thoroughly discussed considering medical and anatomical aspects before diving into the simulation of pre- nand postoperative hemodynamics. The second application case involves blister-like aneurysms, formations barely seen on CT imaging characterized by critically thin and fragile walls. Both disease types are poorly understood and require further research to improve the prospective treatment to those in need of it. With the run simulations, we put on display the framework, but most imporantly, we provide hemodynamics results on rare aneurysms and relate them to existing literature.
 
-
-\section[Literature]{Delayed rupture of a giant aneurysm}\label{chap5:sec1}
-This first patient, as will be detailed below poses a challenging topic for clinicians. The specific type of aneurysm leaves only few options for treatment and has shown to be particularly prone to rupture\,\cite{Kulcsar2011,Li2019,Rouchaud2016}. The patient's medical record will be presented first, followed by a detailed description of the artery topography and the aneurysm. The simulation setup and results will be discussed in the last part of this section. The aim of this study is to understand the hemodynamic changes that occur in the aneurysm after the stent deployment and to determine whether the obtained results fall into either of the risk factors proposed by literature.
+\section{Delayed rupture of giant aneurysms}\label{chap5:sec1}
+Giant aneurysms bear several added difficulties compared to their smaller, saccular counterparts. Due to their size, they are often symptomatic, causing cerebral palsies, headaches and other neurological disturbances. Therefore, treating them is often a necessity, albeit operations are more complex and are more prone to complications\,\cite{Rouchaud2016}. Most giant aneurysms ($>$\,25\,mm) contain a sizable portion of the parent vessel and lack a well defined neck. As a consequence, clipping them surgically is often inviable. Even the deployment of coils is rarely feasible, since they require a sufficient hold to remain firmly in place. Furthermore, coils suffer from an increased risk of recanalization due to accentuated material fatigue and material compaction in these cases\,\cite{Dandapat2021}. Flow-diverter stents, although sometimes difficult to deploy in giant aneurysms, manage to avoid the aforementioned issues. Despite their overall good performance\,\cite{Kulcsar2011}, giant aneurysms still pose a non-negligible risk of delayed rupture\,\cite{Kulcsar2011,Li2019,Rouchaud2016}. Since the first observed cases in the 2010's decade, research teams have proposed several contributing factors and registered their observations. In the following, we will conduct a detailed analysis of the patient case presented to our cooperating hospital, who experienced this dramatic outcome.
 
 
 \subsection{Patient medical record}
@@ -30,7 +29,7 @@ Eighth months after the intervention, the patient reported a sudden headache. A 
 				\draw[white, very thick] (0.67, 0.55) -- (0.55, 0.55) node[near end, left, xshift=-0.275cm, yshift=0.05cm] {Stenosis};
 			\end{scope}
 		\end{tikzpicture}
-		\caption{Annotated DSA image of the preoperative IA.}\label{fig:stenosis}
+		\caption[Preoperative DSA image of the giant aneurysm]{Annotated DSA image of the preoperative IA.}\label{fig:stenosis}
 	\end{minipage}
 	\hfill
 	\begin{minipage}[t]{0.476\linewidth}
@@ -44,19 +43,19 @@ Eighth months after the intervention, the patient reported a sudden headache. A 
 				\draw[red, very thick] (0.18, 0.55) -- (0.15, 0.77) node[near end, above, xshift=-0.2cm, yshift=0.3cm] {\textcolor{white}{Rupture}};
 			\end{scope}
 		\end{tikzpicture}
-		\caption{Annotated DSA image of the postoperative IA.}\label{fig:stenosis2}
+		\caption[Postoperative DSA image of the giant aneurysm]{Annotated DSA image of the postoperative IA.}\label{fig:stenosis2}
 	\end{minipage}
 \end{figure}
 
 
 \subsection{Artery topography}\label{chap5:sec1:subsec2}
 \subsubsection*{Circle of Willis}
-An MRA scan confirmed that the present Circle of Willis (CoW) to be incomplete, missing the posterior communication ipsilateral to the aneurysm. The contralateral one, which appears to have a fetal nature, contributes most of the blood to the left posterior circulation. The anterior communication, although present, has a small size which was confirmed during a clamp test. The structure of the CoW is therefore categorized as a type PCP, a variant found in approximately 7\% of the population\,\cite{Hindenes2023}. Although the CoW configuration carries a 2.3 fold risk of aneurysm formation, it is not clear how it affects the rupture risk.
+An MRA scan confirmed the present Circle of Willis (CoW) to be incomplete, missing the posterior communication ipsilateral to the aneurysm. The contralateral one, which appears to have a fetal nature, contributes most of the blood to the left posterior circulation. The anterior communication, although present, has a small size which was confirmed during a clamp test. According to these features, the structure of the CoW is categorized as a type PCP, a variant found in approximately 7\% of the population\,\cite{Hindenes2023}. Although the CoW configuration carries a 2.3 fold risk of aneurysm formation, it is not clear how it affects the rupture risk.
 
-The aneurysm is found at the C7 section of the ICA, 4\,mm before the terminal bifurcation of the vessel. The Anterior Choroidal Artery (AChA) emanates from it, however its flow is barely noticeable on DSA scans, as seen on the left of \autoref{fig:stenosis}.
+The aneurysm on the communicating (C7) segment of the supra-clinoidal ICA, 4\,mm before its terminal bifurcation. The Anterior Choroidal Artery (AChA) emanates from it, however its flow is barely noticeable on DSA scans, as seen on the left of \autoref{fig:stenosis}.
 
 \subsubsection*{Tampering}
-An important factor considering this case is the presence of Tampering (T) and vessel deformation around the aneurysm. The cavernous ICA has a diameter of 4.16\,mm falling in line with reported values\,\cite{Baz2021}. It experiences a continuous tampering over the communicating and ophtalmic segments leading to a nearly elliptical vessel at the proximal aneurysm neck. This atypical cross-section translates into a 32\% tampering with respect to the diameter of the cavernous ICA (see \autoref{tab:pat_geo}). Past the aneurysm, the terminal section narrows down to 2.15\,mm, equivalently to a 48\% stenosis. This value clearly falls outside the standart deviation of the recorded cases by Baz \etal\,\cite{Baz2021}.
+An important factor considering this case is the presence of Tampering (T) and vessel deformation around the aneurysm. The cavernous ICA has a diameter of 4.16\,mm falling in line with reported values\,\cite{Baz2021}. It experiences a continuous tampering over the ophtalmic (C6) and communicating (C7) segments leading to a nearly elliptical vessel at the proximal aneurysm neck. This atypical cross-section translates into a 32\% tampering with respect to the diameter of the cavernous ICA (see \autoref{tab:pat_geo}). Past the aneurysm, the terminal section narrows down to 2.15\,mm, equivalently to a 48\% stenosis. This value clearly falls outside the standart deviation of the recorded cases by Baz \etal\,\cite{Baz2021}.
 
 After deployment, the proximal vessel sections remain largely unchanged. The clinoidal ICA however shrinks with diameters of 3.33\,mm, which is a 20\% tampering with respect to the cavernous ICA. The sections at the aneurysm have become nearly identical in diameter, attaining commonly found sizes. Although it is not verifyable from the imaging, these effects are likely to be caused by the mechanical forces exerted by the stent and the progressive remodelling of the artery as well.
 
@@ -83,7 +82,7 @@ After deployment, the proximal vessel sections remain largely unchanged. The cli
 \subsection{Aneurysm}\label{chap5:sec1:subsec3}
 
 \subsubsection*{Morphology}
-The aneurysm contained part of its parent vessel prior to the operation. It has a nearly round shape with a diameter of appoximately 25\,mm and a volume of 7170\,mm$^3$. In the course of the eight months after the intervention, the aneurysm underwent changes, similarly to the vasculature. The most notable changes are the size reduction on its lower and left sides, which rendered its shape heart-like. The FDS also reshaped the parent vessel, transforming it into a circular artery with the aneurysm neck being now clearly visible (instead of the vessel traversing the aneurysm). The next rotational angiographic images stem from the hours after rupture, showing a small blood leakage at the tip of the aneurysm, as shown in \autoref{fig:stenosis2}. The rupture site is adjacent to the third ventricle, which permits an extensive movement of the aneurysm at this site.
+The aneurysm contained its parent vessel prior to the operation. It has a nearly round shape with a diameter of appoximately 25\,mm and a volume of 7170\,mm$^3$. In the course of the eight months after the intervention, the aneurysm underwent changes, similarly to the vasculature. Most notably, it shrunk on its lower and left sides, which rendered its shape heart-like. The FDS reshaped the parent vessel, transforming it into a circular artery with the aneurysm neck being now clearly visible (instead of the vessel traversing the aneurysm). The next rotational angiographic images stem from the hours after rupture, showing a small blood leakage at the tip of the aneurysm, as shown in \autoref{fig:stenosis2}. The rupture site is adjacent to the third ventricle, which permits an extensive movement of the aneurysm at this site.
 
 \subsubsection*{Movement}
 The displacement of the aneurysm wall induced by the cardiac pulse, could only clearly be seen after rupture. The whole aneurysm movement can be described similarly to an inflating and deflating balloon, with no noticeable displacement at the neck and a progressively bigger movement towards the tip. During systole, the rupture zone moved by an estimated 10\% of the aneurysm length. The quantitative displacement was however difficult to measure due to the rotating video angiography (see the left of \autoref{fig:wall_movement} for reference), so we propose the value rather as an order of magnitude.
@@ -110,23 +109,23 @@ The displacement of the aneurysm wall induced by the cardiac pulse, could only c
 	\caption[Wall movement]{An attempt to display the different facets of the movement in the aneurysm. The frames of the contrast agent-filled aneurysm at diastole and systole (left) show a distension of the bottom and right faces of the aneurysm. The frames of the aneurysm during ink injection (right) at subsequent snapshots ($\Delta t$\,=\,0.17\,s) display the deflation of the aneurysm, flushing out notable quantities of ink-less blood and rendering the MCA transparent (red arrow).}\label{fig:wall_movement}
 \end{figure}
 
-During the segmentation work, it was seen that the post-rupture images were not as nitid as the preoperative ones, particularly due to the absence of saturated contrast agent in some vessels that are essential. This can be seen in \autoref{fig:stenosis2}, where the MCA is nearly hollow and only the marker wires nidicate the location and size of the vessel. Inspection of the videos taken during injection showed a remarkable response of the aneurysm to the rise in pressure caused by the ink bolus being flushed through the system. The latter is injected following medical protocol at a rate of 3\,mL/s (60\% of the mean flow rate of the ICA) for 7\,s. At systole, ink penetrates the aneurysm without visible reflux of fluids leaving the bulge. Right after systole, the aneurysm deflates, flushing out blood that renders the MCA transparent (see the right of \autoref{fig:wall_movement}). Despite being an effect only seen during the injection and therefore under increased pressure, this underscores the potential volume variation of the aneurysm and its pulsatility. When the ink injection is stopped, the reflux of the aneurysm is no longer visible, indicating a different type of fluid dynamics at play.
+During the segmentation work, it was seen that the post-rupture images were not as nitid as the preoperative ones, particularly due to the absence of saturated contrast agent in some vessels that are essential. This can be seen in \autoref{fig:stenosis2}, where the MCA is nearly hollow and only the marker wires nidicate the location and size of the vessel. Inspection of the videos taken during injection showed a remarkable response of the aneurysm to the rise in pressure caused by the ink bolus being flushed through the system. The latter is injected following medical protocol at a rate of 3\,mL/s (60\% of the mean flow rate of the ICA) for 7\,s. At systole, ink penetrates the aneurysm without visible reflux of fluids leaving the bulge. Right after systole, the aneurysm deflates, flushing out blood that turns the MCA transparent (see the right of \autoref{fig:wall_movement}). Despite being an effect only seen during the injection and therefore under increased pressure, this underscores the potential volume variation of the aneurysm and its pulsatility. When the ink injection is stopped, the reflux of the aneurysm is no longer visible, indicating a different type of fluid dynamics at play.
 
-\subsection{Simulation}\label{chap5:sec2}
+\subsection{Simulations}\label{chap5:sec2}
 The medical images have revealed important information about the case including the topology, morphology and some of the dynamics. These informations are now enriched by hemodynamics simulations, which will help to understand flow structures, the pressure evolution and wall shearing in the aneurysm. These factors are potentially decisive in the remodelling and rupture dynamics as already discussed in previous publications on similar aneurysms\,\cite{Cebral2011, Hirato2023, Li2019}.
 
 \subsubsection*{CFD setup}
 For the CFD study, there are two 3D angiography images available, taken before the stent deployment and after rupture. Both DSA images were segmented following the guidelines described in the previous chapter and meshed with a mesh size of $h$\,=\,0.25\,mm. Due to the increased flow velocities at the stenosis, the preoperative case was run implicitly with a timestep of $\Delta t$\,=\,0.5\,ms. The convection-related instabilities at peak systole that motivate this strategy were not observed in the stented case, where semi-implicit time stepping was sufficient.
 
-The inflow conditions were imposed through parabolic profiles according to averaged waveforms for people in the same age group as the patient\,\cite{Tanaka2006}. We assumed the inflow conditions to remain the same pre- and postoperatively\,\cite{Cebral2011}, but we acknowledge this to be a potential source of bias as already discussed by Cebral \etal\,\cite{Cebral2011}. Outlets where modelled using resistance models fit as described in Chapter 3. The targeted flow was chosen to depend on the cube of the MCA and ACA diameters, meeting Murray's Law.
+The inflow conditions were imposed through parabolic profiles according to averaged waveforms for people in the same age group as the patient\,\cite{Tanaka2006}. We assumed the inflow conditions to remain the same pre- and postoperatively\,\cite{Cebral2011}, but we acknowledge this to be a potential source of bias as already discussed by Cebral \etal\,\cite{Cebral2011}. Outlets were modelled using linear resistances as described in Chapter 3. The targeted flow was chosen to depend on the cube of the MCA and ACA diameters, meeting Murray's Law.
 
 \subsubsection*{FSI setup}
 Since the aneurysm showed clear pulsatility, we investigated the implications of using rigid wall assumptions by comparing them to FSI simulations of the case. These were carried out in cooperation with Aurèle Goetz, another PhD candidate from the lab.
 BLABLALBLALBA
 
 
-\subsection{Results}\label{chap5:sec3}
-The simulation jobs have been executed on 64 cores of the previously mentioned computing facility (see Chapter 3). The computation times and with the different integration modalities are shown in \autoref{tab:comp_times}. The preoperative case caused a longer computation time due to the 2--5 subiterations per time step required for convergence. The postoperative case computed as a CFD simulation was faster, at approximately half the time per cardiac cycle. The FSI simulation of the ruptured aneurysm took with 50h per cardiac cycle the longest time, despite its lower spatial and temporal resolutions. The explicit coupling between the solid and fluid solvers, together with slower convergence rates for the solid solver, are the main reasons for this increase in computation time.
+\subsubsection*{Computation times}
+The simulation jobs have been executed on 64 cores of the previously mentioned computing facility (see Chapter 3). The computation times with the different integration modalities are shown in \autoref{tab:comp_times}. The preoperative case caused a longer computation time due to the 2--5 subiterations per time step required for convergence. The postoperative case computed as a CFD simulation was faster, at approximately half the time per cardiac cycle. The FSI simulation of the ruptured aneurysm took, with 50h per cycle, the longest time despite its lower spatial and temporal resolutions. The explicit coupling between the solid and fluid solvers, together with slower convergence rates for the solid solver, are the main reasons for this increase in computation time.
 
 \begin{table}
 	\centering
@@ -147,7 +146,7 @@ The simulation jobs have been executed on 64 cores of the previously mentioned c
 
 
 \subsubsection*{Pre-operative hemodynamics}\label{chap5:sec3:subsec1}
-The aneurysm hemodynamics before the insertion of the FDS are characterized by a high velocity jet (1800\,mm/s) at the stenosis entering and rolling through the formation around a horizontal axis (see the first quadrant of \autoref{fig:hemodynamics} and \autoref{fig:hemodynamics2}). It then spreads out over the aneurysm surface, generating a large vortex in the bulge. As a consequence, high OSI values form on the ``eyes'' of the vortex, as seen on \autoref{fig:hemodynamics}. The WSS in these regions displays persistently an expansive properties with high divergences of the normalized WSS vectorfield. A pouch at the aneurysm's inner side stands out with high OSI and small TAWSS values, due to its irregular perfusion (see \autoref{fig:hemodynamics}).
+The aneurysm hemodynamics before the insertion of the FDS are characterized by a high velocity jet (1800\,mm/s) at the stenosis entering and rolling through the formation around a horizontal axis (see the first quadrant of \autoref{fig:hemodynamics} and \autoref{fig:hemodynamics2}). It then spreads out over the aneurysm surface, generating a large stable vortex in the bulge. As a consequence, high OSI values form on the ``eyes'' of the vortex, as seen on \autoref{fig:hemodynamics}. The WSS in these regions displays persistently an expansive properties with high divergences of the normalized WSS vectorfield. A pouch at the aneurysm's inner side stands out with high OSI and small TAWSS values, due to its irregular perfusion (see \autoref{fig:hemodynamics}).
 
 \begin{figure}[htb]
 	\centering
@@ -174,7 +173,7 @@ The aneurysm hemodynamics before the insertion of the FDS are characterized by a
 			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post_v.png}
 		\end{minipage}   \\
 	\end{tabular}
-	\caption[Preoperative hemodynamics]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics}
+	\caption[TAWSS and OSI]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics}
 \end{figure}
 
 \subsubsection*{Post-operative hemodynamics}
@@ -216,22 +215,37 @@ The pulsatility index in the postoperative state was computed at 1.24, resemblin
 			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_systole.png}
 		\end{minipage}     \\
 	\end{tabular}
-	\caption[Preoperative hemodynamics]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics2}
+	\caption[Velocity streamlines]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics2}
 \end{figure}
 
 
 \subsubsection*{Pressure changes}
-Considered separately due to its alledged importance, is the alteration of the bulge pressures between the preoperative and postoperative (ruptured) cases. To that end, we have extracted the pressure along the centerline of the ICA and its branches, the ACA and MCA, in both scenarios. Figure\,\ref{fig:ctrl_p} shows on the upper row the pressures on the preoperative state, while the lower one does for the postoperative state. Within each row, the curves are identical up until the location of the aneurysm, since that portion of the centerline is shared. The different colorcoded curves mark the pressure progression at different flow rates of the cardiac cycle. The pressures have been offset to have a zero-pressure at diastole in the distal section of the MCAs.
+Considered separately due to its alledged importance is the alteration of the bulge pressures between the preoperative and postoperative (ruptured) cases. To that end, we have extracted the pressure along the centerline of the ICA and its branches, the ACA and MCA, in both scenarios. Figure\,\ref{fig:ctrl_p} shows on the upper row the pressures on the preoperative state, while the lower one does for the postoperative state. Within each row, the curves are identical up until the location of the aneurysm, since that portion of the centerline is shared. The different colorcoded curves mark the pressure progression at different flow rates of the cardiac cycle. The pressures have been offset to have a zero-pressure at diastole in the distal section of the MCAs.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/Pressure_curves.pdf}
+
+	\begin{tikzpicture}
+		% Include the image
+		\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/Pressure_curves.pdf}};
+
+		% Define the width and height of the image for coordinate system
+		\begin{scope}[x={(image.south east)}, y={(image.north west)}]
+			% Add row labels
+			\node[anchor=east] at (0.0, 0.8) {\rotatebox[origin=c]{90}{\small Preop}};
+			\node[anchor=east] at (0.0, 0.425) {\rotatebox[origin=c]{90}{\small Postop}};
+
+			% Add column labels
+			\node[anchor=north] at (0.275, 1.1) {\small ICA + MCA};
+			\node[anchor=north] at (0.725, 1.1) {\small ICA + ACA};
+		\end{scope}
+	\end{tikzpicture}
 	\caption[Centerline Pressures]{Pressures along the centerlines of the ICA and its daughter vessels ACA and MCA in the pre-stented (top) and post-stented (bottom) scenario. The shows the pressure prorgession in the centerline leading to the MCA whereas the right column does the same for the ACA\@. Note that here we only display the centerline pressure. It is fairly constant along the vessel cross-section excepting at the ICA terminus, where the flow split and the inertia can cause differences of up to 200 Pa on one slice.}\label{fig:ctrl_p}
 \end{figure}
 
-The profiles overall vary almost linearly for the lower flowrates, but contain some fluctuations at systole. Notably, the pressure drops in the later ICA sections are remarkably high at systole when considering the pressure drop along the whole human arterial system. The values turning around 5\,kPa alone nearly the range of 80--120\,mmHg, posing a remarkable question that is not discussed in works that observe it too\,\cite{Cebral2011, Kizhisseri2023}. After estimating the pressure drop with linear resistances given by Poiseuille's law, we found that the obtained pressure drop is indeed the expected. Most of it is the product of the considerable tampering that the ICA experiences and possibly the fact of not modelling the flow through the smaller vessels and perforators. A search in the anatomy of the human brain revealed other possible factors that can be related to the stronger pressure drop in the main arteries. Liebeskind \etal\cite{Liebeskind2016} elaborates on the special mechanisms that the brain has to regulate its blood flow. The brain arterioles lack capillary sphincters that are elsewhere strong pressure regulators. This shifts the task towards upstream arteries, which need to address changes in blood flow from numerous sources, \eg\,physical execise or sleep, in a seamless way. For this purpose, brain arteries have a well developed layer of smooth muscle cells that can react by contracting or dilating\,\cite{Liebeskind2016}. The extend of their capabilities is showcased during vasospasm, a critical form of autoregulation that can onset in during hemorrhages. There, the entire ICA may be shut by the medial contraction\,\cite{Branko2014}, posing life-threatening conditions. I thus hypothesize that the brain arteries have a higher resistance to flow than other arteries, as part of their ``standby'' autoregulation capabilities. The writer underscores that this is merely a hypothesis and needs to be further investigated.
+The profiles overall vary almost linearly for the lower flowrates, but contain some fluctuations at systole. Notably, the pressure drops in the later ICA sections are remarkably high with respect to the human pressure levels. The values around 5\,kPa alone represent the range between 80--120\,mmHg, posing an interesting question not discussed in many other publications\,\cite{Cebral2011, Kizhisseri2023}. After estimating the pressure drop with linear resistances given by Poiseuille's law, we found that the obtained pressure drop is indeed the expected. Most of it is the product of the considerable tampering that the ICA experiences and possibly the fact of not modelling the flow through the smaller vessels and perforators. A search in the anatomy of the human brain revealed other possible factors that can be related to the stronger pressure drop in the main arteries. Liebeskind \etal\cite{Liebeskind2016} elaborates on the special mechanisms that the brain has to regulate its blood flow. The brain arterioles lack capillary sphincters that are elsewhere strong pressure regulators. This shifts the task towards upstream arteries, which need to adapt seamlessly to changing blood flow conditions, \eg\,during physical execise or sleep. For this purpose, brain arteries have a well-developed layer of smooth muscle cells that can widen or narrow down the vessels, thereby adjusting the flow resistance\,\cite{Liebeskind2016}. The extend of their capabilities is showcased during vasospasm, a critical form of autoregulation that can onset in during hemorrhages. There, the entire ICA may be shut by the medial contraction\,\cite{Branko2014}, posing life-threatening conditions. It could thus be possible that the brain arteries have a higher resistance to flow than other arteries, as part of their ``standby'' autoregulation capabilities. The writer underscores that this is merely a hypothesis and needs to be further investigated.
 
-Returning to the matter at hand, the pressures over the cardiac cycle show mostly a linear relationship with the flow rate, excepting some artifacts in the systolic regime. To better comment the results consider the pressure profiles in the ICA during systole displayed in \autoref{fig:ctrl_p_systole}. In the cavernous sections, both preoperative and postoperative cases display a minimal pressure gradient until halfway into the clinoidal section. There, the tampering of the ICA begins, leading to a pressure drops in the range of 200\,Pa. At the aneurysm, the pre-treatment case sees a flat pressure profile, whereas the post-treatment case continues its nearly linear decay. At the distal end of the aneurysm, the tables turn, causing a sharp drop in the preoperative pressure of nearly 26\,mmHg due to the distal stenosis and  the sudden contraction of the flow.
+Returning to the matter at hand, the pressures over the cardiac cycle show mostly a linear relationship with the flow rate, excepting some artifacts in the systolic regime. To better comment the results consider the pressure profiles in the ICA during systole displayed in \autoref{fig:ctrl_p_systole}. In the cavernous sections, both preoperative and postoperative cases display a minimal pressure gradient until halfway into the clinoidal section. There, the tampering of the ICA begins, leading to pressure drops in the range of 200\,Pa. At the aneurysm, the pre-treatment case sees a flat pressure profile, whereas the post-treatment case continues its nearly linear decay. At the distal end of the aneurysm, the tables turn, causing a sharp drop in the preoperative pressure of nearly 26\,mmHg due to the distal stenosis and  the sudden contraction of the flow.
 
 \begin{figure}[htb]
 	\centering
@@ -241,71 +255,21 @@ Returning to the matter at hand, the pressures over the cardiac cycle show mostl
 
 
 \subsection{Discussion}\label{chap5:sec4}
-Delayed aneurysm rupture after treatment with flow-diverter stents is a known phenomenon in literature and affects giant aneurysms in a disproportionate way. These aneurysms can oftentimes only be treated with stents due to the risk of recanalization and compaction of wires\,\cite{Cebral2011}. The FDS, while providing a good solution in most cases, can also lead to a delayed rupture between days and months after the operation. While the exact reasons for this phenomenon are not known, medical teams have studied several smaller patient cohorts and tried relating the rupture to common characteristics observed in failed cases.
+With the observed hemodynamics and the patient case description, we can attempt to relate the rupture to the proposed theories from literature. By doing so, we can at least see if the present case fits into the general picture and if so, support one of the claims with this one case. The main theories that have been proposed relie on pressure-induced\,\cite{Cebral2011}, hemorrhage-induced\,\cite{Kulcsar2011} and lastly flow structure-induced rupture\,\cite{Li2019}.
+
 
 \subsubsection*{Pressure induced rupture}
-In a widely known computational study in the year 2010, Cebral \etal\cite{Cebral2011} analyzed the hemodynamics of 7 FDS-treated intracranial aneurysms located at the upper ICA sections. Of those, 3 ruptured withing a week of the operation, while the remaining 4 occluded during the following months. The healed aneurysms were all middle sized excepting one giant aneurysm, whereas all ruptured belonged to the latter category. In the study, the cases were computed in preoperative and post-rupture state following similar steps as here. The pressures were equalized at the inlets of all simulations to be normotensive. They observed that under those conditions two of the three cases resulted in a pressure increase in the IA. The deployment of the FDS had opened narrow passages of the parent artery located upstream of the lesion, reducing the resistance of the flow and thus carrying higher pressures farther. In the other ruptured case, the stenosis was located past the aneurysm and thus no noticeable alteration of the pressure was reported.
+In a widely known computational study in the year 2010, Cebral \etal\cite{Cebral2011} analyzed the hemodynamics of 7 FDS-treated intracranial aneurysms located at the upper ICA sections. Of those, 3 ruptured withing a week of the operation, while the remaining 4 occluded during the following months. The healed aneurysms were all middle sized excepting one giant aneurysm, whereas all ruptured belonged to the latter category. In the study, the cases were computed in preoperative and post-rupture state following similar steps as here. The pressures were leveled at the inlets of all simulations to be normotensive. They observed that under those conditions two of the three cases resulted in a pressure increase in the IA. The deployment of the FDS had opened narrow passages of the parent artery located upstream of the lesion, reducing the resistance of the flow and thus carrying higher pressures farther. In the other ruptured case, the stenosis was located past the aneurysm and thus no noticeable alteration of the pressure was reported.
 
-While this hypothesis might be a lead in some cases, it seems overall unsuited here. Firstly, the pressure in our case decreases post-treatment due to the location of the stenosis, similarly to other works on this subject\,\cite{Li2019}. In that sense, this aneurysm resembles the giant one that did not rupture in their study. Furthermore, we have observed a strong pulsatility of the aneurysm, which translates into a capacitance that spreads out the pressure waveform. Inevitably, the wall movement introduces further mean pressure losses due to dissipation of energy into the surrounding tissue. Lastly, the timescale of the present rupture exceeds those of Cebral \etal\cite{Cebral2011} by months, pointing towards other long term remodelling phenomena.
+While this hypothesis might be a lead in some cases\,\cite{Hirato2023}, it seems overall unsuited here. Firstly, the pressure in our case decreases post-treatment due to the location of the stenosis, similarly to other works on this subject\,\cite{Li2019}. In that sense, this aneurysm resembles the giant one that did not rupture in their study. Furthermore, we have observed a strong pulsatility of the aneurysm, which translates into a capacitance that spreads out the pressure waveform. Inevitably, the wall movement introduces further mean pressure losses due to dissipation of energy into the surrounding tissue. Lastly, the timescale of the present rupture exceeds those of Cebral \etal\cite{Cebral2011} by months, pointing towards other long term remodelling phenomena.
 
-% \begin{figure}[htb]
-% 	\centering
-% 	\begin{minipage}{0.45\textwidth}
-% 		\centering
-% 		\begin{circuitikz}
-% 			% Define coordinates
-% 			\coordinate (A) at (0,0);
-% 			\coordinate (B) at (0.75,0);
-% 			\coordinate (C) at (2,0);
-% 			\coordinate (D) at (3,0);
-% 			\coordinate (E) at (5,0);
-% 			\coordinate (F) at (7,0);
+The considerations surrounding the pressure increase or decrease at the aneurysm depend directly on the patient and on the overall tampering of the ICA. We suggest larger studies, to investigate the location of the IA and to assess whether the pressure increase is linked to the nature of the vessel or to any cardiovascular disease that can e
 
-% 			% Draw voltage source
-% 			\draw (0, -0.4) node[below]{$p_i$} to[short, o-] (A);
-% 			\draw (A) to[short] (B);
 
-% 			% Draw parallel R and C for Aneurysm with additional resistance
-% 			\draw (B) to[short] ++(0,1) coordinate (C1);
-% 			\draw (B) to[short] ++(0,-1) coordinate (C3);
-% 			\draw (C1) to[R=$R_{Vessel}$] ++(2.25,0) coordinate (C2);
-% 			\draw (C3) to[R=$R_{Aneu}$, l_=$R_{Aneu}$] ++(1.5,0) coordinate (C5);
-% 			\draw (C5) to[C=$C_{Aneu}$, l_=$C_{Aneu}$] ++(0.75,0) coordinate (C4);
-% 			\draw (C2) to[short] (D);
-% 			\draw (C4) to[short] (D);
+\subsubsection*{Thrombus mediated rupture}
+Just months after the previous publication, Kulscar \etal\,\cite{Kulcsar2011} proposed a different mechanism for the delayed rupture of aneurysms. In their study, 13 patients with ruptured intracranial aneurysms were studied post-mortem through imaging and autopsies. The patients harboured giant-saccular and fusiform aneurysms that were treated with FDS, and in one case with stent-assisted coiling. 4 out of the 13 patients reported strong headaches prior to the rupture event, similarly to our case. The ruptures were split into two categories, early ($n$\,=\,10) and late ($n$\,=\,3), with the latter taking place at least 3 months after the intervention. The latest instance of a rupture took place after 5 months, which falls short of the 8 months of our case. There however, double anti-platelet therapy was reduced to single after three months, whereas here the patient was kept on the same medication during the whole time.
 
-% 			% Draw stenosis resistor
-% 			\draw (D) to[R=$R_{Stenosis}$] (E);
-
-% 			% Draw single distal resistor
-% 			\draw (E) to[R=$R_{distal}$] (F);
-
-% 			% Draw ground
-% 			\draw (F) to[ground] ++ (0,0) node[ground](GND){};
-% 		\end{circuitikz}
-% 	\end{minipage}
-% 	\hspace{0.01\textwidth} % Adjust horizontal space between figure and table
-% 	\begin{minipage}{0.5\textwidth}
-% 		\centering
-% 		\renewcommand{\arraystretch}{1.3}
-% 		\setlength{\tabcolsep}{6pt}
-% 		\begin{tabular}{l c c c}
-% 			\hline
-% 			               & Preop    & Postop 1 \\
-% 			\hline
-% 			$R_{Vessel}$   & $\infty$ & low      \\
-% 			$R_{Aneu}$     & high     & high     \\
-% 			$C_{Aneu}$     & 0        & high     \\
-% 			$R_{Stenosis}$ & high     & 0        \\
-% 			$R_{distal}$   & low      & high     \\
-% 			\hline
-% 		\end{tabular}
-% 	\end{minipage}
-% 	\caption{Schematic representation of the circuit with parallel and series resistances and capacitances, and corresponding dummy values for each component.}\label{fig:circuit}
-% \end{figure}
-
-\subsection{Thrombus mediated rupture}
-Just months after the publication of the study by Cebral \etal\,\cite{Cebral2011}, Kulscar \etal\,\cite{Kulcsar2011} proposed a different mechanism for the delayed rupture of aneurysms. In their study, 13 patients with ruptured intracranial aneurysms were studied post-mortem through imaging and autopsies. The patients harboured giant-saccular and fusiform aneurysms that were treated with FDS, and in one case with stent-assisted coiling. The patients reported strong headaches prior to the rupture event, which occured in a timespan of 2 days to 5 months after the operation. One common feature among all cases was the high degree of thrombosis in the aneurysm, which was indeed observed in all cases. Interestingly, thrombosis is generally considered as the treatment goal of FD and thus a positively perceived event. Here however the two dissected aneurysms displayed a large degree of autolysis\footnote{Autolysis: Self-digestion of tissue.} and subsequent necrosis of the tissue. This was expressed in a strong mural thinning, the loss of smooth muscle cells and fibrous tissue. Based on these observations, the authors suggest that thrombosis might have unset the balance of the aneurysm wall, leading to a sped up rupture. The size and aspect ratios ($>$\,1.6) played in thus far a role as that the thrombus would form more quickly within these aneurysms.
+One common feature among all cases was the high degree of thrombosis in the aneurysm. Interestingly, thrombosis is generally considered as the treatment goal of FD and thus a positively perceived event. The two dissected aneurysms displayed a large degree of autolysis\footnote{Autolysis: Self-digestion of tissue.} and subsequent necrosis of the tissue. This was expressed in a strong mural thinning, the loss of smooth muscle cells and fibrous tissue. Based on these observations, the authors suggest that thrombosis might have unset the balance of the aneurysm wall, leading to a sped up rupture. The size and aspect ratios ($>$\,1.6) played in thus far a role as that the thrombus would form more quickly within these aneurysms.
 
 ANSWER THROMBOSIS HERE!
 mention that assisted coiling does not necessarily help!\,\cite{Hirato2023}
@@ -340,11 +304,11 @@ THROMBUS???
 
 
 \section{Blister Aneurysms}
-A further application to flow diverter stents is the research around blister aneurysms, also known as blood blister-like aneurysms (BBAs). These formations are uncommon, highly dangerous and poorly understood. In the following section, we will provide a brief introduction to the specific properties of these aneurysms and present two patient cases that have been followed for some months at the cooperating medical institution. The aim of the study is to provide a hemodynamic analysis of the aneurysms and to discuss the potential implications of the flow diverter stent on the aneurysm's progression.
+A further application to flow diverter stents is the research around blister aneurysms, also known as Blood Blister-like Aneurysms (BBAs). These formations are uncommon, highly dangerous and poorly understood. In the following section, we will provide a brief introduction to the specific properties of these aneurysms and present two patient cases that have been followed for some months at the cooperating medical institution. The aim of the study is to provide a hemodynamic analysis of the aneurysms and to discuss the potential implications of the flow diverter stent on the aneurysm's progression.
 
 
 \subsection{Pathology}
-Blister aneurysms are rare but distinct cerebral vascular lesions. They constitute less than 2\% of all intracranial aneurysms and are typically found on internal carotid artery, although can also be found in other locations such as the anterior communicating artery or basilar trunk\,\cite{Papasilekas2020}. Blister aneurysms are usually small, shallow, broad-based, or semi-fusiform protrusions on the arterial wall. The aneurysm wall is markedly weak, predisposing these lesions to rapid growth, rerupture, and catastrophic consequences. They are thought to result from a tear in the arterial inner wall, leading to an intramural hemorrhage and a protrusion covered only by the adventitial layer. Some studies have shown signs of dissection, such as a double lumen or arterial narrowing. An alternative theory suggests that blister aneurysms are pseudoaneurysms, essentially representing a focal defect in the arterial wall covered by an organized blood clot\,\cite{Papasilekas2020}. 
+Blister aneurysms are rare but distinct cerebral vascular lesions. They constitute less than 2\% of all intracranial aneurysms and are typically found on internal carotid artery, although can also be found in other locations such as the anterior communicating artery or basilar trunk\,\cite{Papasilekas2020}. Blister aneurysms are usually small, shallow, broad-based, or semi-fusiform protrusions on the arterial wall. The aneurysm wall is markedly weak, predisposing these lesions to rapid growth, rerupture, and catastrophic consequences. They are thought to result from a tear in the arterial inner wall, leading to an intramural hemorrhage and a protrusion covered only by the adventitial layer. Some studies have shown signs of dissection, such as a double lumen or arterial narrowing. An alternative theory suggests that blister aneurysms are pseudoaneurysms, essentially representing a focal defect in the arterial wall covered by an organized blood clot\,\cite{Papasilekas2020}.
 
 Most blister aneurysms present with subarachnoid hemorrhage, diagnosed initially via brain CT scans. Due to their shape and fragility only few treatment options are viable in both surgical and endovascular fields. In a review study by Gonzalez \etal\cite{Gonzalez2014}, the authors list a total of 293 ruptured cases, of which approximately two thirds were treated surgically. The morbidity and mortarily rates were 21 and 17\%, respectively, whereas following a endovascular intervention only resulted in 3 and 11\%. Although it is difficult to extract correlations with the severity of the hemorrhage in each of the cases, endovascular treatment displays a promising trend\,\cite{Song_Oh_Kim_Chung_Lim_Kim_Shin_2016, Gonzalez2014}. Among the different techniques of the latter discipline, stenting and stent-assisted coiling have shown the best results in terms of occlusion rates and complication rates\,\cite{Gonzalez2014}. Due to the smaller sizes of cohorts, it remains difficult to provide statistically relevant percentages for the different techniques.
 
@@ -454,7 +418,7 @@ Not necessarily a blister aneurysm, but a similar case. Aneurysm on the MCA bifu
 				% Text above the colorbar
 				\node[anchor=south, yshift=-0.15cm] at (colorbar.north) {\fontsize{9pt}{10pt}\selectfont $u$\,[mm/s]};
 			\end{tikzpicture}
-		\end{minipage} \\[2cm]
+		\end{minipage}                                                        \\[2cm]
 		\rotatebox[origin=c]{90}{\textbf{WSS}}                                                &
 		\begin{minipage}{0.27\linewidth}
 			\centering
@@ -476,5 +440,6 @@ Not necessarily a blister aneurysm, but a similar case. Aneurysm on the MCA bifu
 	\caption[Preoperative hemodynamics]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:blister2}
 \end{figure}
 
-\bibliographystyle{elsarticle-num}
-\bibliography{chapter5/Biblio}
+\bibliographystyle{apsrev}
+{\footnotesize
+	\bibliography{chapter5/Biblio}}

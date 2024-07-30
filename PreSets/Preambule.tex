@@ -47,9 +47,7 @@
 
 %\usepackage[top=2.5cm, bottom=2cm, left=3cm, right=2.5cm, headheight=15pt]{geometry}
 \usepackage{geometry}
-
-\usepackage{fancyhdr}			% Entête et pieds de page. Doit être placé APRES geometry
-
+\usepackage{fancyhdr}
 \usepackage{parskip}
 
 
@@ -89,3 +87,7 @@
 \vbadness=10000
 \let\orgautoref\autoref\renewcommand{\autoref}[1]{\def\equationautorefname{Eq.}\def\figureautorefname{Fig.}\orgautoref{#1}}
 \definecolor{red}{HTML}{aa0000}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\thebibliography}{\section*{\refname}}{\section*{\refname}\footnotesize}{}{}
+\makeatother

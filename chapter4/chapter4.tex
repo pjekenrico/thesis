@@ -3,7 +3,7 @@
 \newpage
 \pagestyle{fancy}
 
-\chapter{Title of the Chapter 4}
+\chapter{Virtual flow diverter deployment and embedding for hemodynamic simulations}
 \minitoc\newpage\label{chap.4}
 
 After an introduction into the computation of hemodynamics in human brain arterial systems, we now will dwell into the modelling of one of the available tools to treat IA, flow diverter stents. The chapter first provide a brief description of the stents, their field of application and outline the areas of remaining research questions. Then a comprehensive guide on how to generate virtual stents based on geometrical constraints will be given. The tool is then validated against deployments found in literature, in-vitro experiments conducted in the course of this work and lastly against a real patient case. The last case is exploited to describe an accessible option to embedd thin devices, such as flow diverter stents, into unstructured tetraahedral meshing using anisotropic meshing and level-set methods. The contents of this chapter are largely based on the work of the author and have been published in \textit{Computers in Biology and Medicine} during the course of the PhD studies.
@@ -27,7 +27,7 @@ In this work, we propose several enhancements to improve the accuracy of virtual
 
 \subsection{Vessel parametrization}\label{chap4:sec1:subsec2}
 
-\subsubsection{Centerline}\label{chap4:sec1:subsec2:subsubsec1}
+\subsubsection*{Centerline}\label{chap4:sec1:subsec2:subsubsec1}
 The geometric description of the vasculature surrounding the aneurysm is the first component to explore, since it will provide the scaffold upon which the geometrical deployment will function. Thanks to the extensive and openly available toolkit \href{http://www.vmtk.org/}{vmtk}\,\cite{Antiga2008, Izzo2018} one can compute the centerlines, average radii, as well as many other characteristics. The interface on 3D Slicer is recommended for its ease of use and the possibility to modify the course of the centerline at the aneurysm neck\,\cite{Fedorov2012}. To have the best possible fit with the meshes used later in the CFD analysis, we employ the preexisting segmentation for the information extraction. The centerlines, being the core component, are found by minimizing the maximal inscribed spheres along a path in the vessel. From there on, the mean radii are calculated which can help sizing the FD later on. Apart from the positioning, the centerline encodes several useful information, such as the curvature and the torsion of the vessel. The curvature is a measure of how much the centerline deviates from a straight line and is an essential requirement for the computation of the stent's deployment. To obtain this information smooth BSplines are fitted to the centerline points to generate a continuous centerline curve along the desired path. Take $\vec\gamma(t):[0,1]\rightarrow\mathbb{R}^3$ as to be such a curve composed by cubic BSplines, i.e. $\gamma_{i}(t)\in C^2$. Suppose also that there exists a unique parametrization $s(t)$ such that:
 
 \begin{equation}
@@ -107,13 +107,13 @@ A stark contrast between the RMF and the frenet frames is illustrated in \autore
 \end{figure}
 
 
-\subsubsection{Vessel Wall}\label{chap4:sec1:subsec2:subsubsec2}
+\subsubsection*{Vessel Wall}\label{chap4:sec1:subsec2:subsubsec2}
 With the obtained RMF it is possible to generate a smooth hull around the centerline that resembles the vessel's wall, but excludes any formation that extends beyond the reach of the stent. The hull can, depending on the user specifications, be restricted to have a fully circular profile, or to adapt itself to the local features of the walls. This permits on one hand deploying the stent later into a more realistic environment, and on the other hand to generate a continuous porosity field for visual inspection, as shown in \autoref{fig:vessel_wall}. To generate the hull, radial distances between the centerline and the vessel wall are computed along equidistant positions. More precisely, for each location on the centerline, a fixed number of rays in the $\vec{e}_1, \vec{e}_2$-plane are cast to the vessel wall. Using the Moller-Trumbore algorithm\,\cite{Moller1997}, the intersection points are computed and the distance to the centerline is stored. Here too, the distances can be fed into a smooth bivariate Spline $r(t, \theta)$ to obtain a continuous representation of the vessel wall.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth]{chapter4/Figures/Coordinate_System/Hull.png}
-	\caption[Stent hull]{Example of a stent hull at the ICA siphon, covering the OA and a blister aneurysm. The envelop's mesh is blended in to show the structured pattern that has been employed.}\label{fig:vessel_wall}
+	\caption[Stent hull]{Example of a stent hull at the ICA siphon, covering the PCom and a blister aneurysm. The envelop's mesh is blended in to show the structured pattern that has been employed.}\label{fig:vessel_wall}
 \end{figure}
 
 The hull, which can be seen as the future stent envelope, can be adjusted to the vessel to incorporate local deformations. When doing so, it is important to respect the limits imposed by the vessel surface, \ie~that the hull does not extend beyond the vessel wall. In the work of Janiga \etal\,(2013)\cite{Janiga2013} this is achieved through a progressive growing of the envelope from the inside until the limits of the vessel are hit. Here, we opt for a simple iterative process, in which first the radius map $r(t, \theta)$ is smoothed with either a Gaussian filter or spline smoothing, and then a new mapping is fitted with resampled points that are limited to the vessel wall. The process is repeated until the hull is fully adapted to the vessel wall. At this stage it is recommended to check the angiography images to confirm that the stent is well adhered to the vessel wall, and if that is not the case, to modify the centerline accordingly.
@@ -199,8 +199,8 @@ By clearing \autoref{eq:clearing_stent} we obtain the expressions for $l_w$ and 
 	\caption{Table of parameters for the stents used in the study. All values other than $N_w$ are given in millimeters. The wire thickness $d_w$ is assumed to be $0.015$\,mm following the device indications for the PED devices. Other manufacturers did not publish this information.}\label{table:stent_params}
 \end{table}
 
-
-\subsection{Cylindric deployment}\label{chap4:sec1:subsec5}
+\subsection{Deployment}
+\subsubsection*{Cylindric deployment}\label{chap4:sec1:subsec5}
 When deploying a stent in a cylinder of variable diameter, the wires evolve, as previously described with the angle $\alpha$ given by \autoref{eq:winding_angle}. Over an infinitesimal section of the stent, the anglular progression in $\theta$ (see \autoref{fig:StentAnalysis}), describing the angle in the radial direction of the wires, is constant:
 \begin{equation}
 	r\,d\theta = dl\sin{\alpha} = \frac{2\pi r}{wN_w}dl
@@ -238,7 +238,7 @@ With this information it is already possible to deploy a stent in a straight cyl
 
 
 
-\subsection{Geometric deployment}
+\subsubsection*{Geometric deployment}
 If a wire segment $\vec{dl}$ is traced on a toroidal envelope, as depicted in \autoref{fig:StentAnalysis}, its progression can be expressed through:
 \begin{equation}
 	\vec{dl} = \begin{pmatrix}
@@ -288,7 +288,7 @@ A more detailed description of the winding's behaviour is seen on \autoref{fig:e
 \end{figure}
 
 
-\subsection{Deployment}
+\subsubsection*{General deployment}
 To extend the obtained results to arbitrary geometries, we will generate a smooth mapping from a clylindrical stent to a curved stent following the vessel walls. To maintain clarity we will enumerate the steps to follow.
 
 \begin{enumerate}
@@ -485,5 +485,6 @@ Lastly, we would like to propose our method as a complementary tool in simulatio
 
 
 \newpage
-\bibliographystyle{tex/mybib}
-\bibliography{chapter4/Biblio}
+\bibliographystyle{apsrev}
+{\footnotesize
+	\bibliography{chapter4/Biblio}}

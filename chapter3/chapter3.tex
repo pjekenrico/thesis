@@ -166,7 +166,7 @@ The Reynolds number in the model \autoref{eqn:friction_velocity} is defined on a
 \subsection{Convergence Analysis}
 Hemodynamics simulations intrinsically depend on the choice of resolutions in both temporal and spatial domains. To not repeat the same analysis over and over in this thesis, one illustrative case will be presented below for which both aspects have been considered. The geometry is part of the publication work that is contained in this chapter and was published during the course of these studies. Details about case that are not of immediate relevance here are given in the next section \autoref{chap3:sec3} for the sake of clarity.\\
 
-\subsubsection{Spatial Resolution}
+\subsubsection*{Spatial Resolution}
 To identify appropriate choices of mesh sizes, computations can be run for different mesh resolutions. Based on the variation of primary variables or other flow indicators, it is possible to devise minimal resolution criteria. In cases of brain hemodynamics simulations, both the flow distribution through the network, as well as a high resolution image of the flow inside the aneurysm dome are important. To properly assess the mesh convergence, the first half will be dedicated to finding a reasonable resolution in the core of the vessels and the second half will be dedicated to the bulge. Doing splitting the analysis, we hope to have a clearer view on the implications of mesh resolution. This has been tested on one of the cases that forms part of the study that is contained by this chapter (case C). In a first step, meshes have been generated with mesh sizes:
 $$h\in\{0.1, 0.15, 0.2, 0.25, 0.3\}\,\text{mm}$$
 that englobe popular choices in IA literature. The aneurysms itself was kept at a fixed resolution of $h=0.1$\,mm, to study it separately. The mesh contained 3 boundary layers with a minimal size of $0.05$\,mm that stretched across the entire geometry. The convergence study was run considering the second of two cardiac cycles run at a constant time step of $\Delta t= 0.001$\,s. Semi-implicit schemes and non-Newtonian viscosity according to the Carreau-Yasuda law were used.
@@ -226,7 +226,7 @@ The integrated errors with respect to the finest resolution have been recorded a
 \end{figure}
 
 
-\subsubsection{Temporal Resolution}
+\subsubsection*{Temporal Resolution}
 Time step size is in general set to match a unit CFL number in the simulations. One reason for this is maintaining an equilibrium between the single components of the momentum stabilization parameter, which depends on both spatial and temporal resolutions. Having a too small time step causes the stabilization to become homogeneous and small, \ie~bounded to the time step size. On one side, this minimises the added numerical diffusion. On the other it increases the risk of losing stability. To find time step sizes that are within reasonable limits, all hemodynamics simulations of this study have been tested with different time steps $\Delta t = \{ 0.0001, 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s. It has been observed that for nearly all computations $\Delta t = 0.0001$\,s lead to stability issues. These would also occur in some cases when using the next larger step $\Delta t = 0.0005$\,s, but not for $\Delta t = 0.001$\,s and above.
 
 The time scheme also contributes to the accumulation of errors and was therefore analyzed separately with a fixed contribution in the stabilization parameters of $\Delta t = 0.001$\,s. The time steps chosen are $\Delta t = \{ 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s, and represent common choices found in literature~\cite{Berg2019_challenge}. The velocity is plotted at systole over the same line as in the previous case in \autoref{fig:conv_time}.
@@ -441,7 +441,7 @@ The linear system of equations was solved using a block ILU preconditioned stabi
 
 \subsection{Results}
 
-\subsubsection{Global flow distribution}
+\subsubsection*{Global flow distribution}
 The overall flow distribution can be visually followed from the velocity magnitudes shown in \autoref{fig:volume}. Patient A stands out due to slower flow velocities despite similar tributary flows, which is a direct consequence from having overall larger vessels compared to B and C. The plot highlights regions of high flow speeds as for instance in the terminal ICA bifurcation. The highly inertia driven flow turns mostly into the MCAs, which both due to their size and the Murray exponent (n=3), carry the largest outflow. The BA, when present, supplies the posterior circulation of the brain without directly irrigating the anterior circulation. Therefore, the flux traversing the PCom is strictly unidirectional carrying blood away from the ICA towards the PCA. Patient B and C feed, according to our models, the distal PCA mostly (Patient C) or exclusively (Patient B) through the PCom due to their small or fetal P1 segments.
 
 \begin{figure}[htbp]
@@ -477,7 +477,7 @@ The detailed presentation of the average blood transported through each vessel i
 	\caption{{Outflow per cardiac cycle with respect to the in total inflow of each patient. In the \textit{Large} configuration of case C, the flow in the right MCA was the consequence of imposing Murray's law on the vessels of the M1-M2 bifurcation. The massflow for the \textit{Middle} and \textit{Small} is taken at the A1 ACA segment due to the inherent cut of the domain.}}\label{tab:flow_perc}
 \end{table}
 
-\subsubsection{Intraaneurysmal flow}
+\subsubsection*{Intraaneurysmal flow}
 The flow structures in the domes are visualized in \autoref{fig:streamlines} for each patient (rows) and configuration (columns). The aneurysms are cut with a plane at the neck and velocity streamlines of the intra-aneurysmal flow are inscribed lightly to indicate the structure of the present vortices at peak diastolic time. For the inertial flow of aneurysm A (first row), all three configurations show a large, centred vortex traversing the dome that can be regarded as consistent across the three sizes. Per contrary, patients B and C in the second and third rows of \autoref{fig:streamlines} display clear discrepancies. Starting with the aneurysm B (second row) it is visible that in the simple configuration, the main inflow enters the dome focused as a small jet, later decaying into a stable weaker recirculation. For the \textit{Middle} and \textit{Full} extensions of the same case, the inflow hits the neck of the daughter sack, splitting its momentum among two vortices that traverse the main lobe and the daughter sack respectively. In the \textit{Full} simulation of B (second row, third column) the daughter sack's recirculation is located farther up inside the dome leading to larger in-plane velocities. Lastly, patient C (third row of \autoref{fig:streamlines}) presents the largest disparities on both quantitative and qualitative levels. On of the most noticeable differences in \autoref{fig:streamlines}, is the inverted circulation of the right aneurysm dome in the \textit{Full} simulation with respect to the other two extensions. At the same time, the impinging jet's velocities exceed the other cases by, on average, 31\% and 19\%.
 \begin{figure}[!ht]
 	\centering
@@ -517,5 +517,6 @@ The obtained results lead us to recommend to take into account the overall anato
 
 
 \newpage
-\bibliographystyle{tex/mybib}
-\bibliography{chapter3/Biblio}
+\bibliographystyle{apsrev}
+{\footnotesize
+	\bibliography{chapter3/Biblio}}
