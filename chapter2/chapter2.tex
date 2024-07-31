@@ -4,26 +4,28 @@
 
 \chapter{Numerical Modelling of Hemodynamics}
 \minitoc\newpage\label{chap.2}
-In the following chapter, the incompressible, single-phase Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations that are run. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then extended with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally controls the otherwise ocurrring spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on 2D and 3D test cases. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
+In the following chapter, the incompressible, single-phase Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then discretized with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally prevents spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on 2D and 3D test cases. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
 
 \section*{Nomenclature}
 
-\begin{tabular}{@{}lll@{}}
-	\hline
-	Symbol         & Description         & Unit       \\
-	\hline
-	$\rho$         & Density of blood    & kg/m$^3$   \\
-	$\mu$          & Dynamic viscosity   & Pa$\cdot$s \\
-	$\mu_C$        & Casson viscosity    & Pa$\cdot$s \\
-	$\tau_y$       & Yield stress        & Pa         \\
-	$\dot{\gamma}$ & Shear rate          & s$^{-1}$   \\
-	$\vec{u}$      & Velocity vector     & m/s        \\
-	$\vec{r}$      & Position vector     & m          \\
-	$\vec{n}$      & Normal vector       & unitless   \\
-	$\tau$         & Shear stress tensor & Pa         \\
-	$\nabla$       & Gradient operator   & m$^{-1}$   \\
-	\hline
-\end{tabular}
+\begin{table}
+	\centering
+	\begin{tabular}{@{}lll@{}}
+		\hline
+		Symbol         & Description         & Unit       \\
+		\hline
+		$\rho$         & Density of blood    & kg/m$^3$   \\
+		$\mu$          & Dynamic viscosity   & Pa$\cdot$s \\
+		$\mu_C$        & Casson viscosity    & Pa$\cdot$s \\
+		$\tau_y$       & Yield stress        & Pa         \\
+		$\dot{\gamma}$ & Shear rate          & s$^{-1}$   \\
+		$\vec{u}$      & Velocity vector     & m/s        \\
+		$\vec{n}$      & Normal vector       & 1          \\
+		$\tau$         & Shear stress tensor & Pa         \\
+		$\nabla$       & Gradient operator   & m$^{-1}$   \\
+		\hline
+	\end{tabular}
+\end{table}
 
 
 \section{Governing Physics}\label{chap2:sec1}
@@ -105,9 +107,9 @@ The stress tensor $\sigma$ is taken to be the:\\
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{c|c|c}
-		$p$       & Pressure          & \pa  \\
-		$\lambda$ & Lamé parameter    & \pas \\
-		$\mu$     & Dynamic viscosity & \pas \\
+		$p$       & Pressure          & Pa         \\
+		$\lambda$ & Lamé parameter    & Pa$\cdot$s \\
+		$\mu$     & Dynamic viscosity & Pa$\cdot$s \\
 	\end{tabular}
 	\caption{Physical quantities of stress tensor.}
 \end{table}
@@ -121,7 +123,7 @@ As will be more thoroughly discussed in the coming section, blood is incompressi
 \end{equation}
 
 \subsection{Boundary Conditions}\label{chap2:sec1:subsec3}
-Boundary conditions have been identified by several publications and computing challenges as sensitive components of hemodynamics simulations\,\cite{Berg2019, Valen-Sendstad2018}. For that reason, Chapter 3 dedicates a full section to inlet and outlet BCs, providing both measurement-based techniques and heuristics that depend on the vascular topology. Additionally, the modelling effects of using rigid walls versus compliant ones will be shown based on existing literature. In Chapter 4, more detail will be provided on the modelling of endoluminal devices. For now, they will be just shortly introduced in order to carry on with the derivation of the numerical framework.\\
+Boundary conditions have been identified by several publications and computing challenges as sensitive components of hemodynamics simulations\,\cite{Berg2019, Valen-Sendstad2018}. For that reason, Chapter 3 dedicates a section to inlet and outlet BCs, providing both measurement-based techniques and heuristics that depend on the vascular topology. Additionally, the modelling effects of using rigid walls versus compliant ones will be shown based on existing literature. In Chapter 4, more detail will be provided on the modelling of endoluminal devices. For now, they will be just shortly introduced in order to carry on with the derivation of the numerical framework.\\
 
 The domain boundaries for segments of the brain arterial system are divided into four groups: inlets $\Gamma_{in}$, outlets $\Gamma_{out}$, walls $\Gamma_{w}$ and endoluminal devices $\Gamma_{fd}$. In general terms, the inflow conditions, \ie\,the blood supplied to the portion of the vasculature that is simulated, is imposed through a time-varying velocity profile. In mathematical terms speaking, it is expressed as:
 \begin{equation}
@@ -979,16 +981,16 @@ where $f$ is the frequency of vortex shedding that in our case has been computed
 	\begin{tabular}{c | c c c c c}
 		$Re=100$ & Proposed stab. & Tezduyar \etal & Ref.\,\cite{Tezduyar2000} & Ref.\,\cite{Rajani2009} & Ref.\,\cite{Main2018} \\
 		\midrule
-		$c_D$    & 1.391          & 1.402          & 1.417 - 1.422            & 1.335                  & 1.35                 \\
-		$c_L$    & 2e-4           & 1e-3           & -                        & -                      & -                    \\
-		St       & 0.168          & 0.167          & 0.167 - 0.169            & 0.157                  & 0.167                \\
-		         &                &                &                          &                        &                      \\[-1em]
+		$c_D$    & 1.391          & 1.402          & 1.417 - 1.422             & 1.335                   & 1.35                  \\
+		$c_L$    & 2e-4           & 1e-3           & -                         & -                       & -                     \\
+		St       & 0.168          & 0.167          & 0.167 - 0.169             & 0.157                   & 0.167                 \\
+		         &                &                &                           &                         &                       \\[-1em]
 		\midrule
 		$Re=300$ & Proposed stab. & Tezduyar \etal & Ref.\,\cite{Rajani2009}   & Ref.\,\cite{mittal1997} & Ref.\,\cite{Main2018} \\
 		\midrule
-		$c_D$    & 1.414          & 1.415          & 1.367                    & 1.38                   & 1.38                 \\
-		$c_L$    & 1e-3           & 8e-4           & -                        & -                      & -                    \\
-		St       & 0.214          & 0.213          & 0.215                    & 0.213                  & 0.211                \\
+		$c_D$    & 1.414          & 1.415          & 1.367                     & 1.38                    & 1.38                  \\
+		$c_L$    & 1e-3           & 8e-4           & -                         & -                       & -                     \\
+		St       & 0.214          & 0.213          & 0.215                     & 0.213                   & 0.211                 \\
 	\end{tabular}
 	\caption[Drag, lift and St of cylinder at Re=100 and Re=300]{Table summarizing the computed drag, lift and Strouhal numbers for $Re=100$ and $Re=300$. The two first columns contain values obtained from the simulations using the principal component metric tensor (\autoref{eqn:new_metric}) and the previously implemented stabilization from\,\cite{Tezduyar2000}. On the right are reference values from literature.}\label{tab:DragLiftStrouhal}
 \end{table}
