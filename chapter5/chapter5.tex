@@ -257,7 +257,12 @@ Returning to the matter at hand, the pressures over the cardiac cycle show mostl
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/Pressure_systole.pdf}
+	\begin{tikzpicture}
+		% Include the PDF image
+		\node (pdf) at (0,0) {\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/Pressure_systole.pdf}};
+		% Include the PNG image with a manual shift
+		\node (png) at (pdf.west) [xshift=4.25cm, yshift=0.1cm] {\includegraphics[width=4.5cm]{chapter5/Figures/Pressures/background_ctrl.png}};
+	\end{tikzpicture}
 	\caption[Centerline Pressures]{Pressures along the centerlines of the ICA in the pre- and postoperative cases at peak systole. Both pressure curves were offset to have the initial pressure of the preoperative case. Notable drops are seen during the tampering of the ICA and at the stenosis of the preoperative case.}\label{fig:ctrl_p_systole}
 \end{figure}
 
