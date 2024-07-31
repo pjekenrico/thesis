@@ -87,7 +87,36 @@
 \vbadness=10000
 \let\orgautoref\autoref\renewcommand{\autoref}[1]{\def\equationautorefname{Eq.}\def\figureautorefname{Fig.}\orgautoref{#1}}
 \definecolor{red}{HTML}{aa0000}
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\thebibliography}{\section*{\refname}}{\section*{\refname}\footnotesize}{}{}
-\makeatother
+\definecolor{blue}{HTML}{00007f}
+\definecolor{green}{HTML}{005500}
+\usepackage{lineno}
+
+\usepackage{tcolorbox} % Import tcolorbox package for creating colored boxes
+
+\tcbset{
+    abstract/.style={
+        colback=blue!20!white, % Background color
+        colframe=blue!20!black, % Frame color
+        left=2mm, right=2mm, top=2mm, bottom=2mm, % Padding
+        boxrule=0.5mm, % Box border width
+        width=\textwidth, % Box width,
+        fontlower=\itshape,
+        fontupper=\itshape,
+        before lower=\textit{\textbf{Resumée}}\vspace*{0.25cm},
+        before upper=\textit{\textbf{Abstract}}\vspace*{0.25cm}, % Space before the title
+    }
+}
+
+% Define a style for the conclusions box
+\tcbset{
+    conclusions/.style={
+        colback=blue!20!white, % Background color
+        colframe=blue!20!black, % Frame color
+        left=2mm, right=2mm, top=2mm, bottom=2mm, % Padding
+        boxrule=0.5mm, % Box border width
+        width=\textwidth, % Box width,
+        fontlower=\itshape,
+        fontupper=\itshape,
+        before upper=\textit{\textbf{Conclusions}}\vspace*{0.25cm}, % Space before the title
+    }
+}

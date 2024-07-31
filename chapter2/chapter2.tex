@@ -4,6 +4,9 @@
 
 \chapter{Numerical Modelling of Hemodynamics}
 \minitoc\newpage\label{chap.2}
+
+\linenumbers
+
 In the following chapter, the incompressible, single-phase Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then discretized with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally prevents spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on 2D and 3D test cases. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
 
 \section*{Nomenclature}
@@ -858,7 +861,7 @@ Using implicit schemes benefits stability, but requires handling non-linear term
 \end{equation}
 The main approach followed when facing such a problem is finding an iterative rule that provides improving guesses on the non-linear variable at the next timestep $n+1$.
 
-\paragraph{Picard iterations} (or Fixpoint iterations) are the most basic iterative approach. The system is solved using an initial guess $\vec{u}^k = \vec{u}^n$ and without updating the right hand side, the new solutions are plugged in as new $\vec{u}^k$ in hopes to converge towards an approximate $\vec{u}^{n+1}$.
+\paragraph{Picard iterations} (or Fixed-point iterations) are the most basic iterative approach. The system is solved using an initial guess $\vec{u}^k = \vec{u}^n$ and without updating the right hand side, the new solutions are plugged in as new $\vec{u}^k$ in hopes to converge towards an approximate $\vec{u}^{n+1}$.
 \begin{equation}
 	\vec{u}^{k+1} = \vec{g}(\vec{u}^{k}) = A^{-1}(\vec{u}^{k})\vec{b}
 	\label{eqn:picard}
@@ -867,7 +870,7 @@ This methods bases on two conditions, first being that there exists a closed sub
 \begin{equation}
 	\norm{\vec{g}(\vec{x}) - \vec{g}(\vec{y})} \leq \alpha \norm{\vec{x}-\vec{y}}
 \end{equation}
-for $\alpha<1$, $x,y\in\mathcal{D}$. In other words, that $\vec{f}$ needs to be Lipschitz continuous with a constant smaller 1 to ensure that iterating following \autoref{eqn:picard} does not leave the space containing the fixpoint. This can be shown by developing the iteration rule. Suppose that $\vec{u}$ is indeed a fixpoint of \autoref{eqn:picard} and that all the conditions above are met.
+for $\alpha<1$, $x,y\in\mathcal{D}$. In other words, that $\vec{f}$ needs to be Lipschitz continuous with a constant smaller 1 to ensure that iterating following \autoref{eqn:picard} does not leave the space containing the fixed-point. This can be shown by developing the iteration rule. Suppose that $\vec{u}$ is indeed a fixed-point of \autoref{eqn:picard} and that all the conditions above are met.
 \begin{equation}
 	\begin{split}
 		\vec{u} - \vec{u}^{k+1} &= \vec{g}(\vec{u}) - \vec{g}(\vec{u}^{k})\\[1em]
@@ -876,7 +879,7 @@ for $\alpha<1$, $x,y\in\mathcal{D}$. In other words, that $\vec{f}$ needs to be 
 		&\leq \alpha^k \norm{\vec{u} - \vec{u}^{0}}\\
 	\end{split}
 \end{equation}
-The first order convergence in the sense of these methods is clearly only provided for an $\alpha<1$. The order of convergence is tight to the fact that $\vec{g}(\vec{u}^{k})$ is a first order approximation of $\vec{u}^{k+1}$. This can be quickly seen by building a Taylor expansion around $\vec{u}^{k+1}$ and neglecting any derivative terms. Picard iterations have as an advantage that their implementation cost is minimal compared to other more performing approaches, like the Newton-Raphson method. The latter, which can also be seen as higher order fixpoint method, requires an expensive computation of a Jacobian and its inverse. When handling systems, whose dynamics are highly non-linear it is very important to implement such a routine to insure a proper resolution of the underlying physics. In our simulations, we will be targeting flow with notably low Reynolds numbers peaking approximately at $Re=1000$. In this range, it is possible to use an alternative approach to Newton-Raphson, that is said to have a second order convergence while its implementation only adds a few terms to the linear system that can then be solved like in a fixpoint method.
+The first order convergence in the sense of these methods is clearly only provided for an $\alpha<1$. The order of convergence is tight to the fact that $\vec{g}(\vec{u}^{k})$ is a first order approximation of $\vec{u}^{k+1}$. This can be quickly seen by building a Taylor expansion around $\vec{u}^{k+1}$ and neglecting any derivative terms. Picard iterations have as an advantage that their implementation cost is minimal compared to other more performing approaches, like the Newton-Raphson method. The latter, which can also be seen as higher order fixed-point method, requires an expensive computation of a Jacobian and its inverse. When handling systems, whose dynamics are highly non-linear it is very important to implement such a routine to insure a proper resolution of the underlying physics. In our simulations, we will be targeting flow with notably low Reynolds numbers peaking approximately at $Re=1000$. In this range, it is possible to use an alternative approach to Newton-Raphson, that is said to have a second order convergence while its implementation only adds a few terms to the linear system that can then be solved like in a fixed-point method.
 
 \paragraph{Linearized Newton} steps employ a second order development of the convective term as followed:
 \begin{equation}
@@ -888,7 +891,7 @@ The first order convergence in the sense of these methods is clearly only provid
 	\end{split}
 	\label{eqn:lin_newton}
 \end{equation}
-Where we assumed $\vec{u}$ to have a Lipschitz-continuous gradient $\nabla \vec{u}$ to merge the second order error terms into the present one. Under the conditions for regular convergence of Fixpoint iterations and the latter condition, substituting the unknown $(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1}$ by the iteration rule \autoref{eqn:lin_newton} yields quadratic convergence. In practice it has been seen that the method is quadratic in convergence, however it has a smaller tolerance in regards to the initial error. Therefore, we have seen that too large time-steps or a cold initial start with a non-physical initial condition are indeed problematic for this iteration rule.
+Where we assumed $\vec{u}$ to have a Lipschitz-continuous gradient $\nabla \vec{u}$ to merge the second order error terms into the present one. Under the conditions for regular convergence of fixed-point iterations and the latter condition, substituting the unknown $(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1}$ by the iteration rule \autoref{eqn:lin_newton} yields quadratic convergence. In practice it has been seen that the method is quadratic in convergence, however it has a smaller tolerance in regards to the initial error. Therefore, we have seen that too large time-steps or a cold initial start with a non-physical initial condition are indeed problematic for this iteration rule.
 
 \paragraph{Semi-implicit time integration} is an equally present choice in the field of computed hemodynamics. The principle is simple here, using a previous' timestep velocity in the integration.
 \begin{equation}
@@ -1062,8 +1065,12 @@ As stated before, this case serves two purposes. First, validating the numerical
 
 For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the missmatch among cutting edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminute perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen. Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \etal\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement in appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
 
-\section{Conclusion}
-In this chapter of the thesis, three main topics have been described and discussed: (i) the derivation of the equations dominating the flow of blood in human arteries, (ii) the numerical frameworks to approximate them and lastly (iii) two illustrative validation cases on which newly proposed methods were examined. With the numerical experiments yielded satisfactory results giving credit to the introduced tensor metric, but much remains to be shown for it to be rigorously proven. Further, the experiments have served a didactive purpose during the course of the project, since thanks to them some optimal schemes and modelling options were chosen for more time-consuming patient-specific simulations. These, introduce namely other, but equally complex challenges to tackle.
+\begin{tcolorbox}[conclusions]
+
+	In this chapter of the thesis, three main topics have been described and discussed: (i) the derivation of the equations dominating the flow of blood in human arteries, (ii) the numerical frameworks to approximate them and lastly (iii) two illustrative validation cases on which newly proposed methods were examined. With the numerical experiments yielded satisfactory results giving credit to the introduced tensor metric, but much remains to be shown and rigorously proven. Further, the experiments have served a didactive purpose during the course of the project, since thanks to them some optimal schemes and modelling options were identified, saving some time in setting up the framework for patient-specific simulations. These introduce namely other, but equally complex challenges to tackle.
+\end{tcolorbox}
+
+\nolinenumbers
 
 \bibliographystyle{apsrev}
 {\footnotesize
