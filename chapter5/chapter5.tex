@@ -120,8 +120,14 @@ For the CFD study, there are two 3D angiography images available, taken before t
 The inflow conditions were imposed through parabolic profiles according to averaged waveforms for people in the same age group as the patient\,\cite{Tanaka2006}. We assumed the inflow conditions to remain the same pre- and postoperatively\,\cite{Cebral2011}, but we acknowledge this to be a potential source of bias as already discussed by Cebral \etal\,\cite{Cebral2011}. Outlets were modelled using linear resistances as described in Chapter 3. The targeted flow was chosen to depend on the cube of the MCA and ACA diameters, meeting Murray's Law.
 
 \subsubsection*{FSI setup}
-Since the aneurysm showed clear pulsatility, we investigated the implications of using rigid wall assumptions by comparing them to FSI simulations of the case. These were carried out in cooperation with Aurèle Goetz, another PhD candidate from the lab.
-BLABLALBLALBA
+Since the aneurysm demonstrated clear pulsatility, we investigated the implications of considering rigid arterial walls by comparing our results to fully-coupled FSI simulations of the case. These were carried out in cooperation with Aurèle Goetz, another PhD candidate involved in the project.
+The fluid dynamics are solved as described in previous chapters, with the nuance that an Arbitrary Lagrangian-Eulerian (ALE) description is employed, the mesh being adapted to follow the wall motions by solving a diffusion equation as done in the work of \cite{HABCHI2013306,Sha20}.
+Arterial tissue is modeled as hyperelastic using a Neo-Hookean formulation with a Simo-Taylor volumetric model \cite{NeoH, SimoTaylor}.
+The solid dynamics equations use a mixed formulation in displacement and pressure, also solved with a VMS-type method \cite{Aurele}.
+The coupling between the two solvers is organized in a partitioned way with an under-relaxed fixed-point algorithm \cite{FELIPPA198061}.
+Fluid stresses are applied as Neumann conditions on the solid interface, and solid dynamics yield displacement updates for the fluid.
+Iterations continue until convergence is achieved, with a tolerance set to $10^{-5}\,$mm on the average solid displacement.
+An Aitken $\Delta^2$ scheme is used for momentum acceleration, enhancing computational efficiency and convergence \cite{Kuttler, BREUER2012107}.
 
 
 \subsubsection*{Computation times}
