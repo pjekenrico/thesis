@@ -2,12 +2,21 @@
 \newpage
 \pagestyle{fancy}
 
-\chapter{Numerical Modelling of Hemodynamics}
+\chapter{Numerical Discretization of Hemodynamics}
 \minitoc\newpage\label{chap.2}
 
 \linenumbers
 
-In the following chapter, the incompressible, single-phase Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then discretized with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally prevents spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on 2D and 3D test cases. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
+\begin{tcolorbox}[abstract]
+
+	In the following chapter, the incompressible, single-phase Navier-Stokes equations are introduced as the backbone to the hemodynamics simulations. The equations are derived from the conservation of mass and momentum and are further reformulated in a weak sense. The obtained formulation is then discretized with a Variational Multiscale-type Method (VMS) to stabilize the schemes in face of same-order test and trial functions for pressure and velocities. This additionally prevents spurious oscillations caused by convection dominated flows, such as the present ones. The methodology is explained and validated on 2D and 3D test cases. The chapter is concluded with a discussion on the numerical results and the implications of the findings.
+
+	\tcblower
+
+	Dans le chapitre suivant, les équations de Navier-Stokes incompressibles et monophasiques sont présentées comme l'épine dorsale des simulations hémodynamiques. Les équations sont dérivées de la conservation de la masse et de la quantité de mouvement et sont reformulées dans un sens faible. La formulation obtenue est ensuite discrétisée à l'aide d'une méthode variationnelle multiéchelle (VMS) afin de stabiliser les schémas face à des fonctions de test et d'essai de même ordre pour la pression et les vitesses. Cette méthode permet en outre d'éviter les oscillations parasites causées par les écoulements dominés par la convection, tels que les écoulements actuels. La méthodologie est expliquée et validée sur des cas d'essai en 2D et en 3D. Le chapitre se termine par une discussion sur les résultats numériques et les implications des conclusions.
+
+\end{tcolorbox}
+
 
 \section*{Nomenclature}
 
@@ -140,7 +149,7 @@ Arterial walls and endoluminal devices are modelled as rigid, no-slip boundaries
 \begin{equation}
 	\vec{u} = 0, \quad (\vec{x}, t) \in \Gamma_{w}\cup\Gamma_{fd}  \times (0,T]
 \end{equation}
-The boundary conditions presented so far can be divided into two groups, essential on $\Gamma_{d}$ and natural on $\Gamma_{n}$. These categories are relevant in Finite Element Analysis (FEA), since their imposition leads to different formulations of the problem. Therefore, inflow, walls and any endoluminal devices are essential, while the outflow is natural.\\
+The boundary conditions presented so far can be divided into two groups, essential on $\Gamma_{d}$ and natural on $\Gamma_{n}$. These categories are relevant in the Finite Element Methods (FEM), since their imposition leads to different formulations of the problem. Therefore, inflow, walls and any endoluminal devices are essential, while the outflow is natural.\\
 
 The initial conditions to the simulations can be set by previously solving a steady state simulation at the inflow rate of interest. Other approaches, involve solving a potential flow or simply setting the initial solution to zero. For any of the choices, it is required to run simulations for several cardiac cycles to ensure that the initial transient is washed out and a periodic state has been reached.
 \begin{equation}
@@ -274,8 +283,8 @@ Arguably, for our flow regime the Carreau-Yasuda model can replicate the Casson 
 Blood rheology is a complex subject due to (i) the complexity of the material and (ii) the difficulties recording its properties. As mentioned by experimental publications\,\cite{Suzuki2021}, even the anticoagulants used to prevent thrombosis in the extracted samples can have a noticeable impact on the viscosity of blood. Even though these effects perturb recording the viscoelastic properties of the suspension, its effects at least seem to be minor in the treated regime. For the further study, both the Carreau-Yasuda and the Casson model will be considered, with the latter being the preferred choice whenever Hct measurements are given.
 
 
-\section{Finite Element Analysis for the incompressible Navier-Stokes Equations}\label{chap2:sec2}
-To properly understand the content of the following section, it is important to revise some basics required in Finite Element Analysis (FEA) for those who are not yet familiar with them. Contrary to finite differences and volumes, where the strong form of the equations can be used to start the discretization, finite elements base themselves on a weak formulation of the problem. This means that the strong form of the PDEs, like for instance \autoref{eqn:navier_stokes} is multiplied by a set of test functions from a suitable function space and integrated over the domain $\Omega$. By applying the chain rule of differentiation and the Gau\ss-divergence theorem, one can conveniently shift derivatives from the solution functions to the newly added test functions. The resulting integral formulations therefore require the solutions and test functions to be contained in a suitable function space, which is usually a Sobolev space. As a reminder, the Sobolev space $H^1(\Omega)$ is the space of square integrable functions whose first derivatives are also square integrable. In more mathematical terms this can be written as:
+\section{Finite Element Methods for the incompressible Navier-Stokes Equations}\label{chap2:sec2}
+To properly understand the content of the following section, it is important to revise some basics required in FEM for those who are not yet familiar with them. Contrary to finite differences and volumes, where the strong form of the equations can be used to start the discretization, finite elements base themselves on a weak formulation of the problem. This means that the strong form of the PDEs, like for instance \autoref{eqn:navier_stokes} is multiplied by a set of test functions from a suitable function space and integrated over the domain $\Omega$. By applying the chain rule of differentiation and the Gau\ss-divergence theorem, one can conveniently shift derivatives from the solution functions to the newly added test functions. The resulting integral formulations therefore require the solutions and test functions to be contained in a suitable function space, which is usually a Sobolev space. As a reminder, the Sobolev space $H^1(\Omega)$ is the space of square integrable functions whose first derivatives are also square integrable. In more mathematical terms this can be written as:
 \begin{equation}
 	\begin{split}
 		H^1(\Omega) &= \left\{ v \in L^2(\Omega) \mid \nabla v \in L^2(\Omega) \right\}\\
@@ -301,7 +310,7 @@ Inner products commonly appear in FEA and thus are usually written in a more com
 
 
 \subsection{Stability Issues}\label{chap2:sec2:subsec1}
-One common question for all those starting to work with FE discretizations of the Navier-Stokes equations is why do most schemes include some sort of stabilization. The reason is twofold involving (i) first the compatibilities between the interpolations of velocity and pressures and secondly (ii) the effects of convection dominated flows. These two problems are thoroughly discussed in many prominent publications, such as\,\cite{Bazilevs2007, Brooks1982}.
+One common question for all those starting to work with FEM discretizations of the Navier-Stokes equations is why do most schemes include some sort of stabilization. The reason is twofold involving (i) first the compatibilities between the interpolations of velocity and pressures and secondly (ii) the effects of convection dominated flows. These two problems are thoroughly discussed in many prominent publications, such as\,\cite{Bazilevs2007, Brooks1982}.
 
 \subsection{Stable Interpolations in mixed problems}\label{chap2:sec2:subsec1:subsubsec1}
 We will start by providing an ilustrative example of the first problem arising in the particular case of a P1-P1 coupling. For showing possible problems arising from using the same order interpolations for velocities and pressures, we will consider the following simple example. Let us consider a 2D domain $\Omega\subset \mathbb{R}^2$ with a square shape and a uniform mesh of splitted rectangular elements (see \autoref{fig:LBB_Violation}). On that domain, it is sought to solve the Stokes problem with homogeneous boundary conditions:
@@ -558,7 +567,7 @@ The mean value frequency is an unknown, yet existing frequency for which the sub
 \begin{equation}
 	\tau_M = \left[\rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}
 \end{equation}
-Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Principe2010}. The illustrative derivation of\,\cite{Principe2010} tackled the problem of subscales for the Convection Diffusion Reaction equations. In other works\,\cite{Bazilevs2007, Masud2011}, these are used in an extended form for the Navier-Stokes Equations as:
+Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Principe2010}. The velocity $\vec{u}$ is interpolated to the cell centers from the nodes, where it resides. The illustrative derivation of\,\cite{Principe2010} tackled the problem of subscales for the Convection Diffusion Reaction equations. In other works\,\cite{Bazilevs2007, Masud2011}, these are used in an extended form for the Navier-Stokes Equations as:
 \begin{equation}
 	\begin{split}
 		\tau_M &= \left[\frac{4\rho^2}{\dt^2} + \rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}\\
@@ -723,7 +732,7 @@ The resulting stabilization however requires a special treatment, if the velocit
 \end{equation}
 
 \subsection{Weak Formulation of the Large Scales}
-With the now cleared choice of subscales, they can be fed back into the large scale equations presented in \autoref{eqn:small_large_scales}. Before doing so, the equations will be rearranged using partial integration, as is common in FE analysis, to eliminate higher order derivatives and to simplify the introduction of the subscales. Note, that as stated before, the subscales yield no boundary contributions by assumption.
+With the now cleared choice of subscales, they can be fed back into the large scale equations presented in \autoref{eqn:small_large_scales}. Before doing so, the equations will be rearranged using partial integration, to eliminate higher order derivatives and to simplify the introduction of the subscales. Note, that as stated before, the subscales yield no boundary contributions by assumption.
 \begin{equation}
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}_h + \vec{U}') \,dV &= \int_{\Omega} \vec{V}_h \cdot \vec{F} \,dV \\[1em]
@@ -820,7 +829,7 @@ In a plain Galerkin discretization the square block matrix $A_{p, q}$ is indeed 
 The last remaining component to discuss is the time discretization of the problem. For this, a small demonstration will be done in the following subsection considering different schemes for the time derivative, as well as methods for treating the non-linearities of the problem.
 
 \subsection{Time Discretization}
-The time derivatives are commonly discretized using finite differences rather than FE. The latter family of methods is also called Space-Time FE and has a superior complexity due to an added dimension in the FE space. Finite differences on the other hand are more straight forward, since the FE structure does not need to change drastically. The functions $\vec{u}_h$ and $p_h$ are approximated in our case through a sum of scaled, piece-wise linear functions $\varphi_i(\vec{x})$ satisfying $\varphi_i(\vec{x}_j) = \delta_{ij}$ for any two nodes $i$, $j$ in the mesh. The time dependency of the problem is shifted onto the scaling factors, allowing for a separation of both problems.
+The time derivatives are commonly discretized using finite differences rather than finite elements. The latter family of methods is also called Space-Time FEM and has a superior complexity due to an added dimension in the finite element space. Finite differences on the other hand are more straight forward, since the spatial structure does not need to change drastically. The functions $\vec{u}_h$ and $p_h$ are approximated in our case through a sum of scaled, piece-wise linear functions $\varphi_i(\vec{x})$ satisfying $\varphi_i(\vec{x}_j) = \delta_{ij}$ for any two nodes $i$, $j$ in the mesh. The time dependency of the problem is shifted onto the scaling factors, allowing for a separation of both problems.
 \begin{equation}
 	\vec{u}_h = \sum_i \vec{u}_i(t) \varphi_i(\vec{x}),\qquad p_h = \sum_i p_i(t) \varphi_i(\vec{x})
 \end{equation}
@@ -885,7 +894,7 @@ The first order convergence in the sense of these methods is clearly only provid
 \begin{equation}
 	\begin{split}
 		(\vec{u}\cdot\nabla)\vec{u} &= (\nabla\vec{u})\cdot\vec{u}\\[1em]
-		(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1} &= (\nabla\vec{u})^{k}\cdot\vec{u}^{k} +  (\nabla\vec{u})^{k+1} -  (\nabla\vec{u})^{k})\cdot\vec{u}^{k} +\\[1em]
+		(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1} &= (\nabla\vec{u})^{k}\cdot\vec{u}^{k} +  \left((\nabla\vec{u})^{k+1} - (\nabla\vec{u})^{k}\right)\cdot\vec{u}^{k} +\\[1em]
 		&+  (\nabla\vec{u})^{k}\cdot(\vec{u}^{k+1} - \vec{u}^{k}) + \mathcal{O}(\norm{\vec{u}^{k+1} - \vec{u}^{k}}^2)\\[1em]
 		&= -(\nabla\vec{u})^{k}\cdot\vec{u}^{k} + (\nabla\vec{u})^{k+1}\cdot\vec{u}^{k} +  (\nabla\vec{u})^{k}\cdot\vec{u}^{k+1} + \mathcal{O}(\norm{\vec{u}^{k+1} - \vec{u}^{k}}^2)
 	\end{split}
