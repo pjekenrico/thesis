@@ -6,7 +6,7 @@
 \chapter{Patient-specific analysis with flow-diverter treatment}\minitoc\newpage\label{chap.5}
 \begin{tcolorbox}[abstract]
 
-	In the previous chapters, we have worked on the numerical framework of VMS in fluid simulations, studied the specifics of brain arterial hemodynamics and developed a tool to model Flow-Diverter Stents (FDS) based on geometrical constraints. With the obtained experience and tools, we now move towards putting the framework to use on 3 patient cases displaying two variations of intracranial aneurysms, each posing very unique challenges to the clinicians. These showcase some situations in which FDS treatment is considered the most promising tool, even though fatality rates are still high. First, we will deal with the giant aneurysm ($>$\,25\,mm) case that has been the subject of research in the previous chapter. The case will be thoroughly discussed considering medical and anatomical aspects before diving into the simulation of pre- and postoperative hemodynamics. The second application case involves blister-like aneurysms, formations barely seen on CT imaging characterized by critically thin and fragile walls. Both disease types are poorly understood and require further research to improve the prospective treatment of those in need of it. With the run simulations, we put on display the framework, but most importantly, we provide hemodynamics results on scarsely documented aneurysms and relate them to existing literature.
+	In the previous chapters, we have worked on the numerical framework of VMS in fluid simulations, studied the specifics of brain arterial hemodynamics and developed a tool to model Flow-Diverter Stents (FDS) based on geometrical constraints. With the obtained experience and tools, we now move towards putting the framework to use on 3 patient cases displaying two variations of intracranial aneurysms, each posing very unique challenges to the clinicians. These showcase some situations in which FDS treatment is considered the most promising tool, even though fatality rates are still high. First, we will deal with the giant aneurysm ($>$\,25\,mm) that has been already shown in the previous chapter. The case will be thoroughly discussed considering medical and anatomical aspects before diving into the simulation of pre- and postoperative hemodynamics. The second application case involves blister-like aneurysms, formations barely seen on CT imaging characterized by critically thin and fragile walls. Both disease types are poorly understood and require further research to improve the prospective treatment of those in need of it. With the run simulations, we put on display the framework, but most importantly, we provide hemodynamics results on scarsely documented aneurysms and relate them to existing literature.
 
 	\tcblower
 
@@ -15,7 +15,7 @@
 \end{tcolorbox}
 
 \section{Delayed rupture of giant aneurysms}\label{chap5:sec1}
-Giant aneurysms bear several added difficulties compared to their smaller counterparts. Due to their size, they are often symptomatic, causing cerebral palsies, headaches and other neurological disturbances. Therefore, treating them is often a necessity, albeit operations are more complex and are more prone to complications\,\cite{Rouchaud2016}. Most giant aneurysms contain a sizable portion of the parent vessel and lack a well-defined neck. As a consequence, clipping them surgically is often inviable. Even the deployment of coils is rarely feasible since they require a sufficient hold to remain firmly in place. Furthermore, coils suffer from an increased risk of recanalization due to accentuated material fatigue and material compaction in these cases\,\cite{Dandapat2021}. Even the use stent-assisted coiling has not been found to improve the odds of positive outcome\,\cite{Hirato2023,Rouchaud2016}. Flow-diverter stents, although sometimes difficult to deploy in giant aneurysms, manage to avoid the aforementioned issues. Despite their overall good performance\,\cite{Kulcsar2011}, giant aneurysms still pose a non-negligible risk of delayed rupture\,\cite{Kulcsar2011, Li2019,Rouchaud2016}. Since the first observed cases in the 2010 decade, research teams have proposed several contributing factors and registered their observations. In the following section, we will conduct a detailed analysis of the patient case presented to our cooperating hospital, which experienced this dramatic outcome.
+Giant aneurysms bear several added difficulties compared to their smaller counterparts. Due to their size, they are often symptomatic, causing cerebral palsies, headaches and other neurological disturbances. Therefore, treating them is often a necessity, albeit operations are more complex and are more prone to complications\,\cite{Rouchaud2016}. Most giant aneurysms contain a sizable portion of the parent vessel and lack a well-defined neck. As a consequence, clipping them surgically is often inviable. Even the deployment of coils is rarely feasible since they require a sufficient hold to remain firmly in place. Furthermore, coils suffer from an increased risk of recanalization due to accentuated material fatigue and material compaction in these cases\,\cite{Dandapat2021}. Even the use stent-assisted coiling has not been found to improve the odds of positive outcome\,\cite{Hirato2023,Rouchaud2016}. Flow-diverter stents, although sometimes difficult to deploy in giant aneurysms, manage to avoid the aforementioned issues. Despite their overall good performance\,\cite{Kulcsar2011}, giant aneurysms still pose a non-negligible risk of delayed rupture\,\cite{Kulcsar2011, Li2019,Rouchaud2016}. Since the first observed cases in the 2010 decade, research teams have proposed several contributing factors and registered their observations. In the following section, we will conduct a detailed analysis of the patient case who sadly experienced this dramatic outcome.
 
 
 \subsection{Patient medical record}
@@ -66,7 +66,7 @@ The aneurysm on the communicating (C7) segment of the supra-clinoidal ICA, 4\,mm
 \subsubsection*{Tapering}
 An important factor considering this case is the presence of Tapering (T) and vessel deformation around the aneurysm. The cavernous ICA has a diameter of 4.16\,mm falling in line with reported values\,\cite{Baz2021}. It experiences continuous tapering over the ophthalmic (C6) and communicating (C7) segments leading to a nearly elliptical vessel at the proximal aneurysm neck. This atypical cross-section translates into a 32\% tapering to the diameter of the cavernous ICA (see \autoref{tab:pat_geo}). Past the aneurysm, the terminal section narrows down to 2.15\,mm, equivalently to a 48\% stenosis. This value falls outside the standard deviation of the recorded cases by Baz \etal\,\cite{Baz2021}.
 
-After deployment, the proximal vessel sections remain largely unchanged. The clinoidal ICA however shrinks with diameters of 3.33\,mm, which is a 20\% tapering to the cavernous ICA. The sections at the aneurysm have become nearly identical in diameter, attaining commonly found sizes. Although it is not verifiable from the imaging, these effects are likely caused by the mechanical forces exerted by the stent and the progressive remodelling of the artery.
+After deployment, the proximal vessel sections remain largely unchanged. The clinoidal ICA however shrinks with diameters of 3.33\,mm, which is a 20\% tapering to the cavernous ICA\@. The sections at the aneurysm have become nearly identical in diameter, attaining commonly found sizes. Although it is not verifiable from the imaging, these effects are likely caused by the mechanical forces exerted by the stent and the progressive remodelling of the artery.
 
 % Table with vessel diameters at the C3, before the aneurysm, and at the terminus
 \begin{table}[htb]
@@ -268,9 +268,7 @@ With the observed hemodynamics and the patient case description, we can attempt 
 \subsubsection*{Pressure induced rupture}
 In a widely known computational study in the year 2010, Cebral \etal\,\cite{Cebral2011} analyzed the hemodynamics of 7 FDS-treated intracranial aneurysms located at the upper ICA sections. Of those, 3 ruptured within a week of the operation, while the remaining 4 occluded during the following months. The healed aneurysms were all middle-sized excepting one giant aneurysm, whereas all ruptured belonged to the latter category. In the study, the cases were computed in preoperative and post-rupture states following similar steps as here. The pressures were levelled at the inlets of all simulations to be normotensive. They observed that under those conditions two of the three cases resulted in a pressure increase in the IA. The deployment of the FDS had opened narrow passages of the parent artery located upstream of the lesion, reducing the resistance of the flow and thus carrying higher pressures farther. In the other ruptured case, the stenosis was located past the aneurysm and thus no noticeable alteration of the pressure was reported.
 
-While this hypothesis might be a lead in some cases\,\cite{Hirato2023}, it seems overall unsuited here. Firstly, the pressure in our case decreases post-treatment due to the location of the stenosis, similar to other works on this subject\,\cite{Li2019}. In that sense, this aneurysm resembles the giant one that did not rupture in their study. Furthermore, we have observed a strong pulsatility of the aneurysm, which translates into a capacitance that spreads out the pressure waveform. Inevitably, the wall movement introduces further mean pressure losses due to dissipation of energy into the surrounding tissue. Lastly, the timescale of the present rupture exceeds those of Cebral \etal\,\cite{Cebral2011} by months, pointing towards other long-term remodelling phenomena.
-
-The considerations surrounding the pressure increase or decrease at the aneurysm depend directly on the patient and on the overall tapering of the ICA. We suggest larger studies, to investigate the location of the IA and to assess whether the pressure increase is linked to the nature of the vessel or to any cardiovascular disease that can e
+While this hypothesis might be a lead in some cases\,\cite{Hirato2023}, it seems overall unsuited here. Firstly, the pressure decreases post-treatment due to the location of the stenosis, similar to other works on this subject\,\cite{Li2019}. In that sense, this aneurysm resembles the giant one that did not rupture in their study. Furthermore, we have observed a strong pulsatility of the aneurysm, which translates into a capacitance that spreads out the pressure waveform. Inevitably, the wall movement introduces further mean pressure losses due to dissipation of energy into the surrounding tissue. Lastly, the timescale of the present rupture exceeds those of Cebral \etal\,\cite{Cebral2011} by months, pointing towards other long-term remodelling phenomena.
 
 
 \subsubsection*{Thrombus mediated rupture}
@@ -314,7 +312,7 @@ This leaves room for a hypothesis worth studying in an attempt to improve patien
 \subsubsection*{Patient 1}
 Patient story
 
-The aneurysm is located on the communicating segment of the ICA, upstream of the Posterior Communicating artery (PCom). The formation has a height of approximately 1.3\,mm and expands over a 4$\times$2.6\,mm area stretched along the main axial direction. Prior to the operation, the parent ICA displayed a contraction downstream of the lesion, which is a common reaction to an haemorrhagic event\,\cite{Papasilekas2020} (see \autoref{fig:blister1}). After deploying a 4.75$\times$20\,mm Silk Vista flow diverter, the narrowing dissappeared. The distal end of the device is located downstream of the PCom before the ACha. Proximally the stent begins before the carotid syphon to ensure a proper wall apposition.
+The aneurysm is located on the communicating segment of the ICA, upstream of the Posterior Communicating artery (PCom). The formation has a height of approximately 1.3\,mm and expands over a 4$\times$2.6\,mm area stretched along the main axial direction. Prior to the operation, the parent ICA displayed a contraction downstream of the lesion, which is a common reaction to an haemorrhagic event\,\cite{Papasilekas2020} (see \autoref{fig:blister1_angio}). After deploying a 4.75$\times$20\,mm Silk Vista flow diverter, the narrowing dissappeared. The distal end of the device is located downstream of the PCom before the ACha. Proximally the stent begins before the carotid syphon to ensure a proper wall apposition.
 
 In the virtual representation of this case, the stent has been only embedded on the portion between the aneurysm and the PCom. This approximation is motivated by computational efficiency and the observations made in the previous chapter in regards to reduced stent representations. The hypothetic second stent was chosen to be the 4.25$\times$15\,mm Silk Vista stent due to its low porosity after deployment on the segment.
 
@@ -323,13 +321,13 @@ In the virtual representation of this case, the stent has been only embedded on 
 	\begin{minipage}[t]{0.475\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{chapter5/Figures/Blister_2/Blister2.png}
-		\caption[Blister aneurysm 1]{Blister aneurysm at the transition between the ophthalmic and communicating segments.}\label{fig:blister1}
+		\caption[Blister aneurysm 1]{Blister aneurysm at the transition between the ophthalmic and communicating segments.}\label{fig:blister1_angio}
 	\end{minipage}
 	\hfill
 	\begin{minipage}[t]{0.476\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{chapter5/Figures/Blister_1/Blister1.png}
-		\caption[Blister aneurysm 2]{Blister-like aneurysm at the proximal end of the cortical middle cerebral artery.}\label{fig:blister2}
+		\caption[Blister aneurysm 2]{Blister-like aneurysm at the proximal end of the cortical middle cerebral artery.}\label{fig:blister2_angio}
 	\end{minipage}
 \end{figure}
 
@@ -338,7 +336,7 @@ In the virtual representation of this case, the stent has been only embedded on 
 
 HERE CHAU's information
 
-The aneurysm has a 1.4\,mm bump over a larger area of 5.1$\times$2.3\,mm granting it a typical BBA shape as seen in \autoref{fig:blister1}. It sits on the first bifurcation of the MCA, between the M2 and M4 segments, which is an uncommon locations for these lesions\,\cite{Papasilekas2020}. Despite the complications of reaching this distal location, the interventionalists managed to successfully deploy a 3.5\,$\times$\,20\,mm Silk Vista stent across the M2 and M1 segments. An added difficulty in this case is the balance between flow redirection and risk of thromboembolic events downstream of the jailed M4 segment. Due to the weakness of the arterial wall and the shape of the formation, no coils could be used. To evaluate the alterations caused by a second virtual stent we simulated a 3.5\,$\times$\,11\,mm XFRED device inserted into the previous FDS.
+The aneurysm has a 1.4\,mm bump over a larger area of 5.1$\times$2.3\,mm granting it a typical BBA shape as seen in \autoref{fig:blister2_angio}. It sits on the first bifurcation of the MCA, between the M2 and M4 segments, which is an uncommon locations for these lesions\,\cite{Papasilekas2020}. Despite the complications of reaching this distal location, the interventionalists managed to successfully deploy a 3.5\,$\times$\,20\,mm Silk Vista stent across the M2 and M1 segments. An added difficulty in this case is the balance between flow redirection and risk of thromboembolic events downstream of the jailed M4 segment. Due to the weakness of the arterial wall and the shape of the formation, no coils could be used. To evaluate the alterations caused by a second virtual stent we simulated a 3.5\,$\times$\,11\,mm XFRED device inserted into the previous FDS.
 
 \subsubsection*{General simulation setup}
 The geometries were meshed following the same pipeline as described before in chapter 4. The reduced size of the geometries permitted a more resolved isotropic mesh size of 0.15--0.2\,mm in both cases, while stent meshing parameters remained unchanged. Simulations were carried out using semi-implicit time stepping with $\Delta t=$1\,ms for 3 cardiac cycles. Boundary conditions and viscosity models were applied in the same manner as the previous case. The in the case of patient 2, the inflow was set at the beginning of the MCA with 50\% of the ICA's flowrate\,\cite{Zarrinkoob2015} for computational efficiency. The choice is justified due to the length of the M1 segment and the lack of tapering on its way, although the waveform shape may not be necessarily suited.
@@ -377,21 +375,21 @@ The obtained computation times per cardiac cycle are given in \autoref{tab:comp_
 	\setlength{\tabcolsep}{6pt}
 	\begin{tabular}{l l c c c}
 		\hline
-		\multicolumn{2}{c}{Case}   & Unstented                              & Single Stent & Double Stent         \\
+		\multicolumn{2}{c}{Case}   & Unstented   & Single Stent & Double Stent         \\
 		\hline
-		\multirow{5}{*}{Patient 1} & $\min\left(\text{TAWSS}\right)$        & 0.5          & 0.5          & 0.3   \\
-		                           & $\text{mean}\left(\text{TAWSS}\right)$ & 2.0          & 1.1          & 0.6   \\
+		\multirow{5}{*}{Patient 1} & min(TAWSS)  & 0.5          & 0.5          & 0.3   \\
+		                           & mean(TAWSS) & 2.0          & 1.1          & 0.6   \\
 
-		                           & $\max\left(\text{TAWSS}\right)$        & 5.2          & 2.5          & 1.1   \\
-		                           & $\text{mean}\left(\text{OSI}\right)$   & 0.010        & 0.015        & 0.023 \\
-		                           & $\max\left(\text{OSI}\right)$          & 0.112        & 0.051        & 0.059 \\
+		                           & max(TAWSS)  & 5.2          & 2.5          & 1.1   \\
+		                           & mean(OSI)   & 0.010        & 0.015        & 0.023 \\
+		                           & max(OSI)    & 0.112        & 0.051        & 0.059 \\
 		\hline
-		\multirow{5}{*}{Patient 2} & $\min\left(\text{TAWSS}\right)$        & 2.5          & 0.6          & 0.2   \\
-		                           & $\text{mean}\left(\text{TAWSS}\right)$ & 4.1          & 1.6          & 0.6   \\
-		                           & $\max\left(\text{TAWSS}\right)$        & 6.7          & 4.2          & 1.9   \\
-		                           & $\text{mean}\left(\text{OSI}\right)$   & 0.002        & 0.001        & 0.002 \\
+		\multirow{5}{*}{Patient 2} & min(TAWSS)  & 2.5          & 0.6          & 0.2   \\
+		                           & mean(TAWSS) & 4.1          & 1.6          & 0.6   \\
+		                           & max(TAWSS)  & 6.7          & 4.2          & 1.9   \\
+		                           & mean(OSI)   & 0.002        & 0.001        & 0.002 \\
 
-		                           & $\max\left(\text{OSI}\right)$          & 0.013         & 0.004          & 0.012  \\
+		                           & max(OSI)    & 0.013        & 0.004        & 0.012 \\
 		\hline
 	\end{tabular}
 	\caption[Computation times]{Computation times per cardiac cycle and used resources. Note that number of cores used was conditioned by server availability and not necessarily by optimized distributions. All meshes have an isotropic meshsize of 0.2\,mm and a resolution at the stent as described in chapter 4.}\label{tab:OSI_WSS_blister}
@@ -409,10 +407,10 @@ The change of shear stresses can be observed from \autoref{fig:blister1}, overal
 
 Patient 2 features a aneurysm with inertial flow, contrary to the shear-driven flow from before. This reflects on elevated WSS values at the dome in the preoperative case as seen in \autoref{tab:OSI_WSS_blister} and \autoref{fig:blister2}. In the latter figure, we decided to show the pressure distribution rather than the flow velocity to highlight how the progressive bending of the stent in the second and third columns, captures part of the momentum of the impinging flow. The pressure isolines in the jailed vessel become parallel to the outflow with increasing metal coverage, while the BBA is exposed to lower peak pressures. Much like in the previous aneurysm, the WSS structures shrink in magnitude and become smoother. The oscillatory components of this formation are smaller by one full magnitude with respect to the ICA aneurysm.
 
-As might be noticed, applying a second stent in this case results in larger alterations than in the previous case. This partly due to the choice of device. The Silk Vista stents used so far contain 48 wires, whereas the second stent in this cases is an XFRED with 64 wires. The number of wires ponders into the metal cover ratio lifting the single value from 21\% to the double coverage of 44\%. 
+As might be noticed, applying a second stent in this case results in larger alterations than in the previous case. This partly due to the choice of device. The Silk Vista stents used so far contain 48 wires, whereas the second stent in this cases is an XFRED with 64 wires. The number of wires ponders into the metal cover ratio lifting the single value from 21\% to the double coverage of 44\%.
 
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
 	\centering
 	\begin{tabular}{ccccc}
 		\multicolumn{1}{c}{}                                                                  &
@@ -440,7 +438,7 @@ As might be noticed, applying a second stent in this case results in larger alte
 				% Text above the colorbar
 				\node[anchor=south, yshift=-0.15cm] at (colorbar.north) {\fontsize{9pt}{10pt}\selectfont $u$\,[mm/s]};
 			\end{tikzpicture}
-		\end{minipage}                                                        \\[2cm]
+		\end{minipage}                                                        \\[1.5cm]
 		\rotatebox[origin=c]{90}{WSS}                                                         &
 		\begin{minipage}{0.27\linewidth}
 			\centering
@@ -459,10 +457,10 @@ As might be noticed, applying a second stent in this case results in larger alte
 			\includegraphics[width=\linewidth]{chapter5/Figures/Blister_1/WSS.png}
 		\end{minipage}                   \\
 	\end{tabular}
-	\caption[Hemodynamics of blister aneurysm 1]{Systolic velocities (upper row) and WSS (lower row) for the three computed cases of patient 1. The stent alters the hemodynamics of the aneurysm and the jailed PCom. The impact of the second stent is mostly reduced to the WSS at the overlapping segments of the stents. TAWSS was omitted due to its high qualitative resemblance with the WSS.}\label{fig:blister2}
+	\caption[Hemodynamics of blister aneurysm 1]{Systolic velocities (upper row) and WSS (lower row) for the three computed cases of patient 1. TAWSS and WSS distributions only differ quantitatively which is reflected as well on low OSI values.}\label{fig:blister2}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
 	\centering
 	\begin{tabular}{ccccc}
 		\multicolumn{1}{c}{}                                                                  &
@@ -485,7 +483,7 @@ As might be noticed, applying a second stent in this case results in larger alte
 		\begin{minipage}{0.075\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{chapter5/Figures/Blister_1/pressure.png}
-		\end{minipage}              \\[2cm]
+		\end{minipage}              \\[1.5cm]
 		\rotatebox[origin=c]{90}{WSS}                                                         &
 		\begin{minipage}{0.27\linewidth}
 			\centering
@@ -504,7 +502,7 @@ As might be noticed, applying a second stent in this case results in larger alte
 			\includegraphics[width=\linewidth]{chapter5/Figures/Blister_1/WSS.png}
 		\end{minipage}                   \\
 	\end{tabular}
-	\caption[Hemodynamics of blister aneurysm 2]{Systolic pressures (upper row) and WSS (lower row) for the three computed cases of patient 2. The stent redirects part of the flow, causing a mild pressure drop in the bulge. Pressure gradients in the jailed M4 are smoothed through each deployed stent. Here too, the TAWSS is ommited due to a high qualitative similarity to the WSS.}\label{fig:blister1}
+	\caption[Hemodynamics of blister aneurysm 2]{Systolic pressures (upper row) and WSS (lower row) for the three computed cases of patient 2. The stent redirects part of the flow, causing a mild pressure drop in the bulge. Pressure gradients in the jailed M4 are smoothed through each deployed stent.}\label{fig:blister1}
 \end{figure}
 
 \subsection{Discussion}
