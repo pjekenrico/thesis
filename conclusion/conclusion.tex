@@ -2,24 +2,31 @@
 \newpage
 \pagestyle{fancy}
 
-\chapter{Conclusions}
+\chapter{Conclusions}\label{conclusion}
 \minitoc
 \newpage
-\label{conclusion}
+\linenumbers
+\section{Conclusion}
+Decades of research in biomechanics have laid a foundation in clinical practice by developing virtual analysis tools for various cardiovascular diseases. These tools have not only enhanced our understanding of the origins of these pathologies but also facilitated the design of optimized treatment strategies. Building on this foundation, both this thesis and the ERC project CURE aim to improve diagnosis and treatment options for patients with intracranial aneurysms. This work focuses on three key research areas: (1) the study of stabilized finite elements for cardiovascular flows, (2) the assessment of the vascular extension around an aneurysm required for accurate numerical simulations, and (3) the development of a fast virtual stenting algorithm for deploying flow diverter stents. Although distinct, these aspects are united by a shared goal of advancing state-of-the-art modeling, with a strong emphasis on the numerical aspects of simulations.
 
-\section{First Section} \label{concl:sec1}
+In the second chapter, we delve into the physics and numerical methods for simulating hemodynamics in brain arterial flows. We revisited the existing numerical framework in a didactic manner, identifying an inconsistency in one modeling choice, which led to the research question: ``How can a tensor-based stabilization parameter become impervious to the ordering of elements?'' To address this, we developed a novel strategy based on Principal Component Analysis, testing it against common 2D and 3D examples from the literature. While not exhaustive, the validation showed improvements over an established alternative and consistently aligned well with experimental data.
 
-In research articles, the materials and methods used in the study should be described together—first the materials, and then the methods. Enough information should be provided to enable repetition of the research. For commercial sources of the materials, the name of the company, and the town and country in which they are headquartered should be indicated. To avoid an excessively long methods section, methods that have already been published should be indicated with a reference, with only the relevant modifications described.
+With an improved understanding of the FEM backend, we explored the complex technical aspects of brain arterial flow, which is constrained by medical knowledge and limited measurement data. We reviewed the literature on boundary conditions and detailed the segmentation and meshing workflows implemented. This led to another research question: ``What is the extent of the vasculature that needs to be simulated around the region of interest to obtain physiological results, particularly when using common outflow models?'' This question arises from the segmentation of the anastomotic (redundantly connected) vessel network in the brain, where arterial loops can theoretically direct flow in any direction and do not always follow common splitting laws. We studied the sensitivity of three patient-specific cases with aneurysms, comparing full Circle of Willis simulations with two reduced vasculature models commonly seen in the literature. The results revealed case-dependent variability, suggesting the need for preliminary studies using different imaging sources to avoid modeling pitfalls.
 
-\section{Second Section} \label{concl:sec2}
+The next focus was on flow diverter stents, which enable clinicians to treat otherwise inoperable intracranial aneurysms. A numerical representation of these devices not only replicates altered flow conditions but also provides insights into how hemodynamic changes affect vessel walls. We proposed a novel virtual stenting algorithm based on geometric analysis, validated it against literature cases, in-vitro experiments, and postoperative patient images. We then demonstrated how to embed the device into an arbitrary unstructured computational mesh and ran a test simulation. The proposed methodology offers three advantages: (i) accurate estimation of local stent porosities, (ii) robust and fast deployment, and (iii) reliance only on centerline information and manufacturer data for deployment. However, the method does not account for mechanical interactions with vessel walls and may underperform with significant stent undersizing.
 
-Add your theoretical background here. Some example text: As we learned from our textbook, Fourier introduced the concept of representing a given function $f(x)$ by a trigonometric series of sines and cosines:
-\begin{equation}
-    f(x) = \frac{a_0}{2} + \sum_{i=1}^\infty \left(a_n\cos{nx} + b_n\sin{nx}\right) \quad x \in (-\pi,\pi].
-    \label{eqn:fourierseries}
-\end{equation}
-You can reference numbered equations, figures, tables, algorithms, and code like this: Equation~\ref{eqn:fourierseries}, etc.
+Equipped with the essential tools for post-treatment aneurysm simulations, we examined three patient cases involving flow diverter stents with varying outcomes. The first case, featuring a giant aneurysm, suffered a delayed rupture after treatment. Simulations of preoperative and postoperative states including wall compliance were carried out and served an analysis based on several rupture hypotheses from the literature. The remaining cases involved (i) a ruptured blister aneurysm and (ii) a ruptured wide-necked aneurysm. Although different, both cases required assessing similar risks, including the trade-offs between reducing flow stress and managing thromboembolic complications. We report on the computed hemodynamics and include a study on deploying a second stent over the existing one. With these results, we hope to contribute to larger population studies aimed at optimizing treatment options.
 
-\cite[text]{KHX}
-\bibliographystyle{elsarticle-num}
-\bibliography{conclusion/Biblio}
+
+\section{Perspectives}
+The work is one of the two initial thesis conducted at the start of the aforementioned ERC project CURE\@. The project posed many initial hurdles thanks to which we learned and progressed. With the momentum gained, the subsequent work of other PhD students can tackle more specific problems. Among all the possible modalities to follow, there are some that are of particular interest in the context of flow diverters.
+
+Firstly, thrombosis has been observed in literature and in one of the presented cases, to lead in some cases to wall autolysis and aneurysm rupture. Simulating thrombosis can help confirming or disproving the autolysis hypothesis by provding the growth dynamics and the exposure time of damaged tissue. Furthermore, it could also be applied to optimize stent design in order to achieve an optimal occlusion rate. The latter optimization has already been conducted by the team, exploiting the capabilities of Reinforcement Learning, but using a reduced simulation complexity\,\cite{Hachem2023}. These ideas can be pursued with more elaborate modelling techniques for which parts of the study will serve. The porosity maps from the stenting algorithm can be used in combination with novel continuum models\,\cite{Abdehkakha2021} of flow diverters to yield a light-weight, yet accurate method for optimization purposes. The Reinforcement Learning has also been advanced in our team ever since\,\cite{Hachem2023} thanks to an improved environment based on partial differential equations\,\cite{Viquerat2024}. With these tools it may become part of clinical routine to design and process personalized medical devices that adjust to each patient's needs at feasible cost.
+
+Validation to this ambitious goal is more increasingly available thanks to improved fields strengths and frame rates of Magnetic Resonance and Computed Tomography machines. With the help of Machine Learning in denoising and gap-filling measurements, the adquisition of reliable data could be carried out as part of clinical routine. This in turn helps validating new algorithms and tackles at the same time the limitiations imposed by using generic boundary conditions. 
+
+\nolinenumbers
+
+\bibliographystyle{apsrev}
+{\footnotesize
+	\bibliography{chapter5/Biblio}}

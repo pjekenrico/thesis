@@ -1,7 +1,6 @@
 
 \usepackage[square,sort&compress,sectionbib,numbers]{natbib}
 \usepackage{chapterbib}
-\renewcommand{\bibsection}{\section{Bibliography}}
 \usepackage[english]{babel}
 \usepackage[babel]{csquotes}
 \usepackage[utf8]{inputenc}
@@ -38,36 +37,22 @@
 
 \usepackage[pdftex,pdfborder={0 0 0},
 	colorlinks=true,
-	linkcolor=blue,
-	citecolor=red,
-	pagebackref=true,
+	linkcolor=black,
+	citecolor=black,
+	pagebackref=false,
 ]{hyperref}	% Créera automatiquement les liens internes au PDF
 
 \usepackage{tocbibind}
-
-%\usepackage[top=2.5cm, bottom=2cm, left=3cm, right=2.5cm, headheight=15pt]{geometry}
 \usepackage{geometry}
 \usepackage{fancyhdr}
 \usepackage{parskip}
 
-
 \usepgfplotslibrary{fillbetween}
 \usetikzlibrary{patterns,shapes,snakes,positioning,calc}
-%\usepackage{cleveref}
-%\usepackage{subcaption}
-%\usepackage{blindtext}
-%\usepackage{draftwatermark}
-%\SetWatermarkText{Draft}
-%\SetWatermarkScale{2}
-%\SetWatermarkColor[rgb]{0.7,0.7,0.7}
 \usepgfplotslibrary{external}
-%\tikzexternalize[optimize command away=\includepdf ,prefix=TikzPictures/]
-%\tikzsetnextfilename{name_of_resulting_pdf}
 \usetikzlibrary{arrows,positioning}
 \tikzset{
-	%Define standard arrow tip
 	>=stealth',
-	%Define style for boxes
 	punkt/.style={
 			rectangle,
 			rounded corners,
@@ -75,7 +60,6 @@
 			text width=6.5em,
 			minimum height=2em,
 			text centered},
-	% Define arrow style
 	pil/.style={
 			->,
 			thick,
@@ -90,9 +74,7 @@
 \definecolor{blue}{HTML}{00007f}
 \definecolor{green}{HTML}{005500}
 \usepackage{lineno}
-
-\usepackage{tcolorbox} % Import tcolorbox package for creating colored boxes
-
+\usepackage{tcolorbox}
 \tcbset{
     abstract/.style={
         colback=blue!20!white, % Background color
@@ -102,12 +84,10 @@
         width=\textwidth, % Box width,
         fontlower=\itshape,
         fontupper=\itshape,
-        before lower=\textit{\textbf{Resumée}}\vspace*{0.25cm},
+        before lower=\textit{\textbf{Resumé}}\vspace*{0.25cm},
         before upper=\textit{\textbf{Abstract}}\vspace*{0.25cm}, % Space before the title
     }
 }
-
-% Define a style for the conclusions box
 \tcbset{
     conclusions/.style={
         colback=blue!20!white, % Background color
