@@ -129,7 +129,7 @@ Arterial walls and endoluminal devices are modelled as rigid, no-slip boundaries
 \end{equation}
 The boundary conditions presented so far can be divided into two groups, essential on $\Gamma_{d}$ and natural on $\Gamma_{n}$. These categories are relevant in Finite Element Methods (FEM), since their imposition leads to different formulations of the problem. Therefore, inflow, walls and any endoluminal devices are essential, while the outflow is natural.
 
-The initial conditions can be set by previously solving a steady state simulation at the inflow rate of interest. Other approaches, involve solving a potential flow or simply setting the initial solution to zero. For any of the choices, it is required to run simulations for several cardiac cycles to ensure that the initial transient is washed out and a periodic state has been reached.
+The initial conditions can be set by previously solving a steady-state simulation at the inflow rate of interest. Other approaches, involve solving a potential flow or simply setting the initial solution to zero. For any of the choices, it is required to run simulations for several cardiac cycles to ensure that the initial transient is washed out and a periodic state has been reached.
 \begin{equation}
 	\vec{u} = \vec{u}_0, \quad \vec{x} \in \Omega,\,t=0
 \end{equation}
@@ -990,7 +990,7 @@ The corresponding plots displaying both lift and drag for both studied Re are se
 \end{tcolorbox}
 
 \subsection{FDA Nozzle}
-The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a simplified, idealized medical device geometry used for benchmarking CFD codes. It shares characteristics with various blood-carrying medical devices, such as catheters and syringes. The nozzle includes a radial step, sharp edges, and a cross-sectional stenosis to induce shear stresses and simulate conditions like hemolysis\,\cite{Pauli2013}. The axisymmetric design features a 0.04\,m long stenotic throat with a 20$^\circ$ connecting cone at one end and a step change in diameter at the other (see \autoref{fig:design_FDA} for more details).
+The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a simplified, idealized medical device geometry used for benchmarking CFD codes. It shares characteristics with various blood-carrying medical devices, such as catheters and syringes. The nozzle includes a radial step, sharp edges, and a cross-sectional stenosis to induce shear stresses and simulate conditions like hemolysis\,\cite{Pauli2013}. The axisymmetric design features a 40\,mm long stenotic throat with a 20$^\circ$ connecting cone at one end and a step change in diameter at the other (see \autoref{fig:design_FDA} for more details).
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\linewidth]{chapter2/Figures/FDA/FDA_Design.png}
@@ -999,26 +999,43 @@ The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a si
 This configuration creates regions of accelerating and decelerating flow, shear stress variations, and recirculating flow, mimicking the flow dynamics observed in medical devices. Although medical devices are not part of the context of this thesis, this case presents interesting CFD challenges to tackle. The numerous studies handling it provide a didactic explanation on how different approaches, such as turbulence models, influence the obtained results within different Re regions. For the analysis, throat Reynolds numbers of Re\,=\,500 and Re\,=\,2000 will be considered. The prior lays in a similar range as the bloodflow in brain arteries and showcasing a fully laminar flow. For that reason it is easier to validate the computational framework, since transient turbulent effects are not present. The case of Re\,=\,2000 on the other hand sheds light into the solvers behaviour in the transition zone. Here, in some cases the jet breaks down in the rear end of the nozzle causing turbulent effects. The appearance of this breakdown depends on the used turbulence models, mesh refinement and experimental setup, and is thus introduces an interesting discussion about to what degree it is reasonable or not to refine the computations.
 
 \subsubsection*{Case setup}
-The FDA Nozzle has been experimentally tested by\,\cite{Stewart2012} for a blood-like solution containing water, glycerin, and sodium iodide with a density of 1056\,\kgm. The viscosity of the Newtonian fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
+The FDA Nozzle has been experimentally tested by 3 teams participating in the computational challenge by Stewart \etal\,\cite{Stewart2012}. The used liquid was a blood-like, Newtonian solution containing water, glycerin, and sodium iodide with a density of 1056\,kg/m$^3$. The viscosity of the fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
 \begin{equation}
-	\dot{Q}_{\Rey500} = 5.21\cdot10^{-6}\,\volflow,\qquad \dot{Q}_{\Rey2000} = 2.08\cdot10^{-5} \,\volflow
+	\dot{Q}_{\Rey500} = 5.21\cdot10^{3}\,\text{mm}^3/\text{s},\qquad \dot{Q}_{\Rey2000} = 2.08\cdot10^{4}\,\text{mm}^3/\text{s}
 \end{equation}
-The walls of the nozzle are set to no-slip conditions and the outlet is rendered traction-free. The nozzle has been generated for an axial extension of 0.168\,m ranging from $z$\,=\,-0.088\,m to $z$\,=\,0.08\,m. The interior of the nozzle was meshed with unstructured tetrahaedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the nozzle, elements are generated with an edgelength of 0.0002\,m and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The time discretization is done using BDF2 with regular timesteps at \dt\,=\,0.5\,ms and \dt\,=\,0.1\,ms for Re\,=\,500 and Re\,=\,2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
+The walls of the nozzle are set to no-slip conditions and the outlet is rendered traction-free. The nozzle has been generated for an axial extension of 168\,mm ranging from $z$\,=\,-88\,mm to $z$\,=\,80\,mm. The interior of the nozzle was meshed with unstructured tetrahaedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the nozzle, elements are generated with an edgelength of 0.2\,mm and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The time discretization is done using BDF2 with regular timesteps at \dt\,=\,0.5\,ms and \dt\,=\,0.1\,ms for Re\,=\,500 and Re\,=\,2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
 
 \subsubsection*{Results}
-Per-timestep convergence was obtained in the case of Re\,=\,500 within 5 iterations, while for Re\,=\,2000 the convergence depended on the stage of the simulations. Before attaining a steady state profile from the transient simulations, the 
-
-This was usually achieved after less than 10 iterations. 
-
-\begin{figure}
+Per-timestep convergence was obtained in the case of Re\,=\,500 within 4 iterations, while for Re\,=\,2000 the convergence depended on the stage of the simulations. Before attaining the steady-state profile shown in the lower half of \autoref{fig:FDA_Velocity_Re2000}, the simulation passed two phases. The first is given by the progressive advancement of the jet in the nozzle (as seen on the upper half of \autoref{fig:FDA_Velocity_Re2000}). Convergence speed there is above 2, while only 5 iterations are required to meet the set tolerance (as seen in \autoref{fig:nonlin_conv}).
+\begin{figure}[htb]
 	\centering
+	\begin{minipage}{0.99\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/profiles.jpg}
+	\end{minipage}
+	\vspace{0.5cm}
+	\begin{minipage}{0.4\linewidth}
+		\centering
+		\begin{tikzpicture}
+			\node[anchor=south west, inner sep=0] (colorbar) at (0,0) {
+				\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/colorbar.jpg}
+			};
+			\node[anchor=south] at (colorbar.north west) {0};
+			\node[anchor=south] at (colorbar.north east) {2000};
+			\node[anchor=south] at (colorbar.north) {Velocity [mm/s]};
+		\end{tikzpicture}
+	\end{minipage}
+	\caption[Transient and converged FDA Nozzle at Re 2000]{Opacity-coded velocity at Re\,=\,2000 at two states. Top: Initial transient phase with presence of vortex structures. Bottom: Converged stage past on which the results have been computed.}\label{fig:FDA_Velocity_Re2000}
+\end{figure}
+Once the jet reaches the outlet, it causes reentering flow through its shedding vortices. The reflux in turn affects the local coercivity causing convergence issues. Once the vortices are evacuated, the flow starts approaching its steady-state profile. In the last section on the right of \autoref{fig:nonlin_conv}, the seemingly two parallel curves follow from an alternating 2 and 3 subiterations needed for convergence.
 
+\begin{figure}[htb]
+	\centering
 	\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/nonlinear_convergence.pdf}
-
+	\caption[Non-linear convergence of the FDA Nozzle at Re\,=\,2000]{Non-linear convergence of the FDA Nozzle at Re\,=\,2000. Left: Initial residual at the beginning of each subiteration. The last residual is not plotted and is below 1e-6. One of every ten curves is shown with a fixed transparency. Right: Convergence order corresponding to the curves for all timesteps until a nearly steady-state is reached. The three sections mark (i) the travelling of the jet through the nozzle, (ii) the jet hitting the outflow boundaries, causing reflux and hindering convergence, and lastly the convergence towards the steady-state solution for which we report results.}\label{fig:nonlin_conv}
 \end{figure}
 
-
-The simulations have been analyzed after converging to a steady flow profile in both cases. Results were extracted along the main axis of the nozzle, recording the axial velocity $u_z$, pressure and massflow. The latter was transformed into a percentile error using the theoretically imposed value as suggested in\,\cite{Stewart2012}:
+Once a steady-state was reached with an initial residual below $10^{-6}$ for both Re, the results were extracted along the main axis of the nozzle, recording the axial velocity $u_z$, pressure and massflow. The latter was transformed into a percentile error using the theoretically imposed value as suggested in\,\cite{Stewart2012}:
 \begin{equation}
 	E_Q = 100\% \times \frac{\dot{Q} - \dot{Q}_{theory}}{\dot{Q}_{theory}}
 \end{equation}
@@ -1029,66 +1046,44 @@ The obtained profiles for Re\,=\,500 in \autoref{fig:ctrl_FDA_Re500} show mass c
 	\caption[Centerline results for the FDA Nozzle at Re\,=\,500]{Resulting mass conservation errors, pressures and axial velocities along the main nozzle axis at Re\,=\,500. Results are plotted against measurements and reference computations found in Stewart \etal\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re500}
 \end{figure}
 Further, cross sections of the flow were compared to Particle Imaging Velocimetry (PIV) measurements at six locations:
-\[z\in\{\text{-0.088\,m, -0.048\,m, -0.008\,m, 0.008\,m, 0.024\,m, 0.080\,m}\}\]
-The resulting profiles were extracted along the positive x-axis values and shown in \autoref{fig:FDA_Re500}. The axial velocity is well reconstructed in the first four locations, but shows a missmatch of approximately 0.05\,m/s at last recorded location. There, the measured values indicate a more strongly diffused pipeflow compared to the simulation.
-\begin{figure}[ht]
+\[
+	z \in \{-88\,\text{mm}, -48\,\text{mm}, -8\,\text{mm}, 8\,\text{mm}, 24\,\text{mm}, 80\,\text{mm}\}
+\]
+The resulting profiles were extracted along the positive x-axis values and shown in \autoref{fig:FDA_Re500}. The axial velocity is well reconstructed in the first four locations, but shows a missmatch of approximately 50\,mm/s at last recorded location. There, the measured values indicate a more strongly diffused pipeflow compared to the simulation.
+\begin{figure}[htb]
 	\centering
 	\input{chapter2/Figures/FDA/Re500/Fig_radial}
-	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,500]{Axial velocity profiles of the FDA Nozzle at Re\,=\,500 on different locations along the nozzle.}\label{fig:FDA_Re500}
+	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,500]{Axial velocity profiles of the FDA Nozzle at Re\,=\,500 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re500}
 \end{figure}
-When considering the Re\,=\,2000, the massflow is similarly well fit with a mean error below 0.2\%. In this case, the pressure is well predicted by the simulations throughout the given values. The centerline velocity is like-wise well fit, excepting the sections past $z$\,=\,0.048\,m. There, the PIV returns a strongly decaying peak velocity that is subject to large variations among three different experimental setups. This suggests the breakdown of the jet and subsequent turbulent structures that diffuse kinetik energy in the stream. For reference, the results of a laminar simulation conducted for the previously mentioned study\,\cite{Stewart2012} are shown. There, as in our case (see \autoref{fig:FDA_Velocity_Re2000}), the jet does not yet break down retaining most of its structured properties from the previous sections.
+When considering the Re\,=\,2000, the massflow is similarly well fit with a mean error below 0.2\%. In this case, the pressure is well predicted by the simulations throughout the given values. The centerline velocity is like-wise well fit, excepting the sections past $z$\,=\,48\,mm. There, the PIV returns a strongly decaying peak velocity that is subject to large variations among three different experimental setups. This suggests the breakdown of the jet and subsequent turbulent structures that diffuse kinetik energy in the stream. For reference, the results of a laminar simulation conducted for the previously mentioned study\,\cite{Stewart2012} are shown. There, as in our case (see \autoref{fig:FDA_Velocity_Re2000}), the jet does not yet break down retaining most of its structured properties from the previous sections.
 \begin{figure}[htbp]
 	\centering
 	\input{chapter2/Figures/FDA/Re2000/Fig_Ctrl}
 	\caption[Centerline results for the FDA Nozzle at Re\,=\,2000]{Resulting mass conservation errors, pressures and axial velocities along the main Nozzle axis at Re\,=\,2000. Results are plotted against measurements and reference computations found in Stewart \etal\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re2000}
 \end{figure}
 The breakdown can be also seen in the radial cross-sections, which this time are taken at slightly modified locations (again, based on the curves provided in\,\cite{Stewart2012}):
-\[z\in\{\text{-0.088\,m, -0.08\,m, 0.008\,m, 0.032\,m, 0.060\,m, 0.080\,m}\}\]
+\[
+	z \in \{-88\,\text{mm}, -80\,\text{mm}, 8\,\text{mm}, 32\,\text{mm}, 60\,\text{mm}, 80\,\text{mm}\}
+\]
 Similarly to before, the first four sections confirm a good match between theory and practice. In the latter two sections, the jet flattens out in the experiment, while the conducted simulations of this work and the reference publication remain similar.
 \begin{figure}[ht]
 	\centering
 	\input{chapter2/Figures/FDA/Re2000/Fig_radial}
-	[Axial velocity profiles of the FDA Nozzle at Re\,=\,2000]{Axial velocity profiles of the FDA Nozzle at Re\,=\,2000 on different locations along the nozzle.}\label{fig:FDA_Re2000}
+	[Axial velocity profiles of the FDA Nozzle at Re\,=\,2000]{Axial velocity profiles of the FDA Nozzle at Re\,=\,2000 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re2000}
 \end{figure}
-
-\begin{figure}[htb]
-	\centering
-	\begin{minipage}{0.99\linewidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/profiles.jpg}
-	\end{minipage}
-
-	\vspace{0.5cm}
-
-	\begin{minipage}{0.4\linewidth}
-		\centering
-		\begin{tikzpicture}
-			% Load the colorbar image
-			\node[anchor=south west, inner sep=0] (colorbar) at (0,0) {
-				\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/colorbar.jpg}
-			};
-			% Add text annotations
-			% Adjust coordinates based on your colorbar image
-			\node[anchor=south] at (colorbar.north west) {0};
-			\node[anchor=south] at (colorbar.north east) {2000}; % Adjust as per your range
-			\node[anchor=south] at (colorbar.north) {Velocity [mm/s]}; % Label
-		\end{tikzpicture}
-	\end{minipage}
-	\caption[Transient and converged FDA Nozzle at Re 2000]{Opacity-coded velocity at Re 2000 at two states. Top: Initial transient phase with presence of vortex structures. Bottom: Converged stage past on which the results have been computed.}\label{fig:FDA_Velocity_Re2000}
-\end{figure}
-
 
 \subsubsection*{Discussion}
 As stated before, this case serves two purposes. First, validating the numerical framework for a more simple, fully laminar setup at Re\,=\,500, and secondly providing a perspective on the performance in a more complex flow regime, Re\,=\,2000. The fully laminar matches experimental data and other reported results from laminar simulations\,\cite{Stewart2012}, reassuring us about the validity of our method. Hereby, it is worth noting that the obtained results base on a mesh that is far from the resolutions that are otherwise used for benchmarking the FDA Nozzle\,\cite{Jain2020, Bergersen2019}. This is important to consider since simulations of hemodynamics cannot afford excessive computational demands.
 
 For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the missmatch among cutting edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminute perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen. Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \etal\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement in appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
 
+\nolinenumbers~\\
+
 \begin{tcolorbox}[conclusions]
 
 	In this chapter, three main topics have been described and discussed: (i) the derivation of the equations dominating the flow of blood in human arteries, (ii) the numerical frameworks to approximate them and lastly (iii) two illustrative validation cases on which newly proposed methods were examined. With the numerical experiments yielded satisfactory results giving credit to the introduced tensor metric, but more extensive verification and convergence tests should be carried out to confirm its validity. Further, the experiments have served a didactive purpose during the course of the project, since thanks to them some optimal schemes and modelling options were identified, saving some time in setting up the framework for patient-specific simulations. These introduce namely other, but equally complex challenges to tackle.
 \end{tcolorbox}
 
-\nolinenumbers
 
 \bibliographystyle{apsrev}
 {\footnotesize
