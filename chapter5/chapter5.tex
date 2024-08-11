@@ -6,11 +6,11 @@
 \chapter{Patient-specific analysis with flow-diverter treatment}\minitoc\newpage\label{chap.5}
 \begin{tcolorbox}[abstract]
 
-	In the previous chapters, we have developed the numerical framework for VMS in fluid simulations, examined the specifics of brain arterial hemodynamics, and created a tool for modeling Flow-Diverter Stents (FDS) based on geometric constraints. Leveraging the experience and tools acquired, we now apply this framework to three patient cases featuring two variations of intracranial aneurysms, each presenting unique challenges to clinicians. These cases highlight situations where FDS treatment is considered highly promising, despite the still high fatality rates. First, we address the giant aneurysm (>$,25,mm$) previously discussed. This case will be thoroughly analyzed from medical and anatomical perspectives before delving into the simulation of pre- and postoperative hemodynamics. The second case involves blister-like aneurysms, formations that are barely visible on CT imaging and are characterized by critically thin and fragile walls. Both types of aneurysms are poorly understood and necessitate further research to enhance treatment outcomes. Through our simulations, we demonstrate the capabilities of the framework and, more importantly, provide hemodynamic results for these scarcely documented aneurysms, correlating our findings with existing literature.
+	In the previous chapters, we have developed the numerical framework for VMS in fluid simulations, examined the specifics of brain arterial hemodynamics, and created a tool for modeling Flow-Diverter Stents (FDS) based on geometric constraints. Leveraging the experience and tools acquired, we now apply this framework to three patient cases featuring two variations of intracranial aneurysms, each presenting unique challenges to clinicians. These cases highlight situations where FDS treatment is considered highly promising, despite the still high fatality rates. First, we address the giant aneurysm ($>$\,25\,mm) previously discussed. This case will be thoroughly analyzed from medical and anatomical perspectives before delving into the simulation of pre- and postoperative hemodynamics. The second case involves blister-like aneurysms, formations that are barely visible on CT imaging and are characterized by critically thin and fragile walls. Both types of aneurysms are poorly understood and necessitate further research to enhance treatment outcomes. Through our simulations, we demonstrate the capabilities of the framework and, more importantly, provide hemodynamic results for these scarcely documented aneurysms, correlating our findings with existing literature.
 
 	\tcblower
 
-	Dans les chapitres précédents, nous avons travaillé sur le cadre numérique du VMS dans les simulations de fluides, étudié les spécificités de l'hémodynamique artérielle cérébrale et développé un outil pour modéliser les Stents Flow-Diverter (FDS) sur la base de contraintes géométriques. Forts de l'expérience et des outils acquis, nous nous apprêtons maintenant à utiliser le cadre sur trois cas de patients présentant deux variantes d'anévrismes intracrâniens, chacun posant des défis très particuliers aux cliniciens. Ces cas illustrent certaines situations dans lesquelles le traitement FDS est considéré comme l'outil le plus prometteur, même si les taux de mortalité sont encore élevés. Tout d'abord, nous traiterons le cas de l'anévrisme géant ($>$25\,mm) qui a fait l'objet d'une recherche dans le chapitre précédent. Le cas sera discuté en détail en tenant compte des aspects médicaux et anatomiques avant de plonger dans la simulation de l'hémodynamique pré et postopératoire. Le second cas d'application concerne les anévrismes de type blister, des formations à peine visibles sur l'imagerie CT caractérisées par des parois extrêmement minces et fragiles. Ces deux types de maladies sont mal compris et nécessitent des recherches supplémentaires afin d'améliorer le traitement prospectif des personnes qui en ont besoin. Avec les simulations d'exécution, nous présentons le cadre, mais surtout, nous fournissons des résultats hémodynamiques sur des anévrismes rarement documentés et nous les mettons en relation avec la littérature existante.
+	Dans les chapitres précédents, un framework numérique pour les simulations hémodynamiques utilisant le méthode de VMS a été établi, ainsi que l'adaptation des simulations aux spécificités anatomiques du réseau artériel et l'intégration des stents à diversion de flux, en validant ces approches par des méthodes numériques et des comparaisons avec des données cliniques. À partir de cette base, le framework est appliqué à trois cas cliniques impliquant deux types d'anévrismes intracrâniens, chacun posant des défis spécifiques. Ces cas illustrent des situations où l'utilisation des stents à diversion de flux est particulièrement prometteuse, bien que les taux de mortalité restent élevés. Le premier cas concerne un anévrisme géant (>\,25\,mm), qui sera examiné en détail tant du point de vue médical qu'anatomique avant d'effectuer des simulations des hémodynamiques pré- et postopératoires. Le second cas implique des anévrismes ``blister-like'', difficilement visibles en imagerie CT et caractérisés par des parois extrêmement fines et fragiles. Ces types d'anévrismes sont encore mal compris et nécessitent une recherche supplémentaire pour améliorer les résultats des traitements. Les simulations permettront de démontrer les capacités du framework et de fournir des données hémodynamiques pour ces anévrismes peu documentés, en les mettant au regard des données et conclusions établies dans la littérature scientifique.
 
 \end{tcolorbox}
 
@@ -23,7 +23,7 @@ Flow-diverter stents, although sometimes difficult to deploy in giant aneurysms,
 \subsection{Patient Medical Records}
 The patient was a woman born in January 1963, with no history of smoking, hypertension, or family history of intracranial aneurysms. She experienced vertigo, anxiety, and a strange sensation, prompting her to consult a neurologist. Following an initial consultation, she underwent an MRI scan of the brain, which revealed a giant intracranial aneurysm compressing the left temporal lobe\footnote{Temporal lobes: Regions of the brain situated on both halves above the ears.}. Her neurologist referred her to a neuro-interventionalist for further evaluation. A cerebral arteriography confirmed the presence of a giant aneurysm in the left supra-clinoid ICA, between the ophthalmic and communicating segments. The aneurysm's involvement of the parent artery caused delayed opacification of the left middle cerebral artery. The small anterior communicating artery was visible during compression of the left ICA.
 
-Given the symptoms and risk of rupture, endovascular treatment was recommended and accepted by the patient. One week before the procedure, she began taking aspirin (75 mg/day) and prasugrel\footnote{Prasugrel: A platelet aggregation inhibitor medication.} (10 mg/day) to reduce the risk of blood clots. The procedure commenced with a balloon test occlusion, where a balloon was temporarily inflated in the artery to block blood flow. A guiding catheter was placed in the right and left internal carotid arteries. A Scepter XC 4--11 balloon was positioned in the left ICA upstream of the aneurysm and inflated to stop blood flow. Contrast injection via the right catheter showed a delay of over one second in the opacification of the left cerebral veins compared to the right, indicating that the left carotid artery could not be safely occluded. Therefore, preserving and reconstructing the left ICA with a flow-diverting stent was necessary. A $3$,mm FRED Jr flow-diverter was deployed from the left MCA (M1 segment) to the left ICA upstream of the aneurysm, immediately causing contrast stasis in the aneurysm sac. Upon waking up, the patient showed no neurological deficits and continued antiplatelet therapy. At her follow-up 1.5 months later, her clinical exam returned normal results. Six months after the procedure, a follow-up cerebral arteriography showed a patent stent\footnote{Patent (stent): Maintaining the openness and integrity of the vessel or structure where it has been placed.} with unchanged opacification of the aneurysm sac. Continued dual antiplatelet therapy was advised, with a repeat arteriography scheduled for ten months post-procedure.
+Given the symptoms and risk of rupture, endovascular treatment was recommended and accepted by the patient. One week before the procedure, she began taking aspirin (75\,mg/day) and prasugrel\footnote{Prasugrel: A platelet aggregation inhibitor medication.} (10\,mg/day) to reduce the risk of blood clots. The procedure commenced with a balloon test occlusion, where a balloon was temporarily inflated in the artery to block blood flow. A guiding catheter was placed in the right and left internal carotid arteries. A Scepter XC 4--11 balloon was positioned in the left ICA upstream of the aneurysm and inflated to stop blood flow. Contrast injection via the right catheter showed a delay of over one second in the opacification of the left cerebral veins compared to the right, indicating that the left carotid artery could not be safely occluded. Therefore, preserving and reconstructing the left ICA with a flow-diverting stent was necessary. A 3\,mm FRED Jr flow-diverter was deployed from the left MCA (M1 segment) to the left ICA upstream of the aneurysm, immediately causing contrast stasis in the aneurysm sac. Upon waking up, the patient showed no neurological deficits and continued antiplatelet therapy. At her follow-up 1.5 months later, her clinical exam returned normal results. Six months after the procedure, a follow-up cerebral arteriography showed a patent stent\footnote{Patent (stent): Maintaining the openness and integrity of the vessel or structure where it has been placed.} with unchanged opacification of the aneurysm sac. Continued dual antiplatelet therapy was advised, with a repeat arteriography scheduled for ten months post-procedure.
 
 Eight months after the intervention, the patient reported a sudden headache. A CT scan revealed spontaneous hyperdensity in the aneurysm, suggesting thrombosis. A week later, she suffered a sudden coma, with a Glasgow Coma Scale score of 4, indicating severe brain injury. A CT scan revealed subarachnoid hemorrhage, intraventricular hemorrhage, and a left temporal hematoma\footnote{Hematoma: A solid swelling of clotted blood within the tissues.}. Cerebral arteriography showed persistent aneurysm opacification, a patent stent, and active contrast leakage from the posteroinferior part of the aneurysm sac. A microcatheter was placed in the aneurysm sac through the stent mesh, and the sac was occluded with coils, halting the bleeding and completely occluding the aneurysm. Sadly, the patient passed away five days after this second intervention.
 
@@ -59,6 +59,7 @@ Eight months after the intervention, the patient reported a sudden headache. A C
 \end{figure}
 
 
+
 \subsection{Arterial Anatomy}
 \subsubsection*{Circle of Willis}
 An MRA scan confirmed an incomplete Circle of Willis (CoW), missing the posterior communicating artery ipsilateral to the aneurysm. The contralateral posterior communicating artery, which appears to have a fetal configuration, supplies most of the blood to the left posterior circulation. The anterior communicating artery, although present, is small, as confirmed during a clamp test. Based on these features, the CoW structure is categorized as a type PCP, a variant found in approximately 7\% of the population\,\cite{Hindenes2023}. Although this CoW configuration carries a 2.3-fold increased risk of aneurysm formation, its effect on rupture risk remains unclear.
@@ -70,24 +71,38 @@ A crucial factor in this case is the presence of tapering (T) and vessel deforma
 
 After stent deployment, the proximal vessel sections remain largely unchanged. However, the clinoidal ICA shrinks, with diameters of 3.33,mm, representing a 20\% tapering relative to the cavernous ICA. The sections at the aneurysm have become nearly identical in diameter, reaching commonly observed sizes. Although it is not verifiable from imaging, these effects are likely caused by the mechanical forces exerted by the stent and the progressive remodeling of the artery.
 
-% Table with vessel diameters at the C3, before the aneurysm, and at the terminus
-\begin{table}[htb]
-	\centering
-	\renewcommand{\arraystretch}{1.4}
-	\setlength{\tabcolsep}{10pt}
-	\begin{tabular}{l c c c c c c}
-		\multirow{2}{*}{} & \multicolumn{2}{c}{Preoperative} & \multicolumn{2}{c}{Postoperative} & \multicolumn{2}{c}{Literature\,\cite{Baz2021}}                                 \\
-		\cline{2-7}
-		                  & $d$\,[mm]                        & T\,[\%]                           & $d$\,[mm]                                      & T\,[\%] & $d$\,[mm] & T\,[\%] \\
-		\hline
-		Cavernous  ICA    & 4.16                             & -                                 & 4.14                                           & -       & 4.13      & -       \\
-		Clinoidal  ICA    & 3.73                             & 10                                & \textcolor{red}{3.33}                          & 20      & 3.98      & 4       \\
-		Aneurysm proximal & 2.84*                            & 32                                & 2.76                                           & 33      & 2.86      & 31      \\
-		Aneurysm distal   & \textcolor{red}{2.15}            & 48                                & 2.71                                           & 35      & 2.70      & 35      \\
-		\hline
-	\end{tabular}
+\begin{figure}[htb]
+	\begin{center}
+		\begin{tikzpicture}
+			\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=0.5\linewidth]{chapter5/Figures/Medical/scheme_cell.jpg}};
+			\begin{scope}[x={(image.south east)},y={(image.north west)}]
+
+				\draw[black, thick] (0.95, 0.6) -- (0.85, 0.6) node[near start, right, xshift=0.2cm, yshift=0.0cm] {Cavernous ICA};
+
+				\draw[black, thick] (0.9, 0.2) -- (0.8, 0.3) node[near start, right, xshift=0.2cm, yshift=-0.1cm] {Clinoidal ICA};
+
+				\draw[black, thick] (0.44, 0.2) -- (0.44, 0.32) node[near start, left, xshift=1.7cm, yshift=-0.4cm] {Proximal};
+
+				\draw[black, thick] (0.1, 0.1) -- (0.28, 0.25) node[near start, left, xshift=-0.25cm, yshift=-0.3cm] {Distal};
+			\end{scope}
+		\end{tikzpicture}
+
+		\renewcommand{\arraystretch}{1.4}
+		\setlength{\tabcolsep}{10pt}
+		\begin{tabular}{l c c c c c c}
+			\multirow{2}{*}{} & \multicolumn{2}{c}{Preoperative} & \multicolumn{2}{c}{Postoperative} & \multicolumn{2}{c}{Literature\,\cite{Baz2021}}                                 \\
+			\cline{2-7}
+			                  & $d$\,[mm]                        & T\,[\%]                           & $d$\,[mm]                                      & T\,[\%] & $d$\,[mm] & T\,[\%] \\
+			\hline
+			Cavernous  ICA    & 4.16                             & -                                 & 4.14                                           & -       & 4.13      & -       \\
+			Clinoidal  ICA    & 3.73                             & 10                                & \textcolor{red}{3.33}                          & 20      & 3.98      & 4       \\
+			Proximal & 2.84*                            & 32                                & 2.76                                           & 33      & 2.86      & 31      \\
+			Distal   & \textcolor{red}{2.15}            & 48                                & 2.71                                           & 35      & 2.70      & 35      \\
+			\hline
+		\end{tabular}
+	\end{center}
 	\caption[Patient vessel diameters]{Vessel diameters ($d$) and Tapering (T) of the vessels with respect to the cavernous ICA section. Literature values for women were taken from a reference study by Baz \etal\,\cite{Baz2021}. The diameter (*) is the circular equivalent of the area of the elliptic cross-section. Red-tainted values mark that they are outside the standard deviation of the cited work.}\label{tab:pat_geo}
-\end{table}
+\end{figure}
 
 \subsection{Aneurysm Properties}
 
@@ -98,7 +113,6 @@ A week later, the aneurysm ruptured, showing a large thrombosis at the same loca
 
 \subsubsection*{Movement}
 The displacement of the aneurysm wall induced by the cardiac pulse became visible only after the rupture. The movement resembled an inflating and deflating balloon, with no noticeable displacement at the neck and progressively more significant movement towards the tip. At the tip, the aneurysm bordered the ventricle, a space filled with cerebrospinal fluid that allows movement. Quantitative displacement was difficult to measure due to the rotating video angiography (see the left of \autoref{fig:wall_movement} for reference).
-
 \begin{figure}[htbp]
 	\centering
 	\begin{tikzpicture}
@@ -167,20 +181,20 @@ The aneurysm hemodynamics before the insertion of the FDS are characterized by a
 		\rotatebox[origin=c]{90}{\textbf{TAWSS and OSI}}                            &
 		\begin{minipage}{0.45\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/pre.png}
+			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/pre.jpg}
 		\end{minipage}   &
 		\begin{minipage}{0.45\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post.png}
+			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post.jpg}
 		\end{minipage}     \\[3cm]
 		\rotatebox[origin=c]{90}{\textbf{Velocity at Systole}}                      &
 		\begin{minipage}{0.45\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/pre_v.png}
+			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/pre_v.jpg}
 		\end{minipage} &
 		\begin{minipage}{0.45\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post_v.png}
+			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post_v.jpg}
 		\end{minipage}   \\
 	\end{tabular}
 	\caption[TAWSS and OSI]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics}
@@ -201,28 +215,28 @@ The Pulsatility Index (PI) in the postoperative state was computed at 1.24, rese
 		\rotatebox[origin=c]{90}{\textbf{Preoperative}}                                                             &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_diastole.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_diastole.jpg}
 		\end{minipage}  &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_mean.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_mean.jpg}
 		\end{minipage}      &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_systole.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_systole.jpg}
 		\end{minipage}      \\[1cm]
 		\rotatebox[origin=c]{90}{\textbf{Postoperative}}                                                            &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_diastole.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_diastole.jpg}
 		\end{minipage} &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_mean.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_mean.jpg}
 		\end{minipage}     &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_systole.png}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_systole.jpg}
 		\end{minipage}     \\
 	\end{tabular}
 	\caption[Velocity streamlines]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics2}
@@ -400,6 +414,7 @@ The insertion of the first stent yields an estimated metal coverage of 21\% and 
 
 \begin{figure}[htb]
 	\centering
+	\addtolength{\tabcolsep}{-0.2em}
 	\begin{tabular}{ccccc}
 		\multicolumn{1}{c}{}                                                                  &
 		\multicolumn{1}{c}{Unstented}                                                         &
@@ -450,7 +465,7 @@ The insertion of the first stent yields an estimated metal coverage of 21\% and 
 
 \begin{figure}[htb]
 	\centering
-	\addtolength{\tabcolsep}{-4em}
+	\addtolength{\tabcolsep}{-0.2em}
 	\begin{tabular}{ccccc}
 		\multicolumn{1}{c}{}                                                                  &
 		\multicolumn{1}{c}{Unstented}                                                         &
