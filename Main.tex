@@ -33,20 +33,18 @@
 \jurymember{8}{Elie HACHEM}{Ph.D., Mines Paris}{Directeur de thèse}
 
 \frabstract{
-Sed tamen haec cum ita tutius observentur, quidam vigore artuum
-inminuto rogati ad nuptias ubi aurum dextris manibus cavatis
-offertur, inpigre vel usque Spoletium pergunt.\ haec nobilium sunt
-instituta.
+    Les anévrismes intracrâniens sont courants mais mal compris, malgré les graves conséquences d'une rupture. La complexité des processus biochimiques du cerveau et la délicatesse de son environnement limitent les études in vivo. La dynamique des fluides numérique (CFD) peut aider à surmonter ces défis en reproduisant les conditions d'écoulement dans le cerveau, qui sont censées influencer l'initiation, la croissance et la rupture des anévrismes. Les simulations CFD peuvent également tester des traitements hypothétiques et évaluer leur impact. Cette thèse se concentre sur le développement d'un cadre de simulation de haute fidélité pour modéliser l'hémodynamique cérébrale, dans le but d'améliorer notre compréhension des anévrismes intracrâniens et de perfectionner leur traitement.
+
+    La thèse commence par explorer les aspects médicaux des anévrismes cérébraux, y compris leurs différents types, options de traitement et risques associés. Elle aborde ensuite la physique et les méthodes numériques qui constituent la base du cadre de simulation, en proposant de nouvelles contributions méthodologiques. Avec ces connaissances et validations en main, le travail progresse vers l'adaptation des simulations à l'environnement vasculaire du cerveau, en discutant des aspects critiques tels que la segmentation, les conditions aux limites et l'étendue du domaine simulé. Pour recréer virtuellement le déploiement d'un stent de dérivation, un algorithme basé sur des contraintes géométriques est développé et rigoureusement validé à l'aide d'exemples tirés de la littérature, de données expérimentales et de cas réels de patients. Dans le dernier chapitre, ces outils sont appliqués pour calculer l'hémodynamique dans trois cas complexes de patients présentant des anévrismes rompus. Les effets du traitement par stent de dérivation sont analysés et comparés aux données médicales les plus récentes.
 }
 
 \enabstract{
-Ego vero sic intellego, Patres conscripti, nos hoc tempore in
-provinciis decernendis perpetuae pacis habere oportere rationem. Nam
-quis hoc non sentit omnia alia esse nobis vacua ab omni periculo
-atque etiam suspicione belli?
+    Intracranial aneurysms are common but not well understood, despite the severe consequences of rupture. The brain's complex biochemical processes and delicate environment limit in-vivo studies. Computational Fluid Dynamics (CFD) can help overcome these challenges by replicating the brain's flow conditions, which are thought to influence the initiation, growth, and rupture of aneurysms. CFD simulations can also test hypothetical treatments and evaluate their impact. This thesis focuses on developing a high-fidelity computational framework to simulate brain hemodynamics, aiming to enhance our understanding of intracranial aneurysms and improve their treatment.
+
+    The thesis begins by exploring the medical aspects of cerebral aneurysms, including their various types, treatment options, and associated risks. It then delves into the physics and numerical methods that form the foundation of the simulation framework, offering new contributions to the methodology. With this knowledge and validation in hand, the work progresses to adapt the simulations to the brain's vascular environment, discussing critical aspects such as segmentation, boundary conditions, and the extent of the simulated domain. To virtually recreate the deployment of a flow diverter stent, an algorithm based on geometrical constraints is developed and thoroughly validated using literature examples, experimental data, and real patient cases. In the final chapter, these tools are applied to compute the hemodynamics in three complex patient cases involving ruptured aneurysms. The effects of flow diverter treatment are analyzed and compared with state-of-the-art medical literature.
 }
 
-\frkeywords{Intracranial aneurysms, Haemodynamics, Computational Flud Dynamics, Finite Elements, Variational Multiscale Method}
+\frkeywords{Anévrismes intracrâniens, hémodynamique, dynamique des fluides numérique, méthode des éléments finis, méthode variationnelle multi-échelle}
 \enkeywords{Intracranial aneurysms, Haemodynamics, Computational Flud Dynamics, Finite Elements, Variational Multiscale Method}
 
 \hypersetup{
@@ -64,7 +62,7 @@ atque etiam suspicione belli?
     pdfproducer={Pablo Jeken Rico},% producer of the document
     pdfkeywords={Haemodynamics} {Intracranial aneurysms} {Meshing},% list of keywords
     pdfnewwindow=true,% links in new window
-    colorlinks=,% false: boxed links; true: colored links
+    colorlinks=false,% false: boxed links; true: colored links
     linkcolor=black,% color of internal links (change box color with linkbordercolor)
     citecolor=black,% color of links to bibliography
     filecolor=black,% color of file links
@@ -72,13 +70,14 @@ atque etiam suspicione belli?
 }
 
 \pgfplotsset{
-ylabel style={overlay},
-yticklabel style={overlay},
-every axis/.append style={
-    label style={font=\scriptsize},
-    tick label style={font=\scriptsize},
-    legend style={font=\tiny}
-}}
+    ylabel style={overlay},
+    yticklabel style={overlay},
+    every axis/.append style={
+        label style={font=\scriptsize},
+        tick label style={font=\scriptsize},
+        legend style={font=\tiny}
+    }
+}
 
 \geometry{left=3cm}
 \geometry{right=3cm}
@@ -118,7 +117,7 @@ every axis/.append style={
 % \include{./chapter2/chapter2}
 % \include{./chapter3/chapter3}
 % \include{./chapter4/chapter4}
-\include{./chapter5/chapter5}
+% \include{./chapter5/chapter5}
 \include{./conclusion/conclusion}
 
 %\appendix
