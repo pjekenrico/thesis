@@ -556,7 +556,7 @@ Returning to the proposed stabilization by\,\cite{Bazilevs2007}, we likewise fin
 Then the tensor $G$ is defined by \autoref{eqn:def_G}, that by construction is Symmetric Positive Definite (SPD) and composed by constant entries for linear elements.
 \begin{equation}
 	\begin{split}
-		G = \frac{\partial \vec{\xi}}{\partial \vec{x}}^T \otimes \frac{\partial \vec{\xi}}{\partial \vec{x}}
+		G = \frac{\partial \vec{\xi}}{\partial \vec{x}}^T \frac{\partial \vec{\xi}}{\partial \vec{x}}
 	\end{split}\label{eqn:def_G}
 \end{equation}
 In a series of implementations with the unit-triangle as a reference, we have encountered some difficulties that have lead to a more in depth analysis of the problem. At all points, we keep in mind that the definition of the methodology might have been misunderstood, regardless of the large number of publications giving similar descriptions on how to implement it. To show the key issues, take a simple 2D example:

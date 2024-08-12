@@ -7,506 +7,511 @@
 
 \begin{tcolorbox}[abstract]
 
-	After a study on the fluid physics and numerics, the computational framework will be now adapted to the specific conditions of the brain arterial flow. For this purpose, we consider first an anatomical description of the arterial network and its functions. Then angiographic imaging and the segmentation procedure are described, highlighting their relevance for subsequent simulations. Commonly used boundary conditions are then discussed in relationship with the extent of the simulated domain. This latter question has been the seed for the first publication that has been carried out during the course of this work ``Evaluating the Impact of Domain Boundaries on Hemodynamics in Intracranial Aneurysms within the Circle of Willis''\cite{Jeken-Rico2023}. From the analysis, we show that in the three patient cases, the hemodynamics do change considerably and a thorough check of the arterial system should be carried out before simulating. To that purpose, dynamic CT imaging, clamp tests and MR images can provide the necessary informations about hipoplasia, flow directions and vessel patency.
+ After reviewing the fluid physics and numerics, the computational framework will now be adapted to the specific conditions of the brain arterial flow. For this purpose, we consider first an anatomical description of the arterial network and its functions. Then angiographic imaging and the segmentation procedure are described, highlighting their relevance for subsequent simulations. Commonly used boundary conditions are then discussed in relationship with the extent of the simulated domain. This latter question has been the seed for the first publication that has been carried out during the course of this work ``Evaluating the Impact of Domain Boundaries on Hemodynamics in Intracranial Aneurysms within the Circle of Willis''\cite{Jeken-Rico2023}. From the analysis, we show that in the three patient cases, the hemodynamics do change considerably and a thorough check of the arterial system should be carried out before simulating. To that purpose, dynamic CT imaging, clamp tests and MR images can provide the necessary information about hypoplasia, flow directions and vessel patency.
 
-	\tcblower
+    \tcblower
 
-	Suite à l'étude de la physique des fluides et des méthodes numériques, nous ajusterons désormais notre approche aux spécificités de l'écoulement sanguin cérébral. Ainsi est présenté l'anatomie du réseau artériel et ses fonctions. Les méthodes d'imagerie angiographique et le processus de segmentation seront ensuite décrits, mettant en lumière leur importance pour les simulations ultérieures. Nous examinerons ensuite le maillage, en abordant les aspects de l'extrusion et de la génération des couches limites. La discussion porte ensuite sur les conditions aux limites couramment utilisées et leur pertinence pour le domaine simulé. Ce sujet a été exploré dans notre première publication, ``Evaluating the Impact of Domain Boundaries on Hemodynamics in Intracranial Aneurysms within the Circle of Willis'' (Évaluation de l'impact des limites du domaine sur l'hémodynamique des anévrismes intracrâniens dans le cercle de Willis)\'\cite{Jeken-Rico2023}. Nos résultats indiquent que l'hémodynamique peut varier de manière significative d'un patient à l'autre, ce qui souligne l'importance de l'étude du système artériel avant de procéder à des simulations. Pour ce faire, un examen de tomodensitométrie, aussi appelé CT-Scan, un test de clamp ou un IRM, peuvent permettre de mesurer directement les données nécessaires du système artériel comme l'hipoplasie, la direction des flux et la perméabilité des vaisseaux.
+ Suite à l'étude de la physique des fluides et des méthodes numériques, nous ajusterons désormais notre approche aux spécificités de l'écoulement sanguin cérébral. Ainsi est présenté l'anatomie du réseau artériel et ses fonctions. Les méthodes d'imagerie angiographique et le processus de segmentation seront ensuite décrits, mettant en lumière leur importance pour les simulations ultérieures. Nous examinerons ensuite le maillage, en abordant les aspects de l'extrusion et de la génération des couches limites. La discussion porte ensuite sur les conditions aux limites couramment utilisées et leur pertinence pour le domaine simulé. Ce sujet a été exploré dans notre première publication, ``Evaluating the Impact of Domain Boundaries on Hemodynamics in Intracranial Aneurysms within the Circle of Willis'' (Évaluation de l'impact des limites du domaine sur l'hémodynamique des anévrismes intracrâniens dans le cercle de Willis)\,\cite{Jeken-Rico2023}. Nos résultats indiquent que l'hémodynamique peut varier de manière significative d'un patient à l'autre, ce qui souligne l'importance de l'étude du système artériel avant de procéder à des simulations. Pour ce faire, un examen de tomodensitométrie, aussi appelé CT-Scan, un test de clamp ou un IRM, peuvent permettre de mesurer directement les données nécessaires du système artériel comme l'hipoplasie, la direction des flux et la perméabilité des vaisseaux.
 
 \end{tcolorbox}
 \linenumbers
-\section{The Arterial System}\label{chap3:sec1}
-The cardiovascular system is a complex network responsible for the circulation of blood, delivering oxygen and nutrients to tissues, and removing waste products. The aorta, the largest artery in the body, originates from the left ventricle of the heart. The blood that reaches the brain arterial system leaves the aorta through the left common carotid artery and the brachiocephalic\footnote{Cephalic: In or relating to the head.} trunk, a vessel from where the left common carotid artery originates. These ascend, splitting at the height of the neck into into the external and Internal Carotid Arteries (ICA). The former supply most extracranial tissues, while the latter lead up to the base of the brain. The ICAs are the primarily supply the brain, carrying approximately 72\% of the total flux\cite{Zarrinkoob2015}. The remainder is supplied through the vertebral arteries, which run along the vertebral spine and merge into the Basilar Artery (BA). The flow from the BA usually joins the ICAs forming an anastomotic\footnote{Anastomosis: A cross-connection between adjacent channels, tubes, fibres, or other parts of a network.} network known as the Circle of Willis (CoW), which ensures redundancy in cerebral blood supply. The ICAs enter the skull through the carotid canals, providing the anterior circulation of the brain and giving rise to several critical branches. The ophthalmic artery supplies the eyes and orbits, the anterior cerebral artery supplies the medial portions of the frontal lobes and superior medial parietal lobes, and the middle cerebral artery supplies the lateral aspects of the frontal, temporal, and parietal lobes, encompassing critical areas for motor and sensory functions. The BA bifurcates into the Posterior Cerebral Arteries (PCA), supplying the occipital lobes, the inferior parts of the temporal lobes, and the brainstem.
 
-\begin{table}[h!]
-	\centering
-	\renewcommand{\arraystretch}{1.2}
-	\setlength{\tabcolsep}{4pt}
-	\small
-	\begin{tabular}{l c c c}
-		\toprule
-		\textbf{Anatomical region} & \textbf{Mean Re} & \textbf{Peak Re} & \textbf{Wo} \\
-		\midrule
-		Ascending aorta            & 1000             & 4000--9000       & 19          \\
-		Abdominal aorta            & 600              & 2500--4500       & 13          \\
-		Coronary arteries          & 250              & 600--800         & 3           \\
-		Carotid arteries           & 450              & 900--1200        & 4           \\
-		Internal Carotid arteries  & 350              & 400--550         & 3.2         \\
-		Vertebral arteries         & 180              & 100--400         & 2.1         \\
-		Main pulmonary artery      & 1600             & 3000--4500       & 16          \\
-		Arterioles                 & 1                & 1                & 0.06        \\
-		Capillaries                & $10^{-3}$        & $10^{-3}$        & 0.003       \\
-		Inferior Vena Cava         & 400              & 1500--2500       & 13          \\
-		\bottomrule
-	\end{tabular}
-	\caption{Hemodynamic parameters for various anatomical regions from\,\cite{Menon2024} and measurements of\,\cite{Cebral2009_data}.}\label{table:hemodynamics}
+To portray a physiologically accurate representation of the flow in intracranial aneurysms, it is crucial to understand the specific properties of brain arterial flow. Hemodynamics in the human body may change considerably by location and resolving the flow in each of those cases may encompass additional efforts or permit simplifications. For instance, one may consider turbulence modelling and vessel compliance when dealing with the aorta. Capillaries on the other hand may require more complex rheology modelling, but allow for a simple constitutive model for the fluid motion. For this reason, we start by describing the arterial system with a dedicated emphasis on the brain vessels that are prone to aneurysms.
+
+\section{The Arterial System}\label{chap3:sec1}
+The cardiovascular system is a complex network responsible for the circulation of blood, delivering oxygen and nutrients to tissues, and removing waste products. The aorta, the largest artery in the body, originates from the left ventricle of the heart. The blood that reaches the brain arterial system leaves the aorta through the left common carotid artery and the brachiocephalic\footnote{Cephalic: In or relating to the head.} trunk, a vessel from where the left common carotid artery originates. These ascend, splitting at the height of the neck into the external and Internal Carotid Arteries (ICA). The former supplies most extracranial tissues, while the latter leads up to the base of the brain. The ICAs are the brain's principal supplier, carrying approximately 72\% of the total flux\cite{Zarrinkoob2015}. The remainder is carried through the vertebral arteries, which run along the vertebral spine and merge into the Basilar Artery (BA). The flow from the BA usually joins the ICAs through the Posterior Communicating arteries (PComs) forming a loop, or more scientifically expressed, an anastomotic\footnote{Anastomosis: A cross-connection between adjacent channels, tubes, fibres, or other parts of a network.} network known as the Circle of Willis (CoW). The Posterior Cerebral Arteries (PCA) start from the BA and transport blood into the back side of the head, including the cerebellum.
+
+Arteries are uniquely structured to manage high-pressure blood flow. Elastic arteries, including the aorta and its major branches, contain a high density of elastic fibres, allowing them to stretch and recoil, buffering the pressure changes from the heart's pumping action. Muscular arteries, such as the ones found in the brain, trade in the external elastic lamina\footnote{Lamina: In the medical context, a thin membrane or layer of tissue.} in favour of more developed muscular layers. These regulate blood flow by vasoconstriction and vasodilation and adjust the distribution of blood to various regions\,\cite{Liebeskind2016}. This ability is particularly important when compensating for elevated or reduced levels of pressure, which can for instance originate from physical exercise or sleep. From the arteries, blood sweeps into the brain arterioles, the smallest arterial branches before arriving at capillaries. Contrary to the many other locations in the body, these lack precapillary sphincters. Elsewhere, the sphincters contract and expand controlling the perfusion of the capillary beds. The brain however requires a consistently high supply everywhere due to its high metabolism, making these control mechanisms redundant\,\cite{Liebeskind2016}.
+
+In physics terms, the flow for each of the vessel types can be characterized through the two non-dimensional Reynolds and Womersley numbers. The Reynolds number, as already introduced in the previous section, expresses the ratio of inertial versus viscous forces in a flow. Large arteries particularly the pulmonary arteries have high inertial flow, as can be seen on \autoref{table:hemodynamics}. Farther downstream, the flow becomes increasingly dominated by viscous forces, simplifying the numerical approximations. The Womersley number shown in \autoref{eq:wo}, depends on the angular frequency of the oscillations $\omega$, a characteristic length $D$ and the kinematic viscosity $\nu$.
+\begin{equation}
+ \text{Wo} = D\sqrt{\omega \nu} = \sqrt{2\pi \text{Re}\text{St}}
+    \label{eq:wo}
+\end{equation}
+As such, the Womersley number measures the oscillatory character of a flow with respect to its viscous dissipation. The large arteries close to the heart are therefore marked with high Wo numbers due to the pronounced pulsatility, whereas more distal vessels feature smaller values due to their smoothed flow profiles and reduced Reynolds numbers.
+
+\begin{table}[htb]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{4pt}
+    \small
+    \begin{tabular}{l c c c}
+        \toprule
+        \textbf{Anatomical region} & \textbf{Mean Re} & \textbf{Peak Re} & \textbf{Wo} \\
+        \midrule
+ Ascending aorta            & 1000             & 4000--9000       & 19          \\
+ Abdominal aorta            & 600              & 2500--4500       & 13          \\
+ Coronary arteries          & 250              & 600--800         & 3           \\
+ Carotid arteries           & 450              & 900--1200        & 4           \\
+ Internal Carotid arteries  & 350              & 400--550         & 3.2         \\
+ Vertebral arteries         & 180              & 100--400         & 2.1         \\
+ Main pulmonary artery      & 1600             & 3000--4500       & 16          \\
+ Arterioles                 & 1                & 1                & 0.06        \\
+ Capillaries                & $10^{-3}$        & $10^{-3}$        & 0.003       \\
+ Inferior Vena Cava         & 400              & 1500--2500       & 13          \\
+        \bottomrule
+    \end{tabular}
+    \caption{Hemodynamic parameters for various anatomical regions from\,\cite{Menon2024} and measurements of\,\cite{Cebral2009_data}.}\label{table:hemodynamics}
 \end{table}
 
-Arteries are uniquely structured to manage high-pressure blood flow. Elastic arteries, including the aorta and its major branches, contain a high density of elastic fibers, allowing them to stretch and recoil, buffering the pressure changes from the heart's pumping action. Muscular arteries, such as the ones found in the brain, trade in the external elastic lamina in favour of more developed muscular layers. These regulate blood flow by vasoconstriction and vasodilation, and adjust the distribution of blood to various regions\,\cite{Liebeskind2016}. This capacity is particularly important when compensating for elevated or reduced levels of pressure, which can for instance originate from physical exercise or sleep. From the arteries, blood sweeps into the brain arterioles, the smallest arterial branches before arriving to capillaries. Contrary to the many other locations in the body, these lack precapillary sphinters. Elsewhere, the sphinters contract and expand controlling the perfusion of the capillary beds. The brain however requires a consistently high supply in all of its regions due to its high metabolism, making these control mechanisms redundant\,\cite{Liebeskind2016}.
-
-In physic's terms speaking, the flow for each of the vessel types can be characterized through the two non-dimensional Reynolds and Womersley numbers. The Reynolds number, as already introduced in the previous section, expresses the ratio of inertial versus viscous forces in a flow. Large arteries and particularly the pulmonary arteries have high inertial flow, as can be seen on \autoref{table:hemodynamics}. Farther downstream, the flow become increasingly viscosity-dominated, simplifying its the numerical approximations. The Womersley number shown in \autoref{eq:wo}, depends on the angular frequency of the oscillations $\omega$, a characteristic length $D$ and a kinematic viscosity $\nu$.
-\begin{equation}
-	\text{Wo} = D\sqrt{\omega \nu} = \sqrt{2\pi \text{Re}\text{St}}
-	\label{eq:wo}
-\end{equation}
-As such, the Womersley number measures the oscillatory character of a flow with respect to its viscous dissipation. The large arteries close to the heart are therefore marked with high Wo numbers due to the pronounced pulsatility, whereas more distal vessels feature smaller values as a consequence from their smoothed flow profiles and reduced Reynolds numbers.
 
 \subsection{Circle of Willis}\label{chap3:sec1:subsec1}
-In research of intracranial aneurysms, we study first and foremost the CoW and its adjacent arteries, since they host the bulk of intracranial aneurysms\,\cite{Brown2014}. As previously stated, the anastomotic network formed by the merging ICAs and the BA. It is believed that this redundancy is a helpful evolutionary feature that protects the brain from the consequences of the infarction of one of its main suppliers. The interconnected vessels of the CoW in that case permit the contralateral ICA or BA to balance out the missing flux. Other vascular diseases, such as stenoses\footnote{Stenosis: Abnormal narrowing of a passage in the body.}, are also alleviated by redirecting the flow and reducing the strain on the heart. The ICAs, as the main suppliers, have the largest diameter among the vessels of the CoW, measuring 4.2\,mm in diameter along its intermediate sections\,\cite{Baz2021}. The MCAs and ACAs, as the main branches of the ICA, have a diameter around 2.5\,mm and 2\,mm, respectively, depending on the parent arteries size\,\cite{Liebeskind2016}. The BA has a proximal\footnote{Proximal: Situated nearer to the centre of the body or the point of attachment.} diameter of 3\,mm that in most cases decays quickly towards the distal section as a consequence of the plentyful branches and perforators along its way.
-
-The complete arrangement of the CoW, as shown in a sketch on \autoref{fig:cow_scheme}, is not fully developed in all humans. In fact, only an estimated 11.9\% of adults posses the textbook-type CoW, while more than 50\% miss at least one of the communicating vessels\,\cite{Hindenes2020}. Hypoplastic\footnote{Hypoplasia: Underdevelopment or incomplete development of a tissue or an organ.} vessels are commonly defined by having a diameter below a set threshold, which in the context of the CoW is often set to 1\,mm\,\cite{Hindenes2020, Hindenes2023}. The type of CoW determines how the flow is distributed from the suppliers. One common formation are so-called fetal PComs, in which the P1 segments of the PCAs are underdeveloped and the flow to the posterior circulation is instead provided from the ICAs through the PComs.\,\cite{Liebeskind2016}.
+The CoW and its adjacent arteries are an important study subject since they host the bulk of intracranial aneurysms\,\cite{Brown2014}. As previously stated, the CoW is a ring connecting ingoing streams of the ICAs and the BA\@. It is believed that this redundancy is a helpful evolutionary feature that protects the brain from the consequences of the infarction of one of its main suppliers. The interconnected vessels of the CoW in that case permit the contralateral ICA or BA to balance out the missing flux. Other vascular diseases, such as stenoses\footnote{Stenosis: Abnormal narrowing of a passage in the body.}, are also alleviated by redirecting the flow and reducing strain on the heart. The ICAs, as the main suppliers, have the largest diameter among the vessels of the CoW, measuring 4.2\,mm in diameter along their intermediate sections\,\cite{Baz2021}. The MCAs and ACAs, as the main branches of the ICA, have a diameter of around 2.5\,mm and 2\,mm, respectively, depending on the parent arteries' size\,\cite{Liebeskind2016}. The BA has a proximal\footnote{Proximal: Situated nearer to the body's centre or the point of attachment.} diameter of 3\,mm that in most cases decays quickly towards the distal section as a consequence of the plentiful branches and perforators along its way.
 
 \begin{figure}[!htb]
-	\centering
-	\fontsize{11.200000}{12.800000}\selectfont
-	\def\svgwidth{0.8\linewidth} \input{chapter3/Figures/cow}
-	\vspace{0.3cm}
-	\caption{Schematic view of a complete CoW and the ophthalmic arteries\cite{Jeken-Rico2023}.}
-	\label{fig:cow_scheme}
+    \centering
+    \fontsize{11.200000}{12.800000}\selectfont
+    \def\svgwidth{0.8\linewidth} \input{chapter3/Figures/cow}
+    \vspace{0.3cm}
+    \caption{Schematic view of a complete CoW and the ophthalmic arteries\cite{Jeken-Rico2023}.}
+    \label{fig:cow_scheme}
 \end{figure}
 
-The shape of the CoW has been shown to influence the likelihood of IA, doubling the prevalence of IA for incomplete circles with respect to complete ones\,\cite{Hindenes2023}. The anterior circulation, comprising the ICAs, MCAs and ACAs, as well as the ACom, contains 85\% of the lesions\,\cite{Brown2014} and is therefore the most common target of operations. On it, there are three particularly prone locations, the ACom (30--35\%), the PCom (30--35\%) and the middle cerebral artery bifurcation (20\%). Other common locations involve the ophthalmic artery, and in the case of the posterior circulation, the basilar tip and the vertebral junction\,\cite{Hacein11}. Due to the asymptomatic nature of most unruptured IA, they are usually found during routine checks or unrelated screenings. The main tool for analysing the disease are angiography images obtained either from Computed Tomography (CT) or Magnetic Resonance (MR) scans. Both modalities encompass benefits and disadvantages that are also important when segmenting the patient's lumen.
+The complete arrangement of the CoW, as shown in a sketch on \autoref{fig:cow_scheme}, is not fully developed in all humans. Only an estimated 11.9\% of adults possess the textbook-type CoW, while more than 50\% miss at least one of the communicating vessels\,\cite{Hindenes2020}. Hypoplastic\footnote{Hypoplasia: Underdevelopment or incomplete development of a tissue or an organ.} vessels are commonly defined by having a diameter below a set threshold, which in the context of the CoW is often 1\,mm\,\cite{Hindenes2020, Hindenes2023}. The type of CoW determines how the flow is distributed from the suppliers. One common formation is so-called fetal PComs, in which the P1 segments of the PCAs are underdeveloped and the flow to the posterior circulation is instead provided by the ICAs through the PComs\,\cite{Liebeskind2016}.
+
+The shape of the CoW has been shown to influence the likelihood of IA, doubling their prevalence on incomplete circles over complete ones\,\cite{Hindenes2023}. The anterior circulation, comprising the ICAs, MCAs and ACAs, as well as the ACom, contains 85\% of the lesions\,\cite{Brown2014} and is, therefore, the most common target of operations. On it, there are three particularly prone locations, the ACom (30--35\%), the PCom (30--35\%) and the middle cerebral artery bifurcation (20\%). Other common locations involve the ophthalmic artery, and in the case of the posterior circulation, the basilar tip and the vertebral junction\,\cite{Hacein11}. Due to the asymptomatic nature of most unruptured IA, they are usually found during routine checks or unrelated screenings. The main tool for analysing the disease is angiography images obtained either from Computed Tomography (CT) or Magnetic Resonance (MR) scans. Both modalities encompass benefits and disadvantages that are also important when segmenting the patient's 3D vessel geometry.
 
 \subsection{Medical Imaging}\label{chap3:sec1:subsec2}
-Arterial angiography\footnote{Angiography: Visualisation of vessels.} highlights the structure of vessels in a designated location of the body. CT angiography involves using ionising radiation to visualise the blood vessels in the brain. A contrast dye, usually iodine-based, is administered through a catheter placed in a vein of an extremity. As the dye travels through the bloodstream, the CT scanner takes a series of detailed cross-sectional images in which the radiopaque ink and the bones stand out from the nearly transparent remaining tissue. The resulting images have a spatial resolution between 0.6 and 1\,mm and are most commonly used in diagnosis\,\cite{Hacein-Bey2011}. Higher resolutions can be obtained with a different CT modality, the Digital Subtraction Angiography (DSA). There, the contrast agent is directly flushed into the target artery upstream of the region of interest, providing superior resolutions of 0.2--0.3\,mm\,\cite{Hacein-Bey2011}. Additionally, a second take without contrast agent is subtracted from the main take to remove static structures, such as bones or coils. The scan can likewise be executed by rotating the scanner during the capture. The images recorded during the $240^{\circ}$ sweep are then reconstructed into one image cube with isotropic resolutions around 0.15--0.2\,mm\,\cite{Hacein-Bey2011}.
+Arterial angiography\footnote{Angiography: Visualisation of vessels.} highlights the structure of vessels in a designated location of the body. CT angiography involves using ionising radiation to visualise the blood vessels. A contrast dye, usually iodine-based, is administered through a catheter placed in a vein of an extremity. As the dye travels through the bloodstream, the CT scanner takes a series of detailed cross-sectional images in which the radiopaque ink and the bones stand out from the nearly transparent remaining tissue. The resulting images have a spatial resolution between 0.6 and 1\,mm and are most commonly used in diagnosis\,\cite{Hacein-Bey2011}. Higher resolutions can be obtained with a different CT modality, the Digital Subtraction Angiography (DSA). There, the contrast agent is directly flushed into the target artery upstream of the region of interest, providing superior resolutions of 0.2--0.3\,mm\,\cite{Hacein-Bey2011}. Additionally, a second take without a contrast agent is subtracted from the main take to remove static structures, such as bones or coils. The scan can likewise be executed by rotating the scanner during the capture. The images recorded during a rotational sweep are then reconstructed into one image cube with isotropic resolutions around 0.15--0.2\,mm\,\cite{Hacein-Bey2011}.
 
-The second modality of angiography imaging is Time-Of-Flight (TOF) MR tomography\footnote{Tomography: A technique for displaying a representation of a cross section through a human body or other solid object.}. TOF MR leverages the movement of blood to produce high-contrast images without the need for contrast agents, which is particularly beneficial for patients with allergies or renal impairments. This method exploits the differences in magnetic properties between stationary tissue and flowing blood to create the images. In a typical MRI scan, repeated radio pulses saturate the protons in stationary tissues, making them appear darker. However, in TOF MR, as blood flows into the imaging slice, it hasn't been exposed to these pulses. This means the protons in the flowing blood are not saturated and retain their signal, appearing bright on the final image. In contrast, the stationary tissue within the imaging slice has been exposed to repeated pulses and therefore appears darker. This difference in signal intensity creates a natural contrast between the bright blood vessels and the darker surrounding tissues, enabling clear and detailed visualisation of the blood vessels (see \autoref{fig:TOFMR}). The resolutions of TOF MR depend fundamentally on the intensity of the magnetic field that can be generated. Common 3\,T machines yield anisotropic resolutions of 0.42$\times$0.42$\times$1.5\,mm, where the coarse side corresponds to the axis in which the scanner sweeps. Newly introduced 7\,T machines offer higher resolutions of up to 0.3\,mm that can be exploited to extract flow velocity profiles through a technique labelled 4D Flow MRI\,\cite{Berg2014}. This technique emerged more than a decade ago and has been an active research field. While the direct use of the scanner to extract flow profiles is attractive, low resolutions and artifacts, combined with long measurement times prevent this technique from being used in day-to-day clinical practice. In section\,\ref{chap3:sec2}, it will be further discussed due to its role in obtaining inflow boundary conditions. MR angiography, as already mentioned, profits from being a non-invasive technique that can simultaneously highlight all sections of the CoW, unlike DSA, making it a widely used diagnosis tool.
+The other commonly employed modality is Time-Of-Flight MR angiography (TOF-MRA). TOF-MRA leverages the movement of blood to produce high-contrast images without the need for a contrast agent, which is particularly beneficial for patients with allergies or renal impairments. This method exploits the differences in magnetic properties between stationary tissue and flowing blood to create the images. In a typical MRI scan, repeated radio pulses saturate the protons in stationary tissues, making them appear darker. However, in TOF-MRA, as blood flows into the imaging slice, it hasn't been exposed to these pulses. This means that the protons in the flowing blood are not saturated and retain their signal, appearing bright in the final image. In contrast, the stationary tissue within the imaging slice has been exposed to repeated pulses and therefore appears darker. This difference in signal intensity creates a natural contrast between the bright blood vessels and the darker surrounding tissues, enabling clear and detailed visualisation of the blood vessels (see \autoref{fig:TOFMR}). The resolutions of TOF-MRA depend fundamentally on the intensity of the magnetic field that can be generated. Common 3\,T machines yield anisotropic resolutions of 0.42$\times$0.42$\times$1.5\,mm, where the coarse side corresponds to the axis in which the scanner sweeps. Newly introduced 7\,T machines require shorter scanning times and offer higher resolutions of up to 0.3\,mm\,\cite{Berg2014}. MR angiography, as already mentioned, profits from being a non-invasive technique that can simultaneously highlight all sections of the CoW, unlike DSA, making it a widely used diagnosis tool.
 \begin{figure}[htb]
-	\centering
-	\begin{minipage}[b]{0.47\textwidth}
-		\centering
-		\includegraphics[width=\linewidth, trim={0 0 4.05cm 0}, clip]{chapter3/Figures/DSA.png}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[b]{0.47\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter3/Figures/CoW_MIP.png}
-	\end{minipage}
-	\caption[Examples of imaging modalities]{Maximum intensity projections of the brain arteries with two different imaging modalities. On the left: High resolved DSA of one brain half. On the right: Non-invasive 3D TOF MR.}
-	\label{fig:TOFMR}
+    \centering
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, trim={0 0 4.05cm 0}, clip]{chapter3/Figures/DSA.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{chapter3/Figures/CoW_MIP.png}
+    \end{minipage}
+    \caption[Examples of imaging modalities]{Maximum intensity projections of the brain arteries with two different imaging modalities. On the left: High-resolved DSA of one brain half. On the right: Non-invasive 3D TOF MR.}
+    \label{fig:TOFMR}
 \end{figure}
-During operations, clinicians use the real time imaging capabilities of CT scanners to guide catheters to the designated area. Injections of ink can then help analyzing the malformations and assessing the performance of the inserted prothesis. These devices are usually made of radiopaque materials, such as platinum (coils), or contain tungsten markers to help locating them.
+During operations, clinicians use the real-time imaging capabilities of CT scanners to guide catheters to the designated area. Injections of ink can then help analyse the malformations and assess the performance of the inserted prosthesis. These devices are usually made of radiopaque materials, such as platinum (coils), or contain tungsten markers to help locate them.
 
 \subsection{Vessel Segmentation}\label{chap3:sec1:subsec3}
-The images obtained during the scans are quickly segmented by radiologists to measure possible malformations and plan interventions. In the process, attention is given to the region of interest and anatomy knowledge is put to use to differentiate between imaging artifacts and vasculature features. When the segmentations ought to be used in hemodynamics simulations, a larger portion of the vasculature has to be processed to ensure the integrity of the simulation. As described in the introduction Berg and Vo\ss\,\etal\,\cite{Berg2018, voss2019} conducted a computing challenge in which they isolated the factor of the segmentation in the simulations of aneurysm hemodynamics. The authors observed a sizeable dissent among some teams and recommend engineers to handle this task with care.
+The images obtained during the scans are segmented by radiologists to measure possible malformations and plan interventions. In the process, attention is given to the region of interest and anatomy knowledge used to differentiate between imaging artefacts and vasculature features. When the segmentations ought to be used in hemodynamics simulations, a larger portion of the vasculature has to be processed to ensure the integrity of the simulation. As described in the introduction Berg and Vo\ss\,\etal\,\cite{Berg2018, voss2019} conducted a computing challenge in which they isolated the factor of the segmentation in the simulations of hemodynamics. The authors observed a sizeable dissent among some teams and recommend handling this task with care.
 
-The 6 patient-specific cases included in this thesishave been segmented by the student and checked with cooperating clinicians to minimize the aforementioned bias. Naturally, this does not translate into impollute work, since even clinicians assess segmentations differently. The software to carry out the segmentation is \href{https://www.slicer.org/}{3D Slicer}, an open-source program providing handy tools to navigate and process medical image data. To obtain a smooth representation of the arterial lumen, the domain of interest is defined and extracted from the rest of the image. Subsequently, minor smoothing and gradient filtering operations can be run to remove background noise and enhance the lumen interface. The image can then be split according to the intensity of the vessels and the background, returning a binary mask of the arteries. One common medical practice at this stage is to remove small and hypoplastic vessels from the segmentation due to the small implications and more error prone delineation. This is commonly adopted for arteries whose diameter is below 1\,mm. When the segmentation is finished, it is highly recommended to check images from another modality for confirmation. For example, one may incurr in errors when a portion of the vessel is situated in plane of an MRA scan, causing its size to appear smaller. Conversely, DSA sometimes hides communicating vessels due to the flow of the contrast agent. An MRA in that case may reveal the existence of these vessels which, as will be shown later, can change notably the simulated hemodynamics.
+The 6 patient-specific cases included in this thesis have been segmented and checked with cooperating clinicians to minimize the aforementioned bias. Naturally, this does not translate into impollute work, since even clinicians assess segmentations differently. The software to carry out the segmentation is \href{https://www.slicer.org/}{3D Slicer}, an open-source program providing handy tools to navigate and process medical image data. To obtain a smooth representation of the arterial lumen, the domain of interest is defined and extracted from the rest of the image. Subsequently, minor smoothing and gradient filtering operations can be performed to remove background noise and enhance the lumen interface. The image can then be split according to the intensity of the vessels and the background, returning a binary mask of the arteries. One common medical practice at this stage is to remove small and hypoplastic vessels from the segmentation due to the small implications and more error-prone delineation. This is commonly adopted for arteries whose diameter is below 1\,mm. When the segmentation is finished, it is highly recommended to check images from another modality for confirmation. For example, one may incur errors when a portion of the vessel is situated in the plane of an MRA scan, causing its size to appear smaller. Conversely, DSA sometimes hides communicating vessels due to the flow of the contrast agent. An MRA in that case may reveal the existence of these vessels which, as will be shown later, can change notably the simulated hemodynamics.
 
-At some point of the segmentation it is required to limit the extension of the vessels surrounding the diseased tissue. This in fact presents an interesting question that is not fully described in literature, particularly in regards to communicating vessels. There the flow direction is not necessarily clear \apriori, as it might depend on the overall flows of the circuit. This interesting question has been the seed for the first publication that has been carried out during the course of this work. Before however engaging in more depth on that question, a few more topics will be introduced that will explain keypoints in modelling physiological hemodynamics.
+At some point in the segmentation, it is required to limit the extension of the vessels surrounding the diseased tissue. This presents an interesting question that is not fully described in the literature, particularly concerning communicating vessels. There the flow direction is not necessarily clear \apriori, as it might depend on the overall flows of the circuit. This interesting question has been the seed for the first publication that has been carried out during the course of this work. Before however engaging in more depth on that question, a few more topics will be introduced that will explain key points in modelling physiological hemodynamics.
 
 
 
 \section{Hemodynamics Simulations}\label{chap3:sec2}
 
 \subsection{Mesh Generation}\label{chap3:sec2:subsec:1}
-The segmentation yields a binary mask identifying vessels and background. Using a resolution-dependent smoothing factor, the surface of the bodies is meshes with triangles. Hereby, the meshing algorithm provided by Slicer does not distinguish between walls and the cut inlets and outlets. Therefore, the mesh has to be manually opened with planar cuts. For carrying out this operation, \href{https://www.paraview.org/}{Paraview} and \href{https://vtk.org/}{vtk} can be used, which additionally permit re-triangulating the mesh to remove any quadrilateral patches originating from the cuts. The location of the inlet cut is best set on a straight segment of the parent vessel, for instance the cervical portion of the ICA, which stretches for more than 30mm in a straight untapered manner\,\cite{Vijaywargiya2017}. This alleviates the fact of modelling the inlet velocity profiles through a simplified parabolic or plug profile\,\cite{Castro2006, Hodis2015}. The tortuous vessels proximal of the IA then bend and shape the flow into a physiological shape again reducing the modelling errors\,\cite{Berg2019}. Additionally, it is advisable to extrude the open mesh along its open boundaries for several reasons. It further reduces inflow modelling errors and allows mapping an irregular cross-section to a circular profile. The latter are especially important when parabolic or Womersley profiles are to be used, since they rely on circular pipes. On the outlets side the extrusions reduce the risk of reflux into the systems, simplifying the CFD modelling overall.
+The segmentation yields a binary mask identifying vessels and the background. Using a resolution-dependent smoothing factor, the surface of the bodies is meshed with triangles. Hereby, the meshing algorithm provided by Slicer does not distinguish between walls and the cut inlets and outlets. Therefore, the mesh has to be manually opened with planar cuts. For carrying out this operation, \href{https://www.paraview.org/}{Paraview} and \href{https://vtk.org/}{vtk} can be used, which additionally permits re-triangulating the mesh to remove any quadrilateral patches originating from the cuts. The location of the inlet cut is best set on a straight segment of the parent vessel, for instance, the cervical portion of the ICA, which stretches for more than 30\,mm in a straight untapered manner\,\cite{Vijaywargiya2017}. This alleviates the fact of modelling the inlet velocity profiles through a simplified parabolic or plug profile\,\cite{Castro2006, Hodis2015}. The tortuous vessels proximal to the IA then bend and shape the flow into a physiological shape again reducing the modelling errors\,\cite{Berg2019}. Additionally, it is advisable to extrude the open mesh along its open boundaries for several reasons. It further reduces inflow modelling errors and allows mapping an irregular cross-section to a circular profile. The latter is especially important when parabolic or Womersley profiles are to be used since they rely on cylindrical pipes. On the outlets' side, the extrusions reduce the risk of reflux into the systems, simplifying the CFD modelling overall.
 
 \paragraph{Extrusion of inlets and outlets} are generated with transfinite interpolations between the original inlet and a target circle. The target profile is generated by fitting a circle to the original cross-section and shifting it along the inlet's outward normal. The concept is sketched in \autoref{fig:transfinite}.
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.4\linewidth]{chapter3/Figures/Meshing/extrusion_scheme.pdf}
-	\caption{Sketch of the interpolation between the vessel cross-section (in the back) and the circular profile (front).}
-	\label{fig:transfinite}
+    \centering
+    \includegraphics[width=0.4\linewidth]{chapter3/Figures/Meshing/extrusion_scheme.pdf}
+    \caption{Sketch of the interpolation between the vessel cross-section (in the back) and the circular profile (front).}
+    \label{fig:transfinite}
 \end{figure}
-The parametrization of the extruded circle is based on the least-squares fit of a circle on the original, irregular boundary. To this end, every node and edge belonging to a boundary patch is fetched. The nodal positions of the given patch are shifted by the mean position towards the origin and registered in a matrix $X\in\mathbb{R}^{n\times3}$, a singular value decomposition can be run on $X$ to obtain the surface normal.
+The parameterization of the extruded circle is based on the least-squares fit of a circle on the original, irregular boundary. To this end, every node and edge belonging to a boundary patch is fetched. The nodal positions of the given patch are shifted by the mean position towards the origin and registered in a matrix $X\in\mathbb{R}^{n\times3}$, a singular value decomposition can be run on $X$ to obtain the surface normal.
 \begin{equation*}
-	X = U\Sigma V^*, \quad \text{with}\quad U\in\mathbb{R}^{n\times n},\, \Sigma\in\mathbb{R}^{n\times3},\, V^*\in\mathbb{R}^{3\times3}
+ X = U\Sigma V^*, \quad \text{with}\quad U\in\mathbb{R}^{n\times n},\, \Sigma\in\mathbb{R}^{n\times3},\, V^*\in\mathbb{R}^{3\times3}
 \end{equation*}
-The vector corresponding to the smallest singular value in matrix $V^*$ provides the surface normal i.e. $\vec{n} = V_{3,j}$. It can then be used to rotate the boundary cross-section onto a 2D plane using the Rodrigues' rotation:
+The vector corresponding to the smallest singular value in matrix $V^*$ provides the surface normal i.e. $\vec{n} = V_{3,j}$. It can then be used to rotate the boundary cross-section onto a 2D plane using Rodrigues' rotation:
 \begin{equation}
-	M_{rot} = sI + \sqrt{1-s^2} [\vec{k}]_\times + (1-s) \vec{k}\otimes\vec{k}
-	\label{eq:rodri}
+ M_{rot} = sI + \sqrt{1-s^2} [\vec{k}]_\times + (1-s) \vec{k}\otimes\vec{k}
+    \label{eq:rodri}
 \end{equation}
 Where $[\cdot]_\times$ indicates the skew-symmetric matrix spanned by $\cdot$ and $\vec{k}$ and $s$ are defined by:
 \begin{equation}
-	\vec{k} = \vec{n}\times \vec{e}_z,\qquad s = \vec{n}\cdot \vec{e}_z
+ \vec{k} = \vec{n}\times \vec{e}_z,\qquad s = \vec{n}\cdot \vec{e}_z
 \end{equation}
 
 \begin{figure}[htb]
-	\centering
-	\input{chapter3/Figures/Meshing/Rotation}
-	\caption{Projection of the cut onto a 2D plane in the reference coordinate system $\xi,\,\eta$.}
+    \centering
+    \input{chapter3/Figures/Meshing/Rotation}
+    \caption{Projection of the cut onto a 2D plane in the reference coordinate system $\xi,\,\eta$.}
 \end{figure}
 Note, that all the nodes are by construction on a plane, thus making the third component of the rotated zero. The cross-section in the $(\xi, \eta)$ plane can now be fitted with a simple least-squares algorithm to a circle:
 \begin{equation*}
-	(\xi-\xi_0)^2 + (\eta-\eta_0)^2 = r^2
+ (\xi-\xi_0)^2 + (\eta-\eta_0)^2 = r^2
 \end{equation*}
 \begin{equation*}
-	[\xi_i\quad \eta_i\quad 1]\,\vec{c} = \xi_i^2 + \eta_i^2
+ [\xi_i\quad \eta_i\quad 1]\,\vec{c} = \xi_i^2 + \eta_i^2
 \end{equation*}
 \begin{equation*}
-	\vec{c}_* = \argmin{\vec{c}\in \mathbb{R}^3} \norm{A\vec{c}-\vec{b}}^2
+ \vec{c}_* = \argmin{\vec{c}\in \mathbb{R}^3} \norm{A\vec{c}-\vec{b}}^2
 \end{equation*}
-The centre coordinates $\xi_0, \eta_0$ then are rotated and translated back to the $(x,y,z)$ space and used to parameterise a circle with the computed radius $r$. The circle is shifted in outward normal direction $\vec{n}$ for a desired distance. If the cut is not perpendicular to the vessel direction, it is also possible to correct the extrusion direction by the average normal of the edges at the cross-section. The nodal coordinates are matched between the circle and the cross-section based on their minimal euclidean distance. With a step wise generation of nodes and a consequent meshing, the desired mesh extension is obtained (see \autoref{fig:extrusion}). The surface mesh provides a scaffold for a full 3D volumetric mesh in which the simulations can be run.
+The centre coordinates $\xi_0, \eta_0$ are then rotated, translated back to the $(x,y,z)$ space and used to parameterise a circle with the computed radius $r$. The circle is shifted in the outward normal direction $\vec{n}$ for a desired distance. If the cut is not perpendicular to the vessel direction, it is also possible to correct the extrusion direction by the average normal of the edges at the cross-section. The nodal coordinates are matched between the circle and the cross-section based on their minimal Euclidean distance. With a step-wise generation of nodes and a subsequent meshing, the desired mesh extension is obtained (see \autoref{fig:extrusion}). The surface mesh provides a scaffold for a full 3D volumetric mesh in which the simulations can be run.
 \begin{figure}[htb]
-	\centering
-	\begin{minipage}{.48\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Extrusion.png}
-		\caption{Extruded outlet with a length of six times its diameter.}\label{fig:extrusion}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{.48\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Remeshing.png}
-		\caption{Outcome of remeshing structured extrusion.}\label{fig:remeshing}
-	\end{minipage}
+    \centering
+    \begin{minipage}{.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Extrusion.png}
+        \caption{Extruded outlet with a length of six times its diameter.}\label{fig:extrusion}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Remeshing.png}
+        \caption{Outcome of remeshing the structured extrusion.}\label{fig:remeshing}
+    \end{minipage}
 \end{figure}
-To generate a tetrahedra-based mesh, the open source meshing library \href{https://gmsh.info/}{gmsh} is used. It supports the input of open \textit{stl}\footnote{STL: Stereolithography files composed of triangles in 3D.} files and generates high quality meshes exploiting elaborated conformal mappings. Aside from the meshing of the interior, it is also possible to generate structured boundary layers along the vessel walls. The preimplemented algorithms detect open boundaries and consider them in this process.
+To generate a tetrahedra-based mesh, the open-source meshing library \href{https://gmsh.info/}{gmsh} is used. It supports the input of open \textit{stl}\footnote{STL\@: Stereolithography files composed of triangles in 3D.} files and generates high-quality meshes exploiting elaborated conformal mappings. Aside from the meshing of the interior, it is also possible to generate structured boundary layers along the vessel walls.
 
-\paragraph{Boundary layers} play a critical role in the computation of many fluid dynamics problems. The provide a better resolution of the phenomena occurring close to walls, where velocity gradients are high and in some cases vortices and other structures can be formed and detach. In the case of hemodynamics, turbulence related effects are not in the main spotlight. Even though studies\,\cite{Valen-Sendstad2011,Jain2016} have devoted their time studying turbulence, its effects are, if present, overcast by segmentation variability and boundary condition modelling errors. Instead boundary layers play an important role in the computation of walls remodelling indicators, such as the previously introduced WSS\@. These quantities have been shown to be susceptible to the layer thickness and element arrangement. In Janiga \etal\,\cite{Janiga2013_mesh}, simulations were carried out using finite volume solvers on different meshes of the same geometry. In that context, using structured boundary layers resulted in a more reproducible WSS computation across meshes. This is not straightforwardly expandable towards finite elements, for two main reasons. Finite volumes profit from regularly aligned cells, but handle tetrahedral meshes rather poorly in comparison. Due to the intrinsic formulation of flux balances across cells, finite volumes can handle polyhedra without large changes, whereas finite elements change radically if more complex element types are considered. On the counter side, FE can increase their order of convergence by using these higher order elements while paying for a higher computation cost. While this explanation surely falls short to properly evaluate the implications on the structure of boundary layers, it is intended to show that one-to-one translations of findings between papers are to be carefully considered. Since the context of this thesis does not include higher order elements, their influence on the boundary layer resolution could not be measured. This stays however as an interesting research topic for follow-up studies. To leverage the possible bias in the WSS computation with linear elements, boundary layers of consistent size should be used.
+\paragraph{Boundary layers} play a critical role in the computation of many fluid dynamics problems. They provide a better resolution of the phenomena occurring close to walls, where velocity gradients are high and in some cases, vortices and other structures can be formed and detached. In the case of hemodynamics, turbulence-related effects are not in the main spotlight. Even though studies\,\cite{Valen-Sendstad2011,Jain2016} have devoted their time to studying turbulence, its effects are, if present, overcast by segmentation variability and boundary condition modelling errors. Instead, boundary layers play an important role in the computation of wall remodelling indicators, such as the previously mentioned Wall Shear Stress (WSS)\@. These quantities are susceptible to layer thickness and element arrangement. In Janiga \etal\,\cite{Janiga2013_mesh}, simulations were carried out using finite volume solvers on different meshes of the same geometry. In that context, using structured boundary layers resulted in a more reproducible WSS computation across meshes. This is not straightforwardly expandable towards finite elements, for two main reasons. Finite volumes profit from regularly aligned cells, but handle tetrahedral meshes rather poorly in comparison. Due to the intrinsic formulation of flux balances across cells, finite volumes can handle polyhedra without large changes, whereas finite elements change radically if more complex element types are considered. On the counter side, FE can increase their order of convergence by using these higher order elements while paying for a higher computation cost. While this explanation surely falls short of properly evaluating the implications on the structure of boundary layers, it is intended to show that one-to-one translations of findings between publications are to be carefully considered. Since the context of this thesis does not include higher-order elements, their influence on the boundary layer resolution could not be measured. This remains however an interesting research topic for follow-up studies. To leverage the possible bias in the WSS computation with linear elements, boundary layers of consistent size should be used.
 
-In gmsh, the wall Boundary Layers (BL) are generated as an inward extrusion of the surface mesh. The resulting prism elements are then split into tetrahedra. The sizes of the boundary layers can commonly be estimated through by targeting a non-dimensional wall distance $y^+ < 1$:
+In gmsh, the wall Boundary Layers (BLs) are generated as an inward extrusion of the surface mesh. The resulting prism elements are then split into tetrahedra. The sizes of the boundary layers can commonly be estimated by targeting a non-dimensional wall distance $y^+ < 1$:
 \begin{equation*}
-	h_{BL} = \frac{y^+\mu}{\rho u_*}
+ h_{BL} = \frac{y^+\mu}{\rho u_*}
 \end{equation*}
 There $u_*$ is the friction velocity, which can be computed through the Schlichting skin-friction correlation:
 \begin{equation}
-	\begin{split}
-		u_* = u_\infty  \frac{\left(2\log_{10}{(\Rey)} -0.65\right)^{-1.15} }{\sqrt{2}}
-	\end{split}
-	\label{eqn:friction_velocity}
+    \begin{split}
+ u_* = u_\infty \frac{\left(2\log_{10}{(\Rey)} -0.65\right)^{-1.15} }{\sqrt{2}}
+    \end{split}
+    \label{eqn:friction_velocity}
 \end{equation}
 The Reynolds number in the model \autoref{eqn:friction_velocity} is defined on a plate over which the flow sweeps. In our context, it remains difficult to estimate for equivalent of the length unit in such a Reynolds number. If the diameter of vessels is considered, maximal Re values span roughly between 250 and 750. In reference work\,\cite{Jain2016, Valen-Sendstad2011} Re numbers between 200 and 697 were estimated. Using values in this reference with overestimated inflow velocities of $u_{\infty}=$\,0.75\,m/s, one obtains minimal boundary layer sizes of $\approx$ 0.05\,mm. With the commonly adopted expansion factor 1.2, the minimal size can be progressively expanded inwards.
 
 \subsection{Convergence Analysis}
-Hemodynamics simulations intrinsically depend on the choice of resolutions in both temporal and spatial domains. To not repeat the same analysis over and over in this thesis, one illustrative case will be presented below for which both aspects have been considered. The geometry is part of the publication work that is contained in this chapter and was published during the course of these studies. Details about case that are not of immediate relevance here are given in the next section \autoref{chap3:sec3} for the sake of clarity.\\
+Hemodynamics simulations intrinsically depend on the choice of resolutions in both temporal and spatial domains. To not repeat the same analysis over and over in this thesis, one illustrative case will be presented below for which both aspects have been considered. The geometry is part of the publication work that is contained in this chapter\,\cite{Jeken-Rico2023}. Details about the case that are not of immediate relevance here are given in the next section \autoref{chap3:sec3} for the sake of clarity.\\
 
 \subsubsection*{Spatial Resolution}
-To identify appropriate choices of mesh sizes, computations can be run for different mesh resolutions. Based on the variation of primary variables or other flow indicators, it is possible to devise minimal resolution criteria. In cases of brain hemodynamics simulations, both the flow distribution through the network, as well as a high resolution image of the flow inside the aneurysm dome are important. To properly assess the mesh convergence, the first half will be dedicated to finding a reasonable resolution in the core of the vessels and the second half will be dedicated to the bulge. Doing splitting the analysis, we hope to have a clearer view on the implications of mesh resolution. This has been tested on one of the cases that forms part of the study that is contained by this chapter (case C). In a first step, meshes have been generated with mesh sizes:
+To identify appropriate choices of mesh sizes, computations can be run for different mesh resolutions. Based on the variation of primary variables or other flow indicators, it is possible to devise minimal resolution criteria. In cases of brain hemodynamics simulations, both the flow distribution through the network, as well as a high-resolution image of the flow inside the aneurysm dome are important. To properly assess the mesh convergence, the first half will be dedicated to finding a reasonable resolution in the core of the vessels and the second half will be dedicated to the bulge. By splitting the analysis, we hope to have a clearer view of the implications of mesh resolution. This has been tested on one of the cases that forms part of the study that is contained in this chapter (case C). In the first step, meshes have been generated with mesh sizes:
 \[h\in\{0.1, 0.15, 0.2, 0.25, 0.3\}\,\text{mm}\]
-that englobe popular choices in IA literature. The aneurysms itself was kept at a fixed resolution of $h$\,=\,0.1\,mm, to study it separately. The mesh contained 3 boundary layers with a minimal size of 0.05\,mm that stretched across the entire geometry. The convergence study was run considering the second of two cardiac cycles run at a constant time step of $\Delta t$\,=\,0.001\,s. Semi-implicit schemes and non-Newtonian viscosity according to the Carreau-Yasuda law were used.
+that englobe popular choices in IA literature. The aneurysm itself was kept at a fixed resolution of $h$\,=\,0.1\,mm, to study it separately. The mesh contained 3 boundary layers with a minimal size of 0.05\,mm that stretched across the entire geometry. The convergence study was excuted considering the second of two cardiac cycles with a constant time step of $\Delta t$\,=\,0.001\,s. Semi-implicit schemes and non-Newtonian viscosity according to the Carreau-Yasuda law were used (see Chapter 2).
 
 \begin{figure}[htb]
-	\centering
-	\begin{tikzpicture}
-		% Include the PDF image
-		\node (pdf) at (0,0) {\includegraphics[width=\linewidth]{chapter3/Figures/Convergence/vessel_convergence_space.pdf}};
-		% Include the PNG image with a manual shift
-		\node (png) at (pdf.west) [xshift=11.6cm, yshift=-1.35cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
-	\end{tikzpicture}
-	\caption{Velocity magnitude along designated green at systole for different mesh resolutions in the vessels.}
-	\label{fig:conv_space}
+    \centering
+    \begin{tikzpicture}
+        % Include the PDF image
+        \node (pdf) at (0,0) {\includegraphics[width=0.975\linewidth]{chapter3/Figures/Convergence/vessel_convergence_space.pdf}};
+        % Include the PNG image with a manual shift
+        \node (png) at (pdf.west) [xshift=11.2cm, yshift=-1.28cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
+    \end{tikzpicture}
+    \caption{Velocity magnitude along the designated line at systole for different mesh resolutions in the vessels.}
+    \label{fig:conv_space}
 \end{figure}
 
-In \autoref{fig:conv_space} the velocity was plotted at the last frame of the simulation (diastole) as an example for the dynamics. It can be seen that the differences among the resolutions are overall small and of quantitative nature, particularly, for mesh sizes below 0.2\,mm. Further, we observe that the transition at $l$\,=\,4\,mm between the coarse vessel and the refined aneurysm mesh is smooth and not perceivable from the fluid plot. The flow in the aneurysm shows no alterations between the different resolutions.
+In \autoref{fig:conv_space} the velocity was plotted at the last frame of the simulation (diastole) as an example of the dynamics. It can be seen that the differences among the resolutions are overall small and of a quantitative nature, particularly, for mesh sizes below 0.2\,mm. Further, we observe that the transition at $l$\,=\,4\,mm between the coarse vessel and the refined aneurysm mesh is smooth and not perceivable from the fluid plot. The flow in the aneurysm shows no alterations between the different resolutions.
 
 The velocity fields were linearly interpolated from all meshes to the coarsest mesh for a global comparison. Taking the most refined simulation as a reference, the $L_2$ norm of the velocity error was computed in the whole domain and integrated over the cardiac cycle and the space. This yielded errors (in mm/s) of:
 \[\varepsilon_{0.3} = 4.937,\quad \varepsilon_{0.25} = 3.559, \quad\varepsilon_{0.2} = 2.414, \quad\varepsilon_{0.15} = 1.194\]
 While the average errors, confirm no large dissent among acceptable resolutions, it is inconclusive on the best choice among them. Instead, the previously considered comparison (see \autoref{fig:conv_space}), suggest a mesh size of $h$\,=\,0.2\,mm as a good candidate.
 
-The aneurysm refinement has been analyzed separately, refining it with isotropic mesh sizes of $h\in\{0.075, 0.1, 0.125, 0.15\}$\,mm. The vessels retain the chosen $h$\,=\,0.2\,mm and all other simulation parameters are kept intact. From the obtained simulations, similar small changes in the primary variables could be observed. To consider a new facet of the important indicators, both the Oscillatory Shear Index (OSI) and the Time-Averaged Wall Shear Stress (TAWSS) have been computed over the aneurysm bulge.
+The aneurysm refinement has been analyzed separately, refining it with isotropic mesh sizes of $h\in\{0.075, 0.1, 0.125, 0.15\}$\,mm. The vessels retain $h$\,=\,0.2\,mm and all other simulation parameters are kept intact. From the obtained simulations, similar small changes in the primary variables could be observed. To consider a new facet of the important indicators, both the Oscillatory Shear Index (OSI) and the Time-Averaged Wall Shear Stress (TAWSS) have been computed.
 \begin{figure}[htb]
-	\centering
-	\begin{minipage}[b]{.45\textwidth}
-		\centering
-		\renewcommand{\arraystretch}{1.25} % Increase table row spacing
-		\setlength{\tabcolsep}{3pt} % Reduce column width
-		\small % Reduce font size
-		\begin{tabular}{l c c}
-			\hline
-			          & $E(\text{TAWSS})$ & $E(\text{OSI})$ \\
-			Unit      & \pa               & 1               \\[0.5em]
-			\hline
-			$h=0.15$  & 0.0089            & 0.0026          \\[0.5em]
-			$h=0.125$ & 0.0078            & 0.0024          \\[0.5em]
-			$h=0.1$   & 0.0074            & 0.0023          \\[0.5em]
-			\hline
-		\end{tabular}
-	\end{minipage}
-	\begin{minipage}[b]{.45\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter3/Figures/Convergence/TAWSS_snapshot.png}
-		\vspace{-2.1cm}
-	\end{minipage}
-	\caption[Convergence aneurysm refinement]{Computation of TAWSS and OSI for different levels of refinement at the aneurysm. Left: Errors for both quantities are computed by nearest neighbour interpolation from fine results onto the coarse mesh and integration over the surface. Right: TAWSS error from the coarses resolution.}\label{fig:osi_tawss}
+    \centering
+    \begin{minipage}[b]{.45\textwidth}
+        \centering
+        \renewcommand{\arraystretch}{1.25} % Increase table row spacing
+        \setlength{\tabcolsep}{3pt} % Reduce column width
+        \small % Reduce font size
+        \begin{tabular}{l c c}
+            \hline
+                      & $E(\text{TAWSS})$ & $E(\text{OSI})$ \\
+ Unit      & Pa                & 1               \\[0.5em]
+            \hline
+            $h=0.15$  & 0.0089            & 0.0026          \\[0.5em]
+            $h=0.125$ & 0.0078            & 0.0024          \\[0.5em]
+            $h=0.1$   & 0.0074            & 0.0023          \\[0.5em]
+            \hline
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}[b]{.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{chapter3/Figures/Convergence/TAWSS_snapshot.png}
+        \vspace{-2.1cm}
+    \end{minipage}
+    \caption[Convergence aneurysm refinement]{Computation of TAWSS and OSI for different levels of refinement at the aneurysm. Left: Errors for both quantities are computed by nearest neighbour interpolation from fine results onto the coarse mesh and integration over the surface. Right: TAWSS error from the coarsest resolution.}\label{fig:osi_tawss}
 \end{figure}
 
-The integrated errors with respect to the finest resolution have been recorded along with the local TAWSS error obtained from the last cardiac cycle in \autoref{fig:osi_tawss}. The errors in this case have been computed by mapping the OSI and TAWSS fields from the finer meshes to the coarsest one using nearest neighbour interpolation. This interpolator, even though sub-optimal, manages to avoid a large number of undefined values which otherwise follow from the use of a smooth interpolation on meshes with a slight mismatch of the surfaces. Since the indicators (OSI and TAWSS) are restricted to the boundaries by their intrinsic nature, it is easy for nodes to be slightly shifted outside the intersections of the convex hulls spanned by the meshes. Any linear or higher order interpolation fails there and yields invalid results. Nearest-neighbour interpolation however is impervious to these issues at the cost of a larger interpolation error. The obtained results show little deviations in TAWSS whose values are withing the range of 0.5--2\,Pa for the bulge. The maximal deviations are found on the neck sections of the aneurysm, where due to larger velocity gradients the WSS differs more notably (see right of \autoref{fig:osi_tawss}). Similar results hold for the OSI over the bulge. The relationship between the different errors is not arranged in a decreasing order. This can either be the result of perturbations due to the interpolation method or errors induced by the granularity of the segmentation. The geometries were segmented and smoothed following the previously described steps. The mesh size of the surface model exported from 3D Slicer lies around an estimated 0.1--0.15\,mm based on the angiography image resolution. Therefore, the limiting factor from the segmentation jeopardizes the attempts to further resolve the numerical resolution. One option is smoothing and refining the segmentation surface mesh, another one is simply avoiding diminute element sizes below 0.1\,mm. From \autoref{fig:osi_tawss} it is concluded that a separate refinement of the aneurysm might not be necessary. Nevertheless, it will be kept at 0.1\,mm, since it does not dramatically increase the computation cost. An example of a mesh using the chosen mesh sizes can be seen in \autoref{fig:mesh2}.
+The integrated errors with respect to the finest resolution have been recorded along with the local TAWSS error obtained from the last cardiac cycle in \autoref{fig:osi_tawss}. The errors, in this case, have been computed by mapping the OSI and TAWSS fields from the finer meshes to the coarsest one using nearest neighbour interpolation. This interpolator, even though sub-optimal, manages to avoid a large number of undefined values which otherwise follow from the use of a smooth interpolation on meshes with a slight mismatch of the surfaces. Since the indicators (OSI and TAWSS) are restricted to the boundaries by their intrinsic nature, it is easy for nodes to be slightly shifted outside the intersections of the convex hulls spanned by the meshes. Any linear or higher-order interpolation fails there and yields invalid results. Nearest-neighbour interpolation however is impervious to these issues at the cost of a larger interpolation error. The obtained results show little deviations in TAWSS whose values are within the range of 0.5--2\,Pa for the bulge. The maximal deviations are found on the neck sections of the aneurysm, where due to larger velocity gradients the WSS differs more notably (see right of \autoref{fig:osi_tawss}). Similar results hold for the OSI over the bulge.
+The mesh size of the surface model exported from 3D Slicer lies around an estimated 0.1--0.15\,mm based on the angiography image resolution. Therefore, the limiting factor from the segmentation jeopardizes the attempts to further resolve the numerical resolution. One option is smoothing and refining the segmentation surface mesh, another one is simply avoiding diminutive element sizes below 0.1\,mm. From \autoref{fig:osi_tawss} it is concluded that a separate refinement of the aneurysm might not be necessary. Nevertheless, it will be kept at 0.1\,mm, since it does not dramatically increase the computation cost. An example of a mesh using the chosen mesh sizes can be seen in \autoref{fig:mesh2}.
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=\linewidth]{chapter3/Figures/Study/mesh_details.png}
-	\caption{Visualization of the CoW of patient A with highlighted mesh features (orange circles). Linear isotropic refinement (left) and structured tetrahaedral boundary layers (right).}\label{fig:mesh2}
+    \centering
+    \includegraphics[width=\linewidth]{chapter3/Figures/Study/mesh_details.png}
+    \caption{Visualization of the CoW of patient A with highlighted mesh features (orange circles). Linear isotropic refinement (left) and structured tetrahedral boundary layers (right).}\label{fig:mesh2}
 \end{figure}
 
 
 \subsubsection*{Temporal Resolution}
-Time step size is in general set to match a unit CFL number in the simulations. One reason for this is maintaining an equilibrium between the single components of the momentum stabilization parameter, which depends on both spatial and temporal resolutions. Having a too small time step causes the stabilization to become homogeneous and small, \textit{i.e.} bounded to the time step size. On one side, this minimises the added numerical diffusion. On the other it increases the risk of losing stability. To find time step sizes that are within reasonable limits, all hemodynamics simulations of this study have been tested with different time steps $\Delta t = \{ 0.0001, 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s. It has been observed that for nearly all computations $\Delta t$\,=\,0.0001\,s lead to stability issues. These would also occur in some cases when using the next larger step $\Delta t$\,=\,0.0005\,s, but not for $\Delta t$\,=\,0.001\,s and above.
+Time step size is in general set to match a unit CFL number (introduced in Chapter 2) in the simulations. One reason for this is maintaining an equilibrium between the single components of the momentum stabilization parameter, which depends on both spatial and temporal resolutions. Having a too-small time step causes the stabilization to become homogeneous and small, \textit{i.e.} bounded to the time step size. On one side, this minimises the added numerical diffusion. On the other, it increases the risk of losing stability. To find time step sizes that are within reasonable limits, all hemodynamics simulations of this study have been tested with different time steps $\Delta t$\,=\,$\{ 0.0001, 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s. It has been observed that for nearly all computations $\Delta t$\,=\,0.0001\,s leads to stability issues. These would also occur in some cases when using the next larger step $\Delta t$\,=\,0.0005\,s, but not for $\Delta t$\,=\,0.001\,s and above.
 
-The time scheme also contributes to the accumulation of errors and was therefore analyzed separately with a fixed contribution in the stabilization parameters of $\Delta t$\,=\,0.001\,s. The time steps chosen are $\Delta t = \{ 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s, and represent common choices found in literature\,\cite{Berg2019_challenge}. The velocity is plotted at systole over the same line as in the previous case in \autoref{fig:conv_time}.
+The time scheme also contributes to the accumulation of errors and was therefore analyzed separately with a fixed contribution in the stabilization parameters of $\Delta t$\,=\,0.001\,s. The time steps chosen are $\Delta t$\,=\,$\{ 0.0005, 0.001, 0.0025, 0.005, 0.01\}$\,s, and represent common choices found in literature\,\cite{Berg2019_challenge}. The velocity is plotted at systole over the same line as in the previous case in \autoref{fig:conv_time}.
 \begin{figure}[htb]
-	\centering
-	\begin{tikzpicture}
-		% Include the PDF image
-		\node (pdf) at (0,0) {\includegraphics[width=\linewidth]{chapter3/Figures/Convergence/vessel_convergence_time.pdf}};
-		% Include the PNG image with a manual shift
-		\node (png) at (pdf.west) [xshift=11.6cm, yshift=-1.35cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
-	\end{tikzpicture}
-	\caption{Velocity magnitude along designated green at systole for different time step sizes.}
-	\label{fig:conv_time}
+    \centering
+    \begin{tikzpicture}
+        % Include the PDF image
+        \node (pdf) at (0,0) {\includegraphics[width=\linewidth]{chapter3/Figures/Convergence/vessel_convergence_time.pdf}};
+        % Include the PNG image with a manual shift
+        \node (png) at (pdf.west) [xshift=11.6cm, yshift=-1.35cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
+    \end{tikzpicture}
+    \caption{Velocity magnitude along designated green at systole for different time step sizes.}
+    \label{fig:conv_time}
 \end{figure}
 The errors coming from the time scheme are below $0.1$\,mm/s for all the curves. To remain consistent with the stabilization $\Delta t$ and for the sake of simplicity and computational efficiency, semi-implicit stepping will be adopted from now on with $\Delta t$\,=\,0.001\,s.
 
 
 \subsection{Risk Indicators}
-The objective of these carefully considered convergence studies is to ensure a proper computation of flow indicators. Most of them, as stated before, depend on the shearing exerted on the vessel walls. In its most basic representation the WSS is expressed as:
+The objective of these carefully considered convergence studies is to ensure a proper computation of flow indicators. Most of them, as stated before, depend on the shearing exerted on the vessel walls. In its most basic representation, the WSS is expressed as:
 \begin{equation}
-	\vec{\tau}_{wss}  = \vec{n} \times \left[ (\sigma\cdot\vec{n})\times \vec{n}\right]
-	\label{eq:wss_def}
+ \vec{\tau}_{wss}  = \vec{n} \times \left[ (\sigma\cdot\vec{n})\times \vec{n}\right]
+    \label{eq:wss_def}
 \end{equation}
 From an equation point of view, the WSS ($\tau_{wss}$) is a projection of the normal stresses onto the tangential plane of the vessel. To see the visual derivation of it see \autoref{fig:wss_theory}.
 \begin{figure}[ht]
-	\centering
-	\input{chapter3/Figures/Meshing/WSS}
-	\caption{WSS derivation.}
-	\label{fig:wss_theory}
+    \centering
+    \input{chapter3/Figures/Meshing/WSS}
+    \caption{WSS derivation.}
+    \label{fig:wss_theory}
 \end{figure}
 In literature, it is common to find a different, scalar definition of WSS, \autoref{eq:wss_def_2}, which in the case of incompressibility corresponds exactly to the $L_2$ norm of $\tau_{wss}$.
 \begin{equation}
-	\norm{\vec{\tau}_{wss}}_2 = \mu\dot{\gamma}
-	\label{eq:wss_def_2}
+ \norm{\vec{\tau}_{wss}}_2 = \mu\dot{\gamma}
+    \label{eq:wss_def_2}
 \end{equation}
-This second definition often profits from the precomputed shear rate $\dot{\gamma}$ that is used for non-Newtonian flows and does not require computing the surface normals. When using the coarse scale solution of the VMS stabilized Navier-Stokes however, using this formulation can be indeed problematic, yielding undesired high WSS contributions. The reason for this lies in the fact that the coarse scale velocities are in general not divergence free, but equal a certain modelled subscale divergence. To provide a better picture of this, consider without loss of generality a surface patch like the one shown in \autoref{fig:wss_theory}, where the normal direction is $\vec{n}=\vec{e}_x$. The no-slip condition at walls enforces that the derivatives in tangential directions are zero, i.e. $\partial_y\vec{u}$\,=\,0 and $\partial_z\vec{u}=0$. Assume, that the fluid is not divergence-free by a factor $\epsilon$:
+This second definition often profits from the precomputed shear rate $\dot{\gamma}$ used in non-Newtonian rheology models and does not require surface normals. When using the coarse-scale solution of the VMS stabilized Navier-Stokes, this formulation can be indeed problematic, yielding undesired high WSS contributions. The reason for this lies in the fact that the coarse-scale velocities are in general not divergence-free, but equal to a certain modelled subscale divergence. To provide a better picture of this, consider without loss of generality a surface patch like the one shown in \autoref{fig:wss_theory}, where the normal direction is $\vec{n}=\vec{e}_x$. The no-slip condition at walls enforces that the derivatives in tangential directions are zero, i.e. $\partial_y\vec{u}$\,=\,0 and $\partial_z\vec{u}=0$. Assume, that the fluid is not divergence-free by a factor $\epsilon$:
 \begin{equation*}
-	\nabla \cdot \vec{u} = \partial_x u_x = \epsilon
+    \nabla \cdot \vec{u} = \partial_x u_x = \epsilon
 \end{equation*}
-Then the original definition of WSS from \autoref{eq:wss_def} still yields the expected contribution, since it filters out $\partial_x u_x$ in the first cross product operation
+Then the original definition of WSS from \autoref{eq:wss_def} still yields the expected contribution, since it filters out $\partial_x u_x$ in the first cross-product operation
 \begin{equation*}
-	\norm{\vec{n} \times \left[ (\sigma\cdot\vec{n})\times \vec{n}\right]}_2 = \mu\sqrt{ {(\partial_x u_y)}^2 + {(\partial_x u_z)}^2},
+ \norm{\vec{n} \times \left[ (\sigma\cdot\vec{n})\times \vec{n}\right]}_2 = \mu\sqrt{ {(\partial_x u_y)}^2 + {(\partial_x u_z)}^2},
 \end{equation*}
 whereas the shear rate definition carries the said divergence into the WSS:
 \begin{equation*}
-	\mu\dot{\gamma} = \mu\sqrt{ \epsilon^2 + {(\partial_x u_y)}^2 + {{(\partial_x u_z)}}^2}
+    \mu\dot{\gamma} = \mu\sqrt{ \epsilon^2 + {(\partial_x u_y)}^2 + {{(\partial_x u_z)}}^2}
 \end{equation*}
-Under these circumstances, it is recommended to use the vectorial definition of the WSS in place of the commonly used shear rate-dependent expression. Apart from alleviating mass continuity errors, it provides a resourceful quantity to measure direction in shearing, which is not possible otherwise. In fact, many relevant indicators, such as the Oscillatory Shear Stress (OSI)\,\cite{Meng2014}, build upon vectorial wall shearing. For these reasons, the vectorial formulation is preserved. The first directly derived quantity of interest is the Time-Averaged WSS (TAWSS), expressing how large the exerted WSS is in an area on average (see \autoref{eqn:tawss}).
+Under these circumstances, it is recommended to use the vectorial definition of the WSS in place of the commonly used shear rate-dependent expression. Apart from alleviating mass continuity errors, it provides a resourceful quantity to measure direction in shearing, which is not possible otherwise. Many relevant indicators, such as the oscillatory shear index\,\cite{Meng2014}, build upon vectorial wall shearing. For these reasons, the vectorial formulation is preserved. The first directly derived quantity of interest is the Time-Averaged WSS (TAWSS), expressing how large the exerted WSS is per cardiac cycle (see \autoref{eqn:tawss}).
 \begin{equation}
-	\text{TAWSS} = \frac{1}{T}\int_T \norm{\vec{\tau}_{wss}}_2 \,dt
-	\label{eqn:tawss}
+ \text{TAWSS} = \frac{1}{T}\int_T \norm{\vec{\tau}_{wss}}_2 \,dt
+    \label{eqn:tawss}
 \end{equation}
-The mentioned OSI quantifies the oscillating character of the WSS. If it retains a consistent direction throughout a cardiac cycle, the OSI is zero. Alterations of its directions yield a growing OSI up to 0.5, its limit value (see \autoref{eqn:osi}).
+The mentioned OSI quantifies the oscillating character of the WSS, attaining high values where the WSS inverts its direction and low ones where stays unidirectional. Its computation is shown in \autoref{eqn:osi}.
 \begin{equation}
-	\text{OSI} = \frac{1}{2}\left[ 1 - \frac{\norm{\int_T \vec{\tau}_{wss} \,dt}_2}{\int_T \norm{\vec{\tau}_{wss}}_2 \,dt} \right]
-	\label{eqn:osi}
+ \text{OSI} = \frac{1}{2}\left[ 1 - \frac{\norm{\int_T \vec{\tau}_{wss} \,dt}_2}{\int_T \norm{\vec{\tau}_{wss}}_2 \,dt} \right]
+    \label{eqn:osi}
 \end{equation}
-Another family of indicators has been developed around the stability of WSS\,\cite{Morbiducci2020, Mazzi2020}, \textit{i.e.} the structure around points of vanishing WSS, as well as contracting and expanding manifolds. The latter analysis, related to the study of dynamical systems, identifies whether a vessel patch is stretched, compressed or twisted by shearing forces. While stability of WSS has not been yet assessed in the same depth as other remodelling indicators related to IA, it may play a considerable role in cases like the giant aneurysm of chapter 5.
+Another family of indicators has been developed around the stability of WSS\,\cite{Morbiducci2020, Mazzi2020}, \textit{i.e.} the structure around points of vanishing WSS, as well as contracting and expanding manifolds. The latter analysis, related to the study of dynamical systems, identifies whether a vessel patch is stretched, compressed or twisted by shearing forces. While the stability of WSS has not been yet assessed in the same depth as other remodelling indicators related to IA, it may play a role in cases like the giant aneurysm of Chapter 5, where flow stability could play a decisive role.
 
-A proper computation of the flow indicators depends on the numerical aspects of the computation, but also on the physiological compatibility between the simulated case and the real phenomena occurring in the human body. One keystone is imposing Boundary Conditions (BCs) that resemble reasonably well, the flow at the segments delimiting the computation domain. These belong to either inlets or outlets and need to be considered separately, due to their differing implications and determining factors.
+A correct estimation of flow indicators depends on the computation aspects, but also on the physiological compatibility between the simulated case and the real phenomena occurring in the human body. One keystone is imposing Boundary Conditions (BCs) that resemble reasonably well, the flow at the segments delimiting the computation domain. These belong to either inlets or outlets and need to be considered separately, due to their differing implications and determining factors.
 
 
 \subsection{Inlet Boundary Conditions}\label{chap3:sec2:subsec:2}
-The in-going volume flow depends on patient-specific characteristics, such as age, physical state and the presence of cardiovascular complications, \textit{e.g.} \,hypertension. In principal, it is possible to record the blood flow velocity in the larger arteries leading to the brain, \textit{i.e.} ICAs, using either Doppler-Ultrasound velocimetry or 4D flow MRI\@.
+The entering volume flow depends on patient-specific characteristics, such as age, physical state and the presence of cardiovascular complications, \textit{e.g.} \,hypertension. In principle, it is possible to record the blood flow velocity in the larger arteries leading to the brain, \textit{i.e.} ICAs, using either Doppler-Ultrasound velocimetry or 4D flow MRI\@.
 
-\paragraph{Doppler-Ultrasound velocimetry} measures the velocity of blood flow or other moving structures within the body using the Doppler effect. The technique involves a transducer that emits high-frequency ultrasound waves into the body. When these waves encounter moving objects, like red blood cells, they are reflected back to the transducer with a change in frequency. This frequency shift, known as the Doppler shift, is directly proportional to the velocity of the moving object. By analysing the frequency changes of the reflected waves, the ultrasound system can calculate and display the speed and direction of blood flow. This technique is widely used when analysing stenosis and other blockages in the upper body and limbs. In the crane however, applying Doppler-Ultrasound is more complicated due to the bony structures in its way. Also, the signal can be perturbed by any other larger vessel that lays between the target artery and the transducer.
+\paragraph{Doppler-Ultrasound velocimetry} measures the velocity of blood flow or other moving structures within the body using the Doppler effect. The technique involves a transducer that emits high-frequency ultrasound waves into the body. When these waves encounter moving objects, like red blood cells, they are reflected to the transducer with a change in frequency. This frequency shift, known as the Doppler shift, is directly proportional to the velocity of the moving object. By analysing the frequency changes of the reflected waves, the ultrasound system can calculate and display the speed and direction of blood flow. Doppler-Ultrasound velocimetry is widely used when analysing stenosis and other blockages in the upper body and limbs. In the crane, however, applying it is more complicated due to the bony structures in its way. Also, the signal can be perturbed by any other larger vessel that lies between the target artery and the transducer.
 
-\paragraph{4D Flow MRI} utilises, as the name suggest, an MRI scanner to retrieve estimates about the flow velocity in one or several planes. For each of the planes, the scanner retrieves the signal over several cardiac cycles to filter out noise. For that reason, patients need to remain still for an extended period of time, making it a seldomly used technique in medical the medical field. In studies where 4D flow is used, resolutions have been reported to be around 1/3 of the ones obtained in TOF MRI using the same device\,\cite{Berg2014}. Due to the reduced resolution, mass and momentum conservation are not assured and neither is the quality of the estimations in recirculation zones. Nevertheless, the technique provides an unbiased profile of the fluxes in the brain that doesn't rely on assumptions related to boundary conditions of blood rheology. Much work is invested lately into the evaluation and development of 4D flow MRI using Machine Learning to enhance the estimations and reduce scanning times\,\cite{Harloff2013, Rutkowski2021, Cherry2022}.
+\paragraph{4D Flow MRI} utilises, as the name suggests, an MR scanner to retrieve estimates about the flow velocity in one or several planes. In each plane, the scanner retrieves the signal over several cardiac cycles to filter out noise. For that reason, patients need to remain still for an extended time, making it a seldom-used technique in the medical field. In studies where 4D flow is used, resolutions have been reported to be around three times more coarse than the ones obtained in TOF MRI using the same machine\,\cite{Berg2014}. Due to the lower resolution, mass and momentum conservation are not assured and neither is the quality of the estimations in recirculation zones. Nevertheless, the technique provides an unbiased profile of the fluxes in the brain that doesn't rely on assumptions related to boundary conditions of blood rheology. Much work has been invested lately into the evaluation and development of 4D flow MRI using Machine Learning to enhance the estimations and reduce scanning times\,\cite{Harloff2013, Rutkowski2021, Cherry2022}.
 
 \paragraph{The influence of the inflow waveform}
-Since neither of the options are generally available, studies usually fall back onto generalised waveforms obtained from large populations. Ideally, these generalised curves are given for separate groups, \textit{e.g.} \,age groups, to better fit specific characteristics\,\cite{Hoi2011}. Several publications have devoted time to analysing the discrepancies between using generalised curves and patient-specific ones. In 2014 Ahn \etal\,\cite{I.G.H.2014} and Ahn \etal\,\cite{Ahn2014} conducted independent studies with partially contradicting outcomes. In the prior a small population was the basis of simulations using different inflow waveforms with the same volume found in literature. The authors found only significant alterations in the OSI magnitudes. On the other hand Jansen\,\cite{I.G.H.2014} found that in the 36 treated patient cases, for which 2D phase-contrast MR recordings were available, substantial differences were the result of different inflow waveforms. In the last, and largest study by Li \etal\,\cite{Li2020} 148 patients were considered. Transcranial Doppler sonography recordings were taken of the patients and used to run simulations of the IA in their brain arterial system. The same simulations, as in the previous studies, were compared to ones run with generalised profiles. The study concluded that even though significant differences in the flow could be witnessed, they were not sufficiently relevant to influence the rupture risk assessment. The latter study strikes a middle ground between its two predecessors and keeps a certain degree of confidence in the use of generalised data. It is also important to note that the cardiac output is a quantity subject to many alterations in the body, such as the state of activity, anemic events and environmental changes. In that sense, it is nearly impossible to strike a ``perfect'' result, underlining that hemodynamic simulations are an approximation of the complex and transient phenomena in the brain.
+Since neither of the options is generally available, studies usually fall back onto generalised waveforms obtained from large populations. Ideally, these generalised curves are given for separate groups, \textit{e.g.} \,age groups, to better fit specific characteristics\,\cite{Hoi2011}. Several publications have devoted time to analysing the discrepancies between using generalised curves and patient-specific ones. In 2014 Jansen \etal\,\cite{I.G.H.2014} and Ahn \etal\,\cite{Ahn2014} conducted independent studies with partially contradicting outcomes. In the prior a small population was the basis of simulations using different inflow waveforms with the same volume found in literature. The authors found only significant alterations in the OSI magnitudes. On the other hand Jansen\,\cite{I.G.H.2014} found that in the 36 treated patient cases, for which 2D phase-contrast MR recordings were available, substantial differences were the result of different inflow waveforms. In the last and largest study by Li \etal\,\cite{Li2020}, 148 patients were considered. Transcranial Doppler sonography recordings were taken of the patients and used to run simulations of the IA in their brain arterial system. The same simulations, as in the previous studies, were compared to ones using generalised profiles. The study concluded that even though significant differences in the flow could be witnessed, they were not sufficiently relevant to influence the rupture risk assessment. The latter study strikes a middle ground between its two predecessors and keeps a certain degree of confidence in the use of generalised data. It is also important to note that cardiac output is a quantity subject to many alterations in the body, such as the state of activity, anaemic events and environmental changes. In that sense, it is nearly impossible to strike a ``perfect'' result, underlining that hemodynamic simulations are an approximation of the complex and transient phenomena occurring in real life.
 
-Considering the presented studies and under the absence of direct measurements for the patients considered in this work, generalized curves are adopted. A waveform of the ICA obtained in the cooperating medical institution was taken as a baseline, since age and other informations were not present. However, the MR scans revealed the whole structure of the CoW which permitted scaling the waveform according to the indications from\,\cite{Tanaka2006}. In the cited work, 105 healthy, young individuals are examined in regards to the flow rates in the ICAs and BA considering posterior or anterior hypoplasia. This permitted generating indications for the flow split among suppliers in the absence of a complete CoW. An example for the volume flow curve alongside another age-based curve\,\cite{Hoi2011} are given in \autoref{fig:waveforms}.
-\begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{chapter3/Figures/Waveforms/waveform_comparison.pdf}
-	\caption[Generalized Inflow Waveforms]{Two waveforms $\dot{Q}_1$\,\cite{Tanaka2006} and $\dot{Q}_2$\,\cite{Hoi2011} used when the structure of the CoW is known and when the individual is older, respectively. The length of the cardiac cycle is $T=0.9$\,s for $\dot{Q}_1$ and $T=0.95$\,s for $\dot{Q}_2$. The shorter period contributes to the higher values of $\dot{Q}_1$, since it was scaled to a mean value of $302$\, ml/min\,\cite{Tanaka2006}.}
-	\label{fig:waveforms}
+Considering the presented studies and the absence of direct measurements for the patients considered in this work, generalized curves are adopted. A waveform of the ICA obtained at the LMU University Hospital was taken as a baseline since age and other information were not present. However, the MR scans revealed the whole structure of the CoW which permitted scaling the waveform according to the indications from\,\cite{Tanaka2006}. In the cited work, 105 healthy, young individuals are examined in regards to the flow rates in the ICAs and BA considering posterior or anterior hypoplasia. This permitted generating indications for the flow split among suppliers in the absence of a complete CoW. An example for the volume flow curve alongside another age-based curve\,\cite{Hoi2011} is given in \autoref{fig:waveforms}.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\linewidth]{chapter3/Figures/Waveforms/waveform_comparison.pdf}
+    \caption[Generalized Inflow Waveforms]{Two waveforms $\dot{Q}_1$\,\cite{Tanaka2006} and $\dot{Q}_2$\,\cite{Hoi2011} are used in this thesis. The first is typical for adults and the second for older adults ($>60$ years). The length of the cardiac cycle is $T=0.9$\,s for $\dot{Q}_1$ and $T=0.95$\,s for $\dot{Q}_2$. The shorter period contributes to the higher values of $\dot{Q}_1$, since it was scaled to a mean value of $302$\, ml/min\,\cite{Tanaka2006}.}
+    \label{fig:waveforms}
 \end{figure}
 
 The volumetric flow can be imposed with varying degrees of complexity. The first, and most simple is using a plug profile over the inlet. If a sufficiently long portion of vasculature, ideally containing turns\,\cite{Hodis2015}, is used, this method may be applied\,\cite{Berg2019}. Its main advantage is that it does not require a circular inlet to be implemented and can instead be applied to any surface. Another more realistic approach is the use of a parabolic profile:
 \begin{equation}
-	\vec{u}_{in} = -\vec{n}_{in}\frac{2\dot{Q}}{\pi R^2}\left(1-\frac{r^2}{R^2}\right)
+ \vec{u}_{in} = -\vec{n}_{in}\frac{2\dot{Q}}{\pi R^2}\left(1-\frac{r^2}{R^2}\right)
 \end{equation}
-The profile bases on a fully developed Poiseuille flow, \textit{i.e.} for a stationary viscous flow in a circular pipe. Therefore, it needs to be applied on circular inlet of radius $R$, where $r$ is the distance to the circle's center. Note that the normal vector $\vec{n}_{in}$ is defined outwards, like all other outflows, and thus requires to be inverted for the profile here. This profile is due to its smooth progression and simple implementation one of the most frequent choices in IA literature\,\cite{Vignon-Clementel2006, Lynch2022}. The last approach found in common IA literature is based on theory of oscillating blood flow described by Womersley in 1957\,\cite{Womersley1957}. Here, not only the magnitude, but also the inflow profile vary across time, mimicking the behaviour of a viscous fluid in a circular pipe under oscillating inflow pressures. While arguably being the most physiologically compatible flow of the presented methods, it requires some more implementation steps as well as circular profiles, much like the parabolic profile. For the present work, Womersley profiles have not been used due to a negligible impact on IA hemodynamics\,\cite{Berg2015} while implicating an increase in complexity of the simulations.
+The profile is based on a fully developed Poiseuille flow, \textit{i.e.} for a stationary viscous flow in a circular pipe. Therefore, it needs to be applied on a circular inlet of radius $R$, where $r$ is the distance to the circle's centre. Note that the normal vector $\vec{n}_{in}$ is defined outwards, like all other outflows, and thus requires to be inverted for the profile here. Using this profile is, due to its smooth progression and simple implementation one of the most frequent choices in IA literature\,\cite{Vignon-Clementel2006, Lynch2022}. The last approach found in common IA literature is based on the theory of oscillating blood flow described by Womersley in 1957\,\cite{Womersley1957}. Here, not only the magnitude but also the inflow profile varies over time, mimicking the behaviour of a viscous fluid in a circular pipe under oscillating inflow pressures. While arguably being the most physiologically compatible flow of the presented methods, it requires some more implementation steps as well as circular profiles, much like the parabolic profile. For the present work, Womersley profiles have not been used due to a negligible impact on IA hemodynamics\,\cite{Berg2015} while implicating an increase in the complexity of the simulations.
 
 
 \subsection{Outlet Boundary Conditions}\label{chap3:sec2:subsec:4}
-Outlet boundary conditions in the brain arterial system are overall difficult to model and calibrate. Contrary to, the aorta and its branches, the vessels branching off the CoW are small and measuring flow velocities in them is nearly impossible. The main difference with respect to the inflow, is that in general there are many more outgoing vessels at different heights of the vascular tree. Therefore, it is necessary to devise a strategy to split the flow correctly throughout the sinks of the system.
+Outlet boundary conditions in the brain arterial system are overall difficult to model and calibrate. Contrary to the aorta and its branches, the vessels branching off the CoW are small and measuring flow velocities in them is nearly impossible. The main difference with respect to the inflow is that, in general, there are many more outgoing vessels at different heights of the vascular tree. Therefore, it is necessary to devise a strategy to split the flow correctly throughout the sinks of the system.
 
-\paragraph{Zero-pressure outlet conditions} are the most common choice in IA literature\,\cite{Berg2019_challenge, Valen-Sendstad2018}. This effectively renders the flow distribution proportional to the resistance along the paths to each vessel. Aside from the fact that no physiological law supports this BC, it implies that the flow split becomes dependent on the length of the outlet extrusions or the outlet cut-offs, and the choice of viscosity model. This can be seen by simply modelling the flow in a network with a 0D model, much like an electrical circuit. If a ground is applied at each end, the sole factor directing the flow through the network is the resistance along each path. However, it is expected that the dominant contribution to the resistance stems actually from the smaller vascular bed of arterioles and capillaries found past the limits of our computation models. This poses a direct contradiction with the zero-pressure law, raising criticism from many\,\cite{Berg2019_challenge, Chnafa2018, Chnafa2017, Vignon-Clementel2006}. Another indirect drawback, is that the overall pressures in the system are not adapted to the ones found in reality. While this does not directly affect CFD simulations, it does yield utterly wrong results when wall compliance is considered. A considerable leap in development was struck in 2006 by Vignon-Clementel who developed a reduced-order model for the outlets.
+\paragraph{Zero-pressure outlet conditions} are the most common choice in IA literature\,\cite{Berg2019_challenge, Valen-Sendstad2018}. This effectively renders the flow distribution proportional to the resistance along the paths to each vessel. Aside from the fact that no physiological law supports this BC, it implies that the flow split becomes dependent on the length of the outlet extrusions or the outlet cut-offs, and the choice of viscosity model. This can be seen by simply modelling the flow in a network with a 0D model, much like an electrical circuit. If a ground is applied at each end, the sole factor directing the flow through the network is the resistance along each path. However, it is expected that the dominant contribution to the resistance stems actually from the smaller vascular bed of arterioles and capillaries found past the limits of our computation models. This poses a direct contradiction with the zero-pressure law, raising criticism from many\,\cite{Berg2019_challenge, Chnafa2018, Chnafa2017, Vignon-Clementel2006}. Another indirect drawback is that the overall pressures in the system are not adapted to the ones found in reality. While this does not directly affect CFD simulations, it does yield utterly wrong results when wall compliance is considered. A considerable leap in development was struck in 2006 by Vignon-Clementel \etal\,\cite{Vignon-Clementel2006} who developed a reduced-order model for the outlets.
 
-\paragraph{Reduced-order outlet model} extends the regular 3D domain by 1D domains in which simplified versions of the Navier-Stokes equations are solved analytically. As a result from the derivation, the pressure is set as a function of the current volumetric flow times a resistance. In the most simple execution, the resistance is a constant $R$, much like in an established Poiseuille flow.
+\paragraph{Reduced-order outlet models} extend the regular 3D domain by 1D domains in which simplified versions of the Navier-Stokes equations are solved analytically. As a result of the derivation, the pressure is set as a function of the current volumetric flow times a resistance. In the most simple execution, the resistance is a constant $R$, much like in an established Poiseuille flow.
 \begin{equation}
-	p_{out} = R\int_{\Gamma_{out}} \vec{u} \cdot \vec{n}\,dA
-	\label{eqn:pqr}
+ p_{out} = R\int_{\Gamma_{out}} \vec{u} \cdot \vec{n}\,dA
+    \label{eqn:pqr}
 \end{equation}
-If vessel compliance is considered, the resulting pressure is no longer linearly dependent of the volume flow, but is subject to an impedance $Z(t)$. The impedance models the shift of the outgoing flow that is caused by the capacity of arteries to elastically deform due to a sudden rise in pressure.
+If vessel compliance is considered, the resulting pressure is no longer linearly dependent on the volume flow but is subject to an impedance $Z(t)$. The impedance models the shift of the outgoing flow caused by the capacity of arteries to elastically deform due to pressure variations.
 \begin{equation}
-	p_{out} = \frac{1}{T} \int_{t-\tau}^{t}Z(t-\tau) \int_{\Gamma_{out}} \vec{u} \cdot \vec{n}\,dA\,d\tau
+ p_{out} = \frac{1}{T} \int_{t-\tau}^{t}Z(t-\tau) \int_{\Gamma_{out}} \vec{u} \cdot \vec{n}\,dA\,d\tau
 \end{equation}
-The latter BC is commonly referred to as a 2-element Windkessel model. The denomination \textit{Windkessel} stems stems from German and means wind kettle. It was used to describe water circuits with integrated air chambers that acted as a dampening volume absorbing shocks from the abrupt changes of flow in the system. In the context of the heart, having compliance outlet conditions is seen as a critical requirement. There, as described above, arteries absorb the shocks emitted by the heart contractions and smooth them out to ensure a continuous flow. In brain per contrary, the arteries lack much of the elasticity and instead have more developed smooth muscle cells in the media\,\cite{Liebeskind2016}. This renders compliance small, which can be seen in dynamic CT images. Note that the same does not necessarily apply to diseased aneurysm tissue, as is known from literature and will be shown in the last chapter of this thesis. In summary, from the presented boundary conditions it is assumed that a linear resistance together with the volume flow rate can provide an effective way of imposing outflow pressures. The remaining question to solve is how to determine this resistance.
+The latter BC is commonly referred to as a 2-element Windkessel model. The denomination \textit{Windkessel} stems stems from German and means wind kettle. It was used to describe water circuits with integrated air chambers that acted as a dampening volume absorbing shocks from the abrupt flow changes. In the context of the heart, having compliance outlet conditions is seen as a critical requirement. There, as described above, arteries absorb the shocks emitted by the heart contractions and smooth them out to ensure a continuous flow. In the brain, on the contrary, arteries lack much elasticity and instead have more developed smooth muscle cells in the media\,\cite{Liebeskind2016}. This renders compliance small, which is thus difficult to observe in dynamic CT imaging. Note that the same does not necessarily apply to diseased aneurysm tissue, as is known from the literature and will be shown in the last chapter of this thesis. In summary, from the presented boundary conditions it is assumed that a linear resistance together with the volume flow rate can provide an effective way of imposing outflow pressures. The remaining question to solve is how to determine this resistance.
 
-\paragraph{The Principle of Minimum Work} also called Murray's Law, describing a natural law of branchings can be exploited to estimate the split. In the course of evolution, humans have developed an optimized branching pattern in arteries that minimizes the overall maintenance $P_s$ and transport cost $P_t$\,\cite{Helthuis2019, Keelan2021}. One can think of the maintainance cost as a penalization to having just few large vessels, since blood needs to be pushed through capillaries to effectively exchange nutrition and waste products. One way of expressing the transport cost is through Poiseuilles law:
+\paragraph{The Principle of Minimum Work} also called Murray's Law, describes a natural law of branchings that can be exploited to estimate the split. In the course of evolution, humans have developed an optimized branching pattern in arteries that minimizes the overall maintenance $P_s$ and transport cost $P_t$\,\cite{Helthuis2019, Keelan2021}. One can think of the maintenance cost as a penalization for having just a few large vessels since blood needs to be pushed through capillaries to effectively exchange nutrition and waste products. One way of expressing the transport cost is through Poiseuilles law:
 \begin{equation*}
-	P_t = \dot{Q}\Delta p = \frac{8\mu l \dot{Q}^2}{\pi r^4}
+ P_t = \dot{Q}\Delta p = \frac{8\mu l \dot{Q}^2}{\pi r^4}
 \end{equation*}
-The storage work grows proportionally to the volume of blood held by an idealised vessel, which is multiplied by an volumetric cost $\lambda$, usually set as $\lambda$\,=\,648\,J/($m^3$s)\,\cite{Keelan2019}.
+The storage work grows proportionally to the volume of blood held by an idealised vessel, which is multiplied by a volumetric cost $\lambda$, usually set as $\lambda$\,=\,648\,J/($m^3$s)\,\cite{Keelan2019}.
 \begin{equation*}
-	P_s=\lambda V = \lambda l\pi r^2
+ P_s=\lambda V = \lambda l\pi r^2
 \end{equation*}
-To retrieve the optimal radius, the minimizer in \autoref{eq:minim_murray} is derived with respect to $r$. Note, that the sum of terms with a dependency $r^{-4}$ and $r^{2}$ has one local minimum for $r>$0.
-\begin{align}
-	\min_r P_t + P_s = \min_r \left(\frac{8\mu l \dot{Q}^2}{\pi r^4} + \lambda l\pi r^2\right)\label{eq:minim_murray} \\[0.2em]
-	\frac{\partial}{\partial r}(P_t + P_s) = -\frac{32\mu l \dot{Q}^2}{\pi r^5} + 2\lambda l\pi r = 0                 \\[0.2em]
-	\dot{Q} = r^3\sqrt{\frac{\lambda\pi^2}{16\mu}}
-\end{align}
+To retrieve the optimal radius, the minimizer in \autoref{eq:minim_murray} is differentiated in $r$. Note, that the sum of terms with a dependency $r^{-4}$ and $r^{2}$ has one local minimum for $r>$0.
+\begin{align*}
+ \min_r P_t + P_s = \min_r \left(\frac{8\mu l \dot{Q}^2}{\pi r^4} + \lambda l\pi r^2\right)\label{eq:minim_murray} \\[0.2em]
+ \frac{\partial}{\partial r}(P_t + P_s) = -\frac{32\mu l \dot{Q}^2}{\pi r^5} + 2\lambda l\pi r = 0                 \\[0.2em]
+ \dot{Q} = r^3\sqrt{\frac{\lambda\pi^2}{16\mu}}
+\end{align*}
 For a given bifurcation with an inflow $\dot{Q}_{in}$ and several outflows $\dot{Q}_{i}$, Murray's law is exploited using the flux balance:
-\begin{align}
-	\frac{\dot{Q}_{1}}{\dot{Q}_{2}} & = \frac{r_1^3}{r_2^3}                                                                            \\
-	\dot{Q}_{in}                    & = \sum_i \dot{Q}_{i} = 1 + \frac{r_2^3}{r_1^3}\dot{Q}_{1} + \frac{r_3^3}{r_1^3}\dot{Q}_{1} + ... \\
-	                                & =\frac{\sum_i r_i^3}{r_1^3}\dot{Q}_{1}
-\end{align}
-For any outlet $k$ and a general exponent $n$, Murray's law fixes average flow over a cardiac cycle as:
+\begin{align*}
+ \frac{\dot{Q}_{1}}{\dot{Q}_{2}} & = \frac{r_1^3}{r_2^3}                                                                            \\
+ \dot{Q}_{in}                    & = \sum_i \dot{Q}_{i} = \dot{Q}_{1} + \frac{r_2^3}{r_1^3}\dot{Q}_{1} + \frac{r_3^3}{r_1^3}\dot{Q}_{1} + ... \\
+                                    & =\frac{\sum_i r_i^3}{r_1^3}\dot{Q}_{1}
+\end{align*}
+For any outlet $k$ and a general exponent $n$, Murray's law fixes the average flow over a cardiac cycle as:
 \begin{equation}
-	\dot{Q}_{k} =\frac{r_k^n}{\sum_i r_i^n}\dot{Q}_{in}
-	\label{eqn:basic_murray}
+ \dot{Q}_{k} =\frac{r_k^n}{\sum_i r_i^n}\dot{Q}_{in}
+    \label{eqn:basic_murray}
 \end{equation}
-Under the previously provided assumptions, Murray's law establishes a cubic proportionality between the steady-state volumetric flow and the vessel radius. Varying assumptions on flow properties or changing the dimensionality of the problem results in other exponents, e.g.\,2D Poiseulle flow has $n$\,=\,5/2, effects of turbulence and compliance yield $n \approx 2$\,\cite{Keelan2021}. Murray's law has been confirmed experimentally by exhaustive \textit{post-mortem} examinations of human brains by Helthuis \etal\,\cite{Helthuis2019}. By measuring the luminal radius in large series of bifurcations it was confirmed that an exponent close to 3 rules the branching patterns. Depending on each individual and the overall size of the bifurcation that is examined, the coefficient may vary between $n$\,=\,2 and $n$\,=\,3.5. In simulated hemodynamics literature, index 3 is a common choice since it bases on the same assumptions than plain resistance boundary conditions, making it a consistent choice\,\cite{Marsden2008}. Several publications have studied the impact of the exponent 2 and 3 for IA simulations\,\cite{Saalfeld2019, Chnafa2018}, confirming that $n$\,=\,3 promotes flow in larger vessels with respect to $n$\,=\,2. Nevertheless, since no measurement data was available, neither of the choices could be prioritised over the other one.
+Under the previously provided assumptions, Murray's law establishes a cubic proportionality between the steady-state volumetric flow and the vessel radius. Varying assumptions on flow properties or changing the dimensionality of the problem results in other exponents, e.g.\,2D Poiseulle flow has $n$\,=\,5/2, effects of turbulence and compliance yield $n \approx 2$\,\cite{Keelan2021}. Murray's law has been confirmed experimentally by exhaustive \textit{post-mortem} examinations of human brains by Helthuis \etal\,\cite{Helthuis2019}. By measuring the luminal radius in a large series of bifurcations, it was confirmed that an exponent close to 3 rules the branching patterns. Depending on each individual and the overall size of the bifurcation that is examined, the coefficient may vary between $n$\,=\,2 and $n$\,=\,3.5. In simulated hemodynamics literature, index 3 is a common choice since it is based on the same assumptions as plain resistance boundary conditions, making it a consistent choice\,\cite{Marsden2008}. Several publications have studied the impact of the exponent 2 and 3 for IA simulations\,\cite{Saalfeld2019, Chnafa2018}, confirming that $n$\,=\,3 promotes flow in larger vessels with respect to $n$\,=\,2. Nevertheless, since no measurement data was available, neither of the choices could be prioritised over the other one in this work.
 
-Another studied aspect of the law is its locality, or in other words, what is considered one bifurcation. In \autoref{eqn:basic_murray} all outflows of a system were considered at a time, but one may arguably consider the mass balance individually at each bifurcation instead, as done in\,\cite{Chnafa2018}. In case of a perfectly Murray-compliant network, both approaches yield the same outcome. When Murray's law is not met the outcomes vary. Consider for instance an unrealistic network, in which all vessels have the same diameter. In that case the flow drastically increases in proximal outlets and diminishes exponentially on distal parts based on the number of bifurcations on its path.
+Another studied aspect of the law is its locality, or in other words, what is considered one bifurcation. In \autoref{eqn:basic_murray} all outflows were considered at once, but one may arguably consider the mass balance individually at each bifurcation instead, as done in Chnafa \etal\,\cite{Chnafa2018}. In the case of a perfectly Murray-compliant network, both approaches yield the same outcome. However, when Murray's law is not met the outcomes vary. Consider for instance an unrealistic network, in which all vessels have the same diameter. In that case, the flow drastically increases in proximal outlets and diminishes exponentially on distal parts based on the number of bifurcations on its path.
 
-One particular issue arising from this local Murray's split concerns communicating vessels. These vessels, as described before, serve the purpose of linking the anterior and posterior circulations, providing alternative pathways for the blood in case of ischaemia\footnote{Ischaemia: Inadequate blood supply to an organ or part of the body.}\,\cite{Liebeskind2016}. There, the local law fails in any case, since depending from which direction the bifurcations are swept through, the communicating vessels will have either one direction or another one. It is also problematic to delimit the vascular network at such a vessel, since their flow direction can even be inverted between individuals\,\cite{Zhang2016}. Hence, Murray's law as well as plain zero-stress boundary conditions are likely to alter results considerably in that scenario. To our surprise, even though 60--70\% of all IA at the CoW are situated at communicating arteries\,\cite{Hacein-Bey2011}, no previous publications (to the authors best knowledge) has mentioned or discussed this question. Most works studying IA at the carotid arteries do not describe the general topology of the CoW and the absence or hypoplasia of communicating segments. There are cases defining the PCom as a regular system outlet\,\cite{Chnafa2017, Chnafa2018} and others neglecting it\,\cite{Castro2006, Dennis2017}. This motivates the contribution in which we attempt evaluate and estimate the implications of using Murray's law in patient cases with IA at posterior communicating arteries.
+One particular issue arising from this local Murray's split concerns communicating vessels. These vessels link the anterior and posterior circulations, providing alternative pathways for the blood in case of ischaemia\footnote{Ischaemia: Inadequate blood supply to an organ or part of the body.}\,\cite{Liebeskind2016}. There, the local law fails in any case, since depending on which direction the bifurcations are swept through, the communicating vessels will have either one direction or another one. It is also problematic to delimit the vascular network at such a vessel since their flow direction can even be inverted between individuals\,\cite{Zhang2016}. Hence, Murray's law as well as plain zero-stress boundary conditions are likely to alter results considerably in that scenario. To our surprise, even though 60--70\% of all IAs at the CoW are situated at communicating arteries\,\cite{Hacein-Bey2011}, no previous publications (to the authors' best knowledge) have mentioned or discussed this question. Most works studying IAs at the carotid arteries do not describe the general topology of the CoW and the absence or hypoplasia of communicating segments. There are cases defining the PCom as a regular system outlet\,\cite{Chnafa2017, Chnafa2018} and others neglecting it\,\cite{Castro2006, Dennis2017}. This motivates the contribution in which we attempt to evaluate and estimate the implications of using Murray's law on patient cases with IAs at posterior communicating arteries. After having studied all the essential subjects to simulate brain hemodynamics, we are going to carry on with the study of this proposed question.
 
 
 \section{Impact of the Domain Extension}\label{chap3:sec3}
-The study starts with a presentation of the patient cases and the different sizes of geometry that are generated to test the sensitivity of the boundary conditions. Then some study specific models will be shortly discussed before showing the results of the hemodynamics computations. The study and the chapter are subsequently finished with a discussion of the findings and a summarising conclusion.
+The study begins with a presentation of the patient cases and the different sizes of geometry that are generated to test the sensitivity of the boundary conditions. Then some specific models will be shortly discussed before showing the results of the hemodynamics computations. The study and the chapter are subsequently finished with a discussion of the findings and a summarising conclusion.
 
 \subsection{Patient-specific Artery Networks}
-For a first exploratory work, we consider 3 patients (A-C) with unruptured saccular aneurysms at the ICA-PCom junction. The angiography images were obtained using TOF angiography on 1.5T and 3T MRI scanners with isotropic imaging and a 0.6\,mm slice thickness. The choice of device ensures that the whole CoW is visible in the scans. The lumen was segmented under the supervision of interventional neuroradiologists of the cooperating medical institution. All aneurysm segmentations were double-checked with DSA imaging taken the day of the respective interventions.
+For the first exploratory work, we consider 3 patients (A-C) with unruptured saccular aneurysms at the ICA-PCom junction. The angiography images were obtained using TOF-MRA on 1.5T and 3T MRI scanners with isotropic imaging and a 0.6\,mm slice thickness. The choice of device ensures that the whole CoW is visible in the scans. The lumen was segmented under the supervision of interventional neuroradiologists at the LMU University Hospital. All aneurysm segmentations were double-checked with DSA imaging taken on the day of the respective interventions.
 
 \begin{figure}[htbp]
-	\centering
-	\begin{minipage}[b]{0.48\textwidth}
-		\includegraphics[width=\linewidth, trim={0 13.1cm 0 0}, clip]{chapter3/Figures/Study/operation_details.png}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[b]{0.48\textwidth}
-		\includegraphics[width=\linewidth, trim={0 0 0 13.1cm}, clip]{chapter3/Figures/Study/operation_details.png}
-	\end{minipage}
-	\caption{Left: DSA image of the aneurysm of patient B. Right: Capture of the aneurysm during surgery. The red pouch is the pronounced lateral daughter sack showing notable wall thinning and immediate rupture risk.}
-	\label{fig:check_IA}
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth, trim={0 13.1cm 0 0}, clip]{chapter3/Figures/Study/operation_details.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth, trim={0 0 0 13.1cm}, clip]{chapter3/Figures/Study/operation_details.png}
+    \end{minipage}
+    \caption{Left: DSA image of the aneurysm of patient B. Right: Capture of the aneurysm during surgery. The red pouch is the pronounced lateral daughter sack showing notable wall thinning and immediate rupture risk.}
+    \label{fig:check_IA}
 \end{figure}
 
-Patient A has a complete CoW with one aneurysm of diameter 7.5\,mm at the left ICA-PCom bifurcation. Patient B has a bilateral P1 hypoplasia and is therefore missing a connection of the basilar artery with both anterior circulations. The PComs are considered fetal since their size is larger than usual and they are in fact the main supplier of blood to the PCA\,\cite{Liebeskind2016}. The aneurysm of the latter is located on the right side ($d$\,=\,5\,mm) and features a pronounced lateral daughter sack. The complex geometry of this formation was later confirmed during surgery, as seen in \autoref{fig:check_IA}. Lastly, patient C too has an incomplete CoW due to an absent right PCom. In this case, two IA can be found, one at the left ICA-PCom bifurcation and one at the right MCA bifurcation. The former, being the only one considered during analysis, is classified as bilobular, due to the presence of two rounded sacks.
+Patient A has a complete CoW with a 7.5\,mm aneurysm at the left ICA-PCom bifurcation. Patient B has a bilateral P1 hypoplasia and is therefore missing a connection of the basilar artery with both anterior circulations. The PComs are considered fetal since their size is larger than usual and they are the PCA's main blood supplier\,\cite{Liebeskind2016}. The aneurysm of the latter is located on the right side ($d$\,=\,5\,mm) and features a pronounced lateral daughter sack. The complex geometry of this formation was later confirmed during surgery, as seen in \autoref{fig:check_IA}. Lastly, patient C too has an incomplete CoW due to an absent right PCom. In this case, two IAs can be found, one at the left ICA-PCom bifurcation and the other at the right MCA bifurcation. The former, being the only one considered during analysis, is classified as bilobular, due to the presence of two rounded sacks.
 
 \begin{figure}[htbp]
-	\centering
-	\input{chapter3/Figures/Study/overview}
-	\caption{Overview of cases A-C (top to bottom) in the different extensions \textit{Simplified}-\textit{Full} (left to right). \textit{Simplified} - Neglection of the adjacent PCom. \textit{Middle} - Simulation of ICA and proximal vessels. \textit{Full} - Full computation of the CoW.}
-	\label{fig:geo}
+    \centering
+    \input{chapter3/Figures/Study/overview}
+    \caption{Overview of cases A-C (top to bottom) in the different extensions \textit{Simplified}-\textit{Full} (left to right). \textit{Simplified} - Neglection of the adjacent PCom. \textit{Middle} - Simulation of ICA and proximal vessels. \textit{Full} - Full computation of the CoW.}
+    \label{fig:geo}
 \end{figure}
 
 For each of the segmented geometries, three extensions of ascending complexity (see \autoref{fig:geo}) are generated to assess the implications of Murray's law on simulated hemodynamics. Geometries with the keyword \textit{Simplified} are constrained to the main supplying artery that leads to the IA. Communicating arteries and A2 segments (see \autoref{fig:cow_scheme}) are in this case neglected. \textit{Middle} extends the prior \textit{Simplified} complexity by adding the PCom. Finally, the keyword \textit{Full} denotes the full CoW. All meshes have been generated following the steps outlined in the previous sections (see \autoref{fig:mesh2}).
 
 \subsection{Methods}
-For this case study, we have used the Carreau-Yasuda model presented in chapter 2 for all patients, since no information about the patients' hematocrit was available. Inflow conditions are described with the help of a generalized volumetric flow curve ($\dot{Q}_1$ from \autoref{fig:waveforms}) which has been scaled and split among the supplying arteries. More precisely, in case A each ICA contributes 44\% of the total volumetric flow while the BA carries only 12\% due to its small size\,\cite{Tanaka2006}. Cases B and C follow a split of 40\%-20\% between each ICA and the BA\@. The flow rate $Q$ is imposed via parabolic velocity profiles at the base of the arterial system. The walls are considered fully rigid and are thus set through no-slip conditions. As previously explained, the boundary conditions are set using the linear resistance models (\autoref{eqn:pqr}) and the target volumetric flow is set though Murray's law with exponent $n$\,=\,3. The resistances needed to map the targeted flow rate to pressures are computed in an iterative process. A naive gradient descend algorithm has been implemented to regularly adapt resistances to minimize the per-cardiac-cycle volume flow error. This procedure was executed on the 9 simulations for the study, achieving volume flows within 5\% of the targeted quantity. An example for the outcome of the fitting can be seen in \autoref{fig:flow_rates}. To wash out the initial transient and establish a periodic solution, 3 cardiac cycles have been computed for each case due to the complexity of the flow in the \textit{Full} simulations. The last cardiac cycle was used in the analysis of the results.
+For this case study, we have used the Carreau-Yasuda model presented in Chapter 2 for all patients, since no information about the patients' hematocrit was available. Inflow conditions are described with the help of a generalized volumetric flow curve ($\dot{Q}_1$ from \autoref{fig:waveforms}) which has been scaled and split among the supplying arteries. More precisely, in case A each ICA contributes 44\% of the total volumetric flow while the BA carries only 12\% due to its small size\,\cite{Tanaka2006}. Cases B and C follow a split of 40\%-20\% between each ICA and the BA\@. The flow rate $Q$ is imposed via parabolic velocity profiles at the base of the arterial system. The walls are considered fully rigid and are thus set through no-slip conditions. As previously explained, the boundary conditions are set using the linear resistance models (\autoref{eqn:pqr}) and the target volumetric flow is set through Murray's law with exponent $n$\,=\,3. The resistances needed to map the targeted flow rate to pressures are computed in an iterative process. A naive Gradient Descend algorithm has been implemented to regularly adapt resistances to minimize the per-cardiac-cycle volume flow error. This procedure was executed on the 9 simulations for the study, achieving volume flows within 5\% of the targeted quantity. An example of the outcome of the fitting can be seen in \autoref{fig:flow_rates}. To wash out the initial transient and establish a periodic solution, 3 cardiac cycles have been computed for each case due to the complexity of the flow in the \textit{Full} simulations. The last cardiac cycle was used in the analysis of the results.
 \begin{figure}[htb]
-	\centering
-	\begin{minipage}[b]{0.48\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{chapter3/Figures/Study/BCs.png}
-		\caption{{Volumetric flow through the left ICA outlets of patient A and the targeted flow by Murray's Law.}}\label{fig:flow_rates}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[b]{0.48\textwidth}
-		\centering
-		\captionsetup{type=table} %% tell latex to change to table
-		\renewcommand{\arraystretch}{1.25} % Increase table row spacing
-		\setlength{\tabcolsep}{3pt} % Reduce column width
-		\small % Reduce font size
-		\begin{tabular}{c c c c c}
-			\hline
-			\multicolumn{2}{c}{Patient} & \textit{Simplified} & \textit{Middle} & \textit{Full}            \\
-			\hline
-			\multirow{2}{*}{A}          & $n_{elem}$          & 3.4             & 3.8           & 7.1      \\
-			                            & $T_{comp}$          & 9:20\,h         & 10:12\,h      & 22:10\,h \\
-			\arrayrulecolor{black!30}\cmidrule(lr){1-5}
-			\multirow{2}{*}{B}          & $n_{elem}$          & 2.0             & 2.1           & 3.6      \\
-			                            & $T_{comp}$          & 4:41\,h         & 5:19\,h       & 8:23\,h  \\
-			\cmidrule(lr){1-5}
-			\multirow{2}{*}{C}          & $n_{elem}$          & 1.6             & 1.7           & 4.7      \\
-			                            & $T_{comp}$          & 5:07\,h         & 5:46\,h       & 8:30\,h  \\
-			\arrayrulecolor{black}\hline
-		\end{tabular}
-		\vspace{1cm}
-		\caption{Element count in million elements and computation time per cardiac cycle of different meshes.}\label{tab:elem_count}
-	\end{minipage}
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{chapter3/Figures/Study/BCs.png}
+        \caption{{Volumetric flow through the left ICA outlets of patient A and the targeted flow by Murray's Law.}}\label{fig:flow_rates}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \captionsetup{type=table} %% tell latex to change to table
+        \renewcommand{\arraystretch}{1.25} % Increase table row spacing
+        \setlength{\tabcolsep}{3pt} % Reduce column width
+        \small % Reduce font size
+        \begin{tabular}{c c c c c}
+            \hline
+            \multicolumn{2}{c}{Patient} & \textit{Simplified} & \textit{Middle} & \textit{Full}            \\
+            \hline
+            \multirow{2}{*}{A}          & $n_{elem}$          & 3.4             & 3.8           & 7.1      \\
+                                        & $T_{comp}$          & 9:20\,h         & 10:12\,h      & 22:10\,h \\
+            \arrayrulecolor{black!30}\cmidrule(lr){1-5}
+            \multirow{2}{*}{B}          & $n_{elem}$          & 2.0             & 2.1           & 3.6      \\
+                                        & $T_{comp}$          & 4:41\,h         & 5:19\,h       & 8:23\,h  \\
+            \cmidrule(lr){1-5}
+            \multirow{2}{*}{C}          & $n_{elem}$          & 1.6             & 1.7           & 4.7      \\
+                                        & $T_{comp}$          & 5:07\,h         & 5:46\,h       & 8:30\,h  \\
+            \arrayrulecolor{black}\hline
+        \end{tabular}
+        \vspace{1cm}
+        \caption{Element count in million elements and computation time per cardiac cycle of different meshes.}\label{tab:elem_count}
+    \end{minipage}
 \end{figure}
 
-The linear system of equations was solved using a block ILU preconditioned stabilized bi-conjugate gradient method. The simulations were carried out on dual nodes (32-Core AMD EPYC 64-bit dual processor 7502, Advanced Micro Devices, Santa Clara, CA, USA) with a 2.5GHz base clock rate and a Infiniband HDR 100 interconnection. The mesh sizes and runtimes are included in \autoref{tab:elem_count}.
+The linear system of equations was solved using a block ILU preconditioned stabilized bi-conjugate gradient method. The simulations were carried out on dual nodes (32-Core AMD EPYC 64-bit dual processor 7502, Advanced Micro Devices, Santa Clara, CA, USA) with a 2.5GHz base clock rate and an Infiniband HDR 100 interconnection. The mesh sizes and runtimes are included in \autoref{tab:elem_count}.
 
 
 \subsection{Results}
 \subsubsection*{Global flow distribution}
-The overall flow distribution can be visually followed from the velocity magnitudes shown in \autoref{fig:volume}. Patient A stands out due to slower flow velocities despite similar tributary flows, which is a direct consequence from having overall larger vessels compared to B and C. The plot highlights regions of high flow speeds as for instance in the terminal ICA bifurcation. The highly inertia driven flow turns mostly into the MCAs, which both due to their size and the Murray exponent ($n$\,=\,3), carry the largest outflow. The BA, when present, supplies the posterior circulation of the brain without directly irrigating the anterior circulation. Therefore, the flux traversing the PCom is strictly unidirectional carrying blood away from the ICA towards the PCA\@. Patient B and C feed, according to our models, the distal PCA mostly (Patient C) or exclusively (Patient B) through the PCom due to their small or fetal P1 segments.
+The overall flow distribution can be visually followed from the velocity magnitudes shown in \autoref{fig:volume}. Patient A stands out due to slower flow velocities despite similar tributary flows, which is a direct consequence of having overall larger vessels compared to B and C. The plot highlights regions of high flow speeds for instance in the terminal ICA bifurcation. The high inertia-driven flow turns mostly into the MCAs, which both due to their size and the Murray exponent ($n$\,=\,3), carry the largest outflow. The BA, when present, supplies the posterior circulation of the brain without directly irrigating the anterior circulation. Therefore, the flux traversing the PCom is strictly unidirectional carrying blood away from the ICA towards the PCA\@. Patient B and C feed, according to our models, the distal PCA mostly (Patient C) or exclusively (Patient B) through the PCom due to their small or fetal P1 segments.
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.9\linewidth]{chapter3/Figures/Study/Volume.png}
-	\caption{Maximum velocity projection of patients A-C (top to bottom) for all complexity levels \textit{Simplified-Full} (left to right) at diastole.}\label{fig:volume}
+    \centering
+    \includegraphics[width=0.9\linewidth]{chapter3/Figures/Study/Volume.png}
+    \caption{Maximum velocity projection of patients A-C (top to bottom) for all complexity levels \textit{Simplified-Full} (left to right) at diastole.}\label{fig:volume}
 \end{figure}
 
 The detailed presentation of the average blood transported through each vessel is provided in \autoref{tab:flow_perc}. Notably, in the \textit{Full} configuration, the flow through the A2 segment of the ACA is consistently smaller, exhibiting a deviation of up to 5 percentage points compared to the \textit{Middle} and \textit{Simplified} configurations. The \textit{Middle} configuration is characterized by guiding flow away from the MCA towards the A1 segment of the ACA, representing a distinct pattern in the distribution of blood flow. These observations are relevant for the later discussion of the biases of Murray's law.
 
 \begin{table}[!htb]
-	\centering
-	\small
-	\begin{tabular}{clccccccccc}
-		\cmidrule(lr){1-10}
-		Case               & Complexity          & \multicolumn{2}{c}{MCA} & \multicolumn{2}{c}{PCA} & \multicolumn{2}{c}{ACA} & \multicolumn{2}{c}{OA}                                  \\
-		                   &                     & Left                    & Right                   & Left                    & Right                  & Left   & Right & Left  & Right \\
-		\cmidrule(lr){1-10}
-		\multirow{3}{*}{A} & \textit{Full}       & 28.8\%                  & 25.7\%                  & 14.0\%                  & 7.7\%                  & 7.2\%  & 9.3\% & 3.1\% & 4.2\% \\
-		                   & \textit{Middle}     & 21.8\%                  & -                       & 10.6\%                  & -                      & 9.2\%  & -     & 2.4\% & -     \\
-		                   & \textit{Simplified} & 28.8\%                  & -                       & -                       & -                      & 12.1\% & -     & 3.1\% & -     \\
-		\arrayrulecolor{black!30}\cmidrule(lr){2-10}
-		\multirow{3}{*}{B} & \textit{Full}       & 29.3\%                  & 21.6\%                  & 4.9\%                   & 9.6\%                  & 4.3\%  & 7.0\% & -     & 3.1\% \\
-		                   & \textit{Middle}     & -                       & 20.9\%                  & -                       & 9.3\%                  & -      & 6.8\% & -     & 3.1\% \\
-		                   & \textit{Simplified} & -                       & 27.2\%                  & -                       & -                      & -      & 8.8\% & -     & 4.0\% \\
-		\cmidrule(lr){2-10}
-		\multirow{3}{*}{C} & \textit{Full}       & 27.1\%                  & 35.9\%                  & 12.0\%                  & 12.4\%                 & 4.0\%  &
-		8.5\%              & -                   & -                                                                                                                                     \\
-		                   & \textit{Middle}     & 22.1\%                  & -                       & 7.5\%                   & -                      & 10.3\% & -     & -     & -     \\
-		                   & \textit{Simplified} & 27.3\%                  & -                       & -                       & -                      & 12.7\% & -     & -     & -     \\
-		\arrayrulecolor{black}\cmidrule(lr){1-10}
-	\end{tabular}
-	\caption{{Outflow per cardiac cycle with respect to the in total inflow of each patient. In the \textit{Large} configuration of case C, the flow in the right MCA was the consequence of imposing Murray's law on the vessels of the M1-M2 bifurcation. The massflow for the \textit{Middle} and \textit{Small} is taken at the A1 ACA segment due to the inherent cut of the domain.}}\label{tab:flow_perc}
+    \centering
+    \small
+    \begin{tabular}{clccccccccc}
+        \cmidrule(lr){1-10}
+ Case               & Complexity          & \multicolumn{2}{c}{MCA} & \multicolumn{2}{c}{PCA} & \multicolumn{2}{c}{ACA} & \multicolumn{2}{c}{OA}                                  \\
+                           &                     & Left                    & Right                   & Left                    & Right                  & Left   & Right & Left  & Right \\
+        \cmidrule(lr){1-10}
+        \multirow{3}{*}{A} & \textit{Full}       & 28.8\%                  & 25.7\%                  & 14.0\%                  & 7.7\%                  & 7.2\%  & 9.3\% & 3.1\% & 4.2\% \\
+                           & \textit{Middle}     & 21.8\%                  & -                       & 10.6\%                  & -                      & 9.2\%  & -     & 2.4\% & -     \\
+                           & \textit{Simplified} & 28.8\%                  & -                       & -                       & -                      & 12.1\% & -     & 3.1\% & -     \\
+        \arrayrulecolor{black!30}\cmidrule(lr){2-10}
+        \multirow{3}{*}{B} & \textit{Full}       & 29.3\%                  & 21.6\%                  & 4.9\%                   & 9.6\%                  & 4.3\%  & 7.0\% & -     & 3.1\% \\
+                           & \textit{Middle}     & -                       & 20.9\%                  & -                       & 9.3\%                  & -      & 6.8\% & -     & 3.1\% \\
+                           & \textit{Simplified} & -                       & 27.2\%                  & -                       & -                      & -      & 8.8\% & -     & 4.0\% \\
+        \cmidrule(lr){2-10}
+        \multirow{3}{*}{C} & \textit{Full}       & 27.1\%                  & 35.9\%                  & 12.0\%                  & 12.4\%                 & 4.0\%  &
+ 8.5\%              & -                   & -                                                                                                                                     \\
+                           & \textit{Middle}     & 22.1\%                  & -                       & 7.5\%                   & -                      & 10.3\% & -     & -     & -     \\
+                           & \textit{Simplified} & 27.3\%                  & -                       & -                       & -                      & 12.7\% & -     & -     & -     \\
+        \arrayrulecolor{black}\cmidrule(lr){1-10}
+    \end{tabular}
+    \caption{{Outflow per cardiac cycle with respect to the in total inflow of each patient. In the \textit{Large} configuration of case C, the flow in the right MCA was the consequence of imposing Murray's law on the vessels of the M1-M2 bifurcation. The massflow for the \textit{Middle} and \textit{Small} is taken at the A1 ACA segment due to the inherent cut of the domain.}}\label{tab:flow_perc}
 \end{table}
 
 \subsubsection*{Intraaneurysmal flow}
-The flow structures in the domes are visualized in \autoref{fig:streamlines} for each patient (rows) and configuration (columns). The aneurysms are cut with a plane at the neck and velocity streamlines of the intra-aneurysmal flow are inscribed lightly to indicate the structure of the present vortices at peak diastolic time. For the inertial flow of aneurysm A (first row), all three configurations show a large, centred vortex traversing the dome that can be regarded as consistent across the three sizes. Per contrary, patients B and C in the second and third rows of \autoref{fig:streamlines} display clear discrepancies. Starting with the aneurysm B (second row) it is visible that in the simple configuration, the main inflow enters the dome focused as a small jet, later decaying into a stable weaker recirculation. For the \textit{Middle} and \textit{Full} extensions of the same case, the inflow hits the neck of the daughter sack, splitting its momentum among two vortices that traverse the main lobe and the daughter sack respectively. In the \textit{Full} simulation of B (second row, third column) the daughter sack's recirculation is located farther up inside the dome leading to larger in-plane velocities. Lastly, patient C (third row of \autoref{fig:streamlines}) presents the largest disparities on both quantitative and qualitative levels. On of the most noticeable differences in \autoref{fig:streamlines}, is the inverted circulation of the right aneurysm dome in the \textit{Full} simulation with respect to the other two extensions. At the same time, the impinging jet's velocities exceed the other cases by, on average, 31\% and 19\%.
+The flow structures in the domes are visualized in \autoref{fig:streamlines} for each patient (rows) and configuration (columns). The aneurysms are cut with a plane at the neck and velocity streamlines of the intra-aneurysmal flow are inscribed lightly to indicate the structure of the present vortices at peak diastolic time. For the inertial flow of aneurysm A (first row), all three configurations show a large, centred vortex traversing the dome that can be regarded as consistent across the three sizes. Per contrast, patients B and C in the second and third rows of \autoref{fig:streamlines} display clear discrepancies. Starting with the aneurysm B (second row) it is visible that in the simple configuration, the main inflow enters the dome focused as a small jet, later decaying into a stable weaker recirculation. For the \textit{Middle} and \textit{Full} extensions of the same case, the inflow hits the neck of the daughter sack, splitting its momentum among two vortices that traverse the main lobe and the daughter sack respectively. In the \textit{Full} simulation of B (second row, third column) the daughter sack's recirculation is located farther up inside the dome leading to larger in-plane velocities. Lastly, patient C (third row of \autoref{fig:streamlines}) presents the largest disparities on both quantitative and qualitative levels. One of the most noticeable differences in \autoref{fig:streamlines}, is the inverted circulation of the right aneurysm dome in the \textit{Full} simulation to the other two extensions. At the same time, the impinging jet's velocities exceed the other cases by, on average, 31\% and 19\%.
 \begin{figure}[!ht]
-	\centering
-	\includegraphics[width=\linewidth]{chapter3/Figures/Study/Streamlines.png}
-	\caption{Cross-section cuts at the IA neck of patients A-C (top to bottom) with inscribed velocity magnitudes at diastole. Velocity streamlines are superposed with the aneurysm necks to highlight the structure of the flow.}\label{fig:streamlines}
+    \centering
+    \includegraphics[width=\linewidth]{chapter3/Figures/Study/Streamlines.png}
+    \caption{Cross-section cuts at the IA neck of patients A-C (top to bottom) with inscribed velocity magnitudes at diastole. Velocity streamlines are superposed with the aneurysm necks to highlight the structure of the flow.}\label{fig:streamlines}
 \end{figure}
 
 The WSS magnitude for peak diastole and systole are shown in \autoref{fig:wss} (a) and (b) respectively. Patient A (first row) is characterized by a stable, qualitatively similar WSS pattern across all extensions. Here, only the \textit{Simplified} case demonstrates smaller patches of higher shearing that are not present in the \textit{Middle} and \textit{Full} systems. Patients B and C instead exhibit persistently altered WSS patterns for all of the domain extensions. Setting the \textit{Simplified} system aside, one can observe shifts in patterns between the \textit{Middle} and \textit{Full} extensions in the second and third columns respectively. Most notable here is the daughter sack in patient B's aneurysm (second row of \autoref{fig:wss}). During diastole, the WSS is relatable between the \textit{Middle} and \textit{Full} systems. At systole, on the contrary, the shearing increases for the \textit{Middle} system, but remains low for the \textit{Full} system, leading to two distinct characterizations. Following the \textit{Full} system, the daughter sack could be identified as a risk factor due to low WSS exposure, whereas the \textit{Middle} simulation would not. Daughter sacks play hereby an important role since their appearance is linked to an augmented risk of rupture. The last patient case in the bottom row of \autoref{fig:wss} (a) and (b), again shows an inconsistent WSS among the different extensions, especially aggravated at the {dent} separating the two sacks.
 \begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\linewidth]{chapter3/Figures/Study/WSS_bulge.png}
-	\caption{WSS distributions on the aneurysms A-C (top to bottom) for the different complexity levels at diastole (a) and peak systole (b).}\label{fig:wss}
+    \centering
+    \includegraphics[width=\linewidth]{chapter3/Figures/Study/WSS_bulge.png}
+    \caption{WSS distributions on the aneurysms A-C (top to bottom) for the different complexity levels at diastole (a) and peak systole (b).}\label{fig:wss}
 \end{figure}
 
 Following the same structure of Fig.\,\autoref{fig:wss} (a) and (b), the OSI is displayed in \autoref{fig:osi}. The observed stable WSS profile of aneurysm A inevitably leads to a nearly absent oscillatory shearing with only small localized peaks (see the first row in \autoref{fig:osi}). Large dissent of the OSI distributions is again found in patients B and C (second and third rows of \autoref{fig:osi}), where especially the distal lobe of patient C points out. There, overall high values are found on the visible face in the \textit{Full} CoW simulation, in contrast to the other cases.
 
 \begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.6\linewidth]{chapter3/Figures/Study/OSI_bulge.png}
-	\caption{OSI distributions for cases A-C (top to bottom) under different geometry extensions.}\label{fig:osi}
+    \centering
+    \includegraphics[width=0.6\linewidth]{chapter3/Figures/Study/OSI_bulge.png}
+    \caption{OSI distributions for cases A-C (top to bottom) under different geometry extensions.}\label{fig:osi}
 \end{figure}
 
 \subsection{Discussion}
-The resulting flow in the CoW resembles literature values\,\cite{Zarrinkoob2015} with a tendency to overestimate the flow through the MCAs. Using an exponent of ($n$\,=\,2) in Murray's law reduces the discrepancy for the flow in the MCA at the cost of overestimating the flows in smaller vessels, such as the OA. The changes in the flow through the ACA between the different computational domain extensions are a direct consequence of Murray's law being applied on vessels of varying diameter. The proximal ACA (A1) has, in all cases, a larger radius than its post-communicating segment (A2), consequently leading to different flow rates. However, this apparent inconsistency is caused by perforator vessels around the ACom, such as the Recurrent Artery of Heubner, which, due to their small size, cannot be properly simulated. Experimental studies\,\cite{Zarrinkoob2015} support the observed decrease in flow rates. In our cases, applying Murray's law has shown a better agreement in ACA and MCA flowrates with the said study when setting the domain boundary in the A1 segment.
+The resulting flow in the CoW resembles literature values\,\cite{Zarrinkoob2015} with a tendency to overestimate the flow through the MCAs. Using an exponent of ($n$\,=\,2) in Murray's law reduces the discrepancy for the flow in the MCA at the cost of overestimating the flows in smaller vessels, such as the OA. The changes in the flow through the ACA between the different computational domain extensions are a direct consequence of Murray's law being applied on vessels of varying diameters. The proximal ACA (A1) has, in all cases, a larger radius than its post-communicating segment (A2), consequently leading to different flow rates. However, this apparent inconsistency is caused by perforator vessels around the ACom, such as the Recurrent Artery of Heubner, which, due to their small size, cannot be properly simulated. Experimental studies\,\cite{Zarrinkoob2015} support the observed decrease in flow rates. In our cases, applying Murray's law has shown a better agreement in ACA and MCA flow rates with the said study when setting the domain boundary in the A1 segment.
 
-The further analysis of the hemodynamics in the IA has shown differences that exceed expectations, comparable to those seen in simulation challenges\,\cite{Berg2018, Berg2019, Valen-Sendstad2018}. The \textit{Simplified} strategy lacks physical reasoning since all of the patient geometries in this study exhibit PCom arteries. Simulations confirm that neglecting these significantly alters the intrasaccular hemodynamics, confirming the initial intuition. Without further exploration of this strategy, we conclude that it is unsuitable for the presented vasculatures. The \textit{Middle} extension, commonly found in literature, presents more similarities with \textit{Full} CoW simulations. However, moderate changes in hemodynamics sometimes result in magnified alterations in WSS. These differences may lead to varied correlations between flow dynamics and the aneurysm evolution\,\cite{Valen-Sendstad2014}. Causes for these observations included changed boundary flow rates on one side and the lack of interactions with the opposing hemisphere and the posterior circulation on the other.
+The further analysis of the hemodynamics in the IA has shown differences that exceed expectations, comparable to those seen in simulation challenges\,\cite{Berg2018, Berg2019, Valen-Sendstad2018}. The \textit{Simplified} strategy lacks physical reasoning since all of the patient geometries in this study exhibit PCom arteries. Simulations confirm that neglecting these significantly alters intrasaccular hemodynamics, confirming the initial intuition. Without further exploration of this strategy, we conclude that it is unsuitable for the presented vasculatures. The \textit{Middle} extension, commonly found in literature, presents more similarities with \textit{Full} CoW simulations. However, moderate changes in hemodynamics sometimes result in magnified alterations in WSS. These differences may lead to varied correlations between flow dynamics and the aneurysm evolution\,\cite{Valen-Sendstad2014}. Causes for these observations included changed boundary flow rates on one side and the lack of interactions with the opposing hemisphere and the posterior circulation on the other.
 
-The additional blood suppliers in the case of \textit{Full} simulations, such as the neighbouring ICA and the BA, are participants in causing blood to traverse communicating vessels into other circulation segments. Although most of the interhemispheric flow was observed at the ACom, hence distal to the aneurysm fundus, the influence of the inflow streams cannot be generally disregarded from being important\,\cite{Castro2006}. In our study, equal flow rates for the ICAs were imposed, aligning with a popular choice shown in large scale studies\,\cite{Valen-Sendstad2018} due to a lack of measurement data. As stated before, this is irrefutably one of the biases taken into consideration that could be lifted by measurements in follow-up work. The second factor causing altered results between the \textit{Full} CoW and \textit{Middle} simulations is, as stated, the interaction between both anterior and posterior circulations. By not imposing a boundary midway in a posterior communicating artery, more slack is left for the flow to unravel its natural characteristics thereby providing a more physiological hemodynamic profile. Examples of this, among others, are pressure drops at posterior arterial junctions and bifurcations that effectively alter upstream pressure distributions and are of notable relevance\,\cite{Mynard2015, Chnafa2017}.
+The additional blood suppliers in the case of \textit{Full} simulations, such as the neighbouring ICA and the BA, are participants in causing blood to traverse communicating vessels into other circulation segments. Although most of the interhemispheric flow was observed at the ACom, hence distal to the aneurysm fundus, the influence of the inflow streams cannot be generally disregarded from being important\,\cite{Castro2006}. In our study, equal flow rates for the ICAs were imposed, aligning with a popular choice shown in large-scale studies\,\cite{Valen-Sendstad2018} due to a lack of measurement data. As stated before, this is irrefutably one of the biases taken into consideration that could be lifted by measurements in follow-up work. The second factor causing altered results between the \textit{Full} CoW and \textit{Middle} simulations is, as stated, the interaction between both anterior and posterior circulations. By not imposing a boundary midway in a posterior communicating artery, more slack is left for the flow to unravel its natural characteristics thereby providing a more physiological hemodynamic profile. Examples of this, among others, are pressure drops at posterior arterial junctions and bifurcations that effectively alter upstream pressure distributions and are of notable relevance\,\cite{Mynard2015, Chnafa2017}.
 
-The flow in these communicating vessels holds significant medical importance, given that they host 60--70\% of all IAs on the Circle of Willis, which itself constitutes 85\% of all IAs\,\cite{Hacein11}. While the role of CFD in diagnosing and analyzing IA growth and remodeling processes remains uncertain, it is crucial to acknowledge that modeling choices significantly impact the hemodynamics of communicating vessels\,\cite{Zhang2016}. Moreover, statistical evidence indicates that the absence or hypoplasia of certain communicating segments is associated with a higher likelihood of developing IAs\,\cite{Hindenes2023, Feng2023}. As such, it becomes imperative to continually evaluate and refine CFD models to capture the hemodynamics of the CoW more effectively. One promising outlook is the use of perfusion imaging\,\cite{Zhang2016, Schollenberger2021}. Thanks to a quantification of the perfusion of different brain parts, the flow into different sections of the brain can be mapped through a brain atlas, giving direct feedback about the flow traversing the outlets of the CoW. While this method is still in its infancy and requires an elaborate MRI procedure, it holds the potential to provide a more accurate boundary condition for CFD simulations.
+The flow in these communicating vessels holds significant medical importance, given that they host 60--70\% of all IAs on the Circle of Willis, which itself constitutes 85\% of all IAs\,\cite{Hacein11}. While the role of CFD in diagnosing and analyzing IA growth and remodelling processes remains uncertain, it is crucial to acknowledge that modelling choices significantly impact the hemodynamics of communicating vessels\,\cite{Zhang2016}. Moreover, statistical evidence indicates that the absence or hypoplasia of certain communicating segments is associated with a higher likelihood of developing IAs\,\cite{Hindenes2023, Feng2023}. As such, it becomes imperative to continually evaluate and refine CFD models to capture the hemodynamics of the CoW more effectively. One promising outlook is the use of perfusion imaging\,\cite{Zhang2016, Schollenberger2021}. Thanks to a quantification of the perfusion of different brain parts, the flow into different sections of the brain can be mapped through a brain atlas, giving direct feedback about the flow traversing the outlets of the CoW. While this method is still in its infancy and requires an elaborate MRI procedure, it holds the potential to provide a more accurate boundary condition for CFD simulations.
 
 
 \begin{tcolorbox}[conclusions]
 
-	In this chapter, we have presented the brain's anatomy and how to translate its complex hemodynamics into a numerical framework, including details on the  mesh generation and boundary conditions. The main research was dedicated to assessing the sensitivity of the aneurysm hemodynamics for varying domain extensions. To this goal three patients harbouring ICA-PCom aneurysms were considered in this study. For each one, simulations are run on two reduced domain extensions commonly seen in literature and contrasted with the full CoW flow. The analysis showed notable alterations of the flow in some cases biased mostly by imposing Murray's law on communicating vessel, whose primary role deviates from other arteries. The obtained results recommend taking into account the overall anatomy of each patient and consider possible implications of the flow from contralateral or posterior circulations. By confirming hypoplasia or absence of communicating segments on MR angiography, studies can further reinforce their choice of BCs or motivate a sensitity study otherwise.
+ In this chapter, we have presented the brain's anatomy and how to translate its complex hemodynamics into a numerical framework, including details on mesh generation and boundary conditions. The main research was dedicated to assessing the sensitivity of the aneurysm hemodynamics for varying domain extensions. To this goal, three patients harbouring ICA-PCom aneurysms were considered in this study. For each one, simulations are run on two reduced domain extensions commonly seen in literature and contrasted with the full CoW flow. The analysis showed notable alterations of the flow in some cases biased mostly by imposing Murray's law on communicating vessels, whose primary role deviates from other arteries. The obtained results recommend taking into account the overall anatomy of each patient and considering possible implications of the flow from contralateral or posterior circulations. By confirming hypoplasia or the absence of communicating segments on MR angiography, studies can further reinforce their choice of BCs or motivate a sensitivity study otherwise.
 
 \end{tcolorbox}
 
@@ -516,4 +521,4 @@ The flow in these communicating vessels holds significant medical importance, gi
 \newpage
 \bibliographystyle{apsrev}
 {\footnotesize
-	\bibliography{chapter3/Biblio}}
+    \bibliography{chapter3/Biblio}}

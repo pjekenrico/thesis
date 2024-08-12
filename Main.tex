@@ -1,6 +1,5 @@
 \documentclass[a4paper,12pt,twoside,english,openleft]{thesis}
 \input{./PreSets/Preambule} 
-\input{./PreSets/CommandesPerso} 
 \usepackage{./PreSets/psl-cover}
 \input{macros}
 
@@ -33,9 +32,9 @@
 \jurymember{8}{Elie HACHEM}{Ph.D., Mines Paris}{Directeur de thèse}
 
 \frabstract{
-    Les anévrismes intracrâniens sont courants mais mal compris, malgré les graves conséquences d'une rupture. La complexité des processus biochimiques du cerveau et la délicatesse de son environnement limitent les études in vivo. La dynamique des fluides numérique (CFD) peut aider à surmonter ces défis en reproduisant les conditions d'écoulement dans le cerveau, qui sont censées influencer l'initiation, la croissance et la rupture des anévrismes. Les simulations CFD peuvent également tester des traitements hypothétiques et évaluer leur impact. Cette thèse se concentre sur le développement d'un cadre de simulation de haute fidélité pour modéliser l'hémodynamique cérébrale, dans le but d'améliorer notre compréhension des anévrismes intracrâniens et de perfectionner leur traitement.
+    Les anévrismes intracrâniens sont fréquents mais mal compris, malgré les conséquences graves liées à leur rupture. La complexité des processus biochimiques du cerveau et la fragilité de son environnement limitent les études in-vivo. L'étude de la dynamique des fluides numérique (CFD) peut aider à surmonter ces défis en reproduisant les conditions d'écoulement du cerveau, qui sont supposées influencer l'initiation, la croissance et la rupture des anévrismes. Les simulations CFD peuvent également permettre de tester différents traitements et évaluer leur impact. Cette thèse se concentre sur le développement d'un framework numérique pour simuler l'hémodynamique dans le cerveau, dans le but d'améliorer notre compréhension des anévrismes intracrâniens et d'optimiser leur traitement.
 
-    La thèse commence par explorer les aspects médicaux des anévrismes cérébraux, y compris leurs différents types, options de traitement et risques associés. Elle aborde ensuite la physique et les méthodes numériques qui constituent la base du cadre de simulation, en proposant de nouvelles contributions méthodologiques. Avec ces connaissances et validations en main, le travail progresse vers l'adaptation des simulations à l'environnement vasculaire du cerveau, en discutant des aspects critiques tels que la segmentation, les conditions aux limites et l'étendue du domaine simulé. Pour recréer virtuellement le déploiement d'un stent de dérivation, un algorithme basé sur des contraintes géométriques est développé et rigoureusement validé à l'aide d'exemples tirés de la littérature, de données expérimentales et de cas réels de patients. Dans le dernier chapitre, ces outils sont appliqués pour calculer l'hémodynamique dans trois cas complexes de patients présentant des anévrismes rompus. Les effets du traitement par stent de dérivation sont analysés et comparés aux données médicales les plus récentes.
+    La thèse commence par explorer les différents aspects médicaux des anévrismes cérébraux, notamment leur forme, leur taille, ainsi que les options de traitement et les risques associés. Elle aborde ensuite la physique et les méthodes numériques qui constituent la base du framework, en apportant de nouvelles contributions méthodologiques. Fort de ces connaissances et validations, le travail se concentre ensuite sur l'adaptation des simulations à l'environnement vasculaire cérébral, en abordant des aspects essentiels tels que la segmentation, les conditions aux limites, ainsi que la définition et la portée du domaine simulé. Pour simuler le déploiement d'un stent à diversion de flux, un algorithme basé sur des contraintes géométriques est développé et rigoureusement validé à l'aide d'exemples tirés de la littérature, de données expérimentales et de cas réels de patients. Dans le dernier chapitre, ces outils sont appliqués à trois cas complexes de patients présentant des anévrismes rompus. Les effets du traitement par stent à diversion de flux sont finalement analysés et comparés à la littérature existante.
 }
 
 \enabstract{
@@ -100,7 +99,7 @@
 \pagenumbering{roman}
 \maketitle
 \input{Layout/dedication.tex}
-\input{Layout/acknowledgements.tex}
+% \input{Layout/acknowledgements.tex}
 
 
 \setcounter{page}{0}
@@ -115,10 +114,10 @@
 \setcounter{page}{0}
 % \include{./introduction/introduction}
 % \include{./chapter2/chapter2}
-% \include{./chapter3/chapter3}
+\include{./chapter3/chapter3}
 % \include{./chapter4/chapter4}
 % \include{./chapter5/chapter5}
-\include{./conclusion/conclusion}
+% \include{./conclusion/conclusion}
 
 %\appendix
 %\include{Appendices/appendix1}
