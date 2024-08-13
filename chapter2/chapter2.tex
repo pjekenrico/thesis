@@ -3,9 +3,7 @@
 \pagestyle{fancy}
 
 \chapter{Numerical Simulations of Hemodynamics}
-\minitoc\newpage\label{chap.2}
-
-\linenumbers
+\minitoc
 
 \begin{tcolorbox}[abstract]
 
@@ -13,31 +11,33 @@
 
 	\tcblower
 
-	Dans ce chapitre, les équations de Navier-Stokes incompressibles et monophasiques sont introduites comme le fondement des simulations hémodynamiques. Ces équations sont dérivées des principes de conservation de la masse et de la quantité de mouvement, puis reformulées sous une forme faible pour faciliter leur traitement numérique. La formulation obtenue est ensuite discrétisée à l’aide d’une méthode variationnelle multiéchelle (VMS). Cette méthode permet de stabiliser les schémas numériques en utilisant des fonctions tests et des fonctions essais de même ordre pour la pression et les vitesses. La VMS permet également de réduire les instabilités causées par les écoulements dominés par la convection, fréquents dans les simulations de cette étude. La méthodologie est expliquée en détail et validée à travers des cas tests en 2D et en 3D. Le chapitre se conclut par une discussion approfondie des résultats numériques obtenus et des conclusions tirés de ces derniers.
+	Dans ce chapitre, les équations de Navier-Stokes incompressibles et monophasiques sont introduites comme le fondement des simulations hémodynamiques. Ces équations sont dérivées des principes de conservation de la masse et de la quantité de mouvement, puis reformulées sous une forme faible pour faciliter leur traitement numérique. La formulation obtenue est ensuite discrétisée à l'aide d'une méthode variationnelle multiéchelle. Cette méthode permet de stabiliser les schémas numériques en utilisant des fonctions tests et des fonctions essais de même ordre pour la pression et les vitesses. La VMS permet également de réduire les instabilités causées par les écoulements dominés par la convection, fréquents dans les simulations de cette étude. La méthodologie est expliquée en détail et validée à travers des cas tests en 2D et en 3D. Le chapitre se conclut par une discussion approfondie des résultats numériques obtenus et des conclusions tirés de ces derniers.
 
 \end{tcolorbox}
 
-\section{The Incompressible Navier-Stokes Equations}\label{chap2:sec1}
+\linenumbers
+
+\section{The Incompressible Navier-Stokes Equations}
 The Navier-Stokes equations stem, as mentioned before from the conservation of mass and momentum in an open and bounded domain $\Omega \subset \mathbb {R}^{n}$ in which no material enters or leaves. For the former quantity, the conservation can be expressed through:
-\begin{equation}
+\begin{equation*}
 	\frac{d}{dt} \int_{\Omega(t)} \rho dV = 0,
-\end{equation}
+\end{equation*}
 imposing that the integral of over the density $\rho$ in the control volume does not change.
 
-\subsection{Reynolds Transport Theorem}\label{chap2:sec1:subsec1}
+\subsection{Reynolds Transport Theorem}
 The derivative over the time-dependent domain can be simplified thanks to the Reynolds transport theorem, named after its discoverer Osborne Reynolds.
 
 \begin{theorem}[Reynolds Transport Theorem]\label{thm:rtt}
 	Let $\vec{f}(t, \vec{x})$ be any conservation quantity, then the Reynolds transport theorem states that for a velocity field $\vec{u}$, the following holds:
-	\begin{equation}
+	\begin{equation*}
 		\frac{d}{dt}\int_{\Omega (t)}\vec {f} \,dV=\int_{\Omega (t)}{\frac{\partial \vec {f} }{\partial t}} + \nabla\cdot(\vec{u}\otimes\vec{f}) \,dV
-	\end{equation}
+	\end{equation*}
 \end{theorem}
 
 \begin{proof}
-	\begin{equation}
+	\begin{equation*}
 		\frac{d}{dt}\int_{\Omega (t)}\vec {f}(t, \vec{x}) \,dV = \lim_{\dt\to 0} \frac{1}{\dt} \left(\int_{\Omega (t+\dt, \vec{x})}\vec{f}(t+\dt, \vec{x}) \,dV-\int_{\Omega (t)}\vec{f}(t, \vec{x}) \,dV\right)
-	\end{equation}
+	\end{equation*}
 	To drag the derivative into the integral it is necessary to reformulate the problem in terms of an initial position $\vec{X}$ and a mapping $\vec{x}=\vec{\phi}(t, \vec{X})$. With the corresponding derivative $\nabla\vec{\phi} = F(t, \vec{X})$ and the Jacobian $J = \det F$, the integral can be rewritten written in terms of the initial domain $\Omega(0)$ and the contents can therefore be merged:
 
 	\begin{align}
@@ -45,13 +45,13 @@ The derivative over the time-dependent domain can be simplified thanks to the Re
 		                                        & = \int_{\Omega (0)} \left[J\frac{\partial}{\partial t}(\vec{f}\circ\vec{\phi}) + (\vec{f}\circ\vec{\phi})\frac{\partial J}{\partial t}\right](t, \vec{X})\,dV
 	\end{align}
 	To simplify the derivative of the Jacobian, recall Jacobi's formula.
-	\begin{equation}
+	\begin{equation*}
 		\frac{\partial J}{\partial t} = J\tr\left(F^{-1}\frac{\partial F}{\partial t}\right)= J\tr\left(\frac{\partial}{\partial\vec{x}}\frac{\partial \vec{\phi}}{\partial t}\right) = J(\nabla\cdot\vec{u})
-	\end{equation}
+	\end{equation*}
 	Now the integral can be written back in terms of a time-dependent domain.
-	\begin{equation}
+	\begin{equation*}
 		\frac{d}{dt}\int_{\Omega (t)}\vec {f} \,dV = \int_{\Omega (t)}\frac{\partial\vec{f}}{\partial t} + (\vec{u}\cdot\nabla)\vec{f} + \vec{f}(\nabla\cdot\vec{u})\,dV = \int_{\Omega (t)}\frac{\partial\vec{f}}{\partial t} + \nabla\cdot(\vec{u}\otimes\vec{f})\,dV
-	\end{equation}
+	\end{equation*}
 \end{proof}
 
 From now on all functions are taken to be time-dependent, as well as dependent on a location $\vec{x}$ in an Eulerian framework, unless stated otherwise. The explicit dependencies are omitted for the sake of brevity. Also, the derivatives in time will be denoted by $\partial_{t}$.
@@ -59,11 +59,11 @@ From now on all functions are taken to be time-dependent, as well as dependent o
 \begin{figure}[ht]
 	\centering
 	\input{chapter2/Figures/RTT/Figure}
-	\caption{Illustration of the moving domain $\Omega$. In vague terms, by sticking to the domain at time $t$, one needs to adjust the conservation laws to account for the displacement.}\label{fig:reynolds_transport_theorem}
+	\caption[Continuum in motion]{Illustration of the moving domain $\Omega$. In vague terms, by sticking to the domain at time $t$, one needs to adjust the conservation laws to account for the displacement.}\label{fig:reynolds_transport_theorem}
 \end{figure}
 
 
-\subsection{Conservation Equations}\label{chap2:sec1:subsec2}
+\subsection{Conservation Equations}
 Using \autoref{thm:rtt}, the conservation of mass can be expressed as:
 \begin{equation}
 	\int_\Omega \partial_{t}\rho + \nabla\cdot(\rho\vec{u})\,dV = 0
@@ -112,30 +112,30 @@ As will be more thoroughly discussed in the coming section, blood is incompressi
 	\label{eqn:navier_stokes}
 \end{equation}
 
-\subsection{Boundary Conditions}\label{chap2:sec1:subsec3}
+\subsection{Boundary Conditions}
 Boundary conditions have been identified by several publications and computing challenges as sensitive components of hemodynamics simulations\,\cite{Berg2019, Valen-Sendstad2018}. For that reason, Chapter 3 dedicates a section to inlet and outlet BCs, providing both measurement-based techniques and heuristics that depend on the vascular topology. In Chapter 4, more detail will be provided on the modelling of endoluminal devices. For now, they will be just shortly introduced to carry on with the derivation of the numerical framework.\\
 
-The domain boundaries for segments of the brain arterial system are divided into four groups: inlets $\Gamma_{in}$, outlets $\Gamma_{out}$, walls $\Gamma_{w}$ and endoluminal devices $\Gamma_{fd}$. In general terms, the inflow conditions, \ie\,the blood supply to the portion of the vasculature that is simulated, are imposed through a time-varying velocity profile. In mathematical terms speaking, it is expressed as:
-\begin{equation}
+The domain boundaries for segments of the brain arterial system are divided into four groups: inlets $\Gamma_{in}$, outlets $\Gamma_{out}$, walls $\Gamma_{w}$ and endoluminal devices $\Gamma_{fd}$. In general terms, the inflow conditions, \textit{i.e.}\,the blood supply to the portion of the vasculature that is simulated, are imposed through a time-varying velocity profile. In mathematical terms speaking, it is expressed as:
+\begin{equation*}
 	\vec{u} = \vec{u}_{in}, \quad (\vec{x}, t) \in \Gamma_{in} \times (0,T]
-\end{equation}
+\end{equation*}
 Outflow conditions, on the other hand, are related to the flow split caused by the resistance and capacitance of the distal vasculature. The split can be either modelled as an imposed volumetric flow or a normal stress. For now, we will stick to the latter:
-\begin{equation}
+\begin{equation*}
 	\sigma \cdot \vec{n} = \vec{h}, \quad (\vec{x}, t) \in \Gamma_{out} \times (0,T]
-\end{equation}
+\end{equation*}
 Arterial walls and endoluminal devices are modelled as rigid, no-slip boundaries. Therefore, in an Eulerian framework, the velocity at the vessel wall and the interface of any implanted device will be dictated by:
-\begin{equation}
+\begin{equation*}
 	\vec{u} = 0, \quad (\vec{x}, t) \in \Gamma_{w}\cup\Gamma_{fd}  \times (0,T]
-\end{equation}
+\end{equation*}
 The boundary conditions presented so far can be divided into two groups, essential on $\Gamma_{d}$ and natural on $\Gamma_{n}$. These categories are relevant in Finite Element Methods (FEM) since their imposition leads to different formulations of the problem. Therefore, inflow, walls and any endoluminal devices are essential, while the outflow is natural.
 
 The initial conditions can be set by previously solving a steady-state simulation at the inflow rate of interest. Other approaches, involve solving a potential flow or simply setting the initial solution to zero. For any of the choices, it is required to run simulations for several cardiac cycles to ensure that the initial transient is washed out and a periodic state has been reached.
-\begin{equation}
+\begin{equation*}
 	\vec{u} = \vec{u}_0, \quad \vec{x} \in \Omega,\,t=0
-\end{equation}
+\end{equation*}
 
-\section{Blood Rheology}\label{chap2:sec1:subsec4}
-Blood is a complex dense suspension comprising approximately 40--45\% cellular components, including Red Blood Cells (RBCs), white blood cells (leukocytes), and platelets. The remainder of the blood is called plasma, a homogeneous yellow substance composed of water (90\% of plasma \cite{Fung1993}), electrolytes, proteins, glucose, lipids, hormones, and carbon dioxide. Due to the high water content, both in cells and plasma, blood is generally considered incompressible, with a density of 1056\,kg/m$^3$\,\cite{Suzuki2021}. Likewise, plasma exhibits nearly Newtonian characteristics\,\cite{Nader2019} with dynamic viscosities that only decrease from $\mu_\text{plasma}$\,=\,1.27\,mPa$\cdot$s in a resting state to $\mu_{plasma}$\,=\,1.23\,mPa$\cdot$s under high shearing\,\cite{Rodrigues2022}.
+\section{Blood Rheology}
+Blood is a complex dense suspension comprising approximately 40--45\% cellular components, including Red Blood Cells (RBCs), white blood cells (leukocytes), and platelets. The remainder of the blood is called plasma, a homogeneous yellow substance composed of water (90\% of plasma\,\cite{Fung1993}), electrolytes, proteins, glucose, lipids, hormones, and carbon dioxide. Due to the high water content, both in cells and plasma, blood is generally considered incompressible, with a density of 1056\,kg/m$^3$\,\cite{Suzuki2021}. Likewise, plasma exhibits nearly Newtonian characteristics\,\cite{Nader2019} with dynamic viscosities that only decrease from $\mu_\text{plasma}$\,=\,1.27\,mPa$\cdot$s in a resting state to $\mu_{plasma}$\,=\,1.23\,mPa$\cdot$s under high shearing\,\cite{Rodrigues2022}.
 
 RBCs account for more than 99\% of the cells found in the bloodstream and play the pivotal role of transporting oxygen in the body\,\cite{Fung1993}. Their interior is filled with haemoglobin, an iron-rich protein with the capacity to store and release oxygen based on pressure levels and the chemistry of its environment. These cells are optimised for their transport task to the point in which they eject their nucleus to accommodate more space for haemoglobin and improve their flexibility. While resting, RBCs attain a biconcave disk shape ($d$\,=\,8\,$\mu$m), as displayed in \autoref{fig:rbc}, but can change their shape elastically under stress in order 1 deformations. When blood flows, especially in areas of high shear stress, RBCs tend to orient themselves and elongate along the flow direction, allowing them to traverse narrow vessels\,\cite{Dirkes2024}. This adaptability is particularly valuable in capillaries, whose diameter of 5\,$\mu$m lies below the diameter of RBCs\,\cite{Nader2019}.
 
@@ -172,7 +172,7 @@ RBCs account for more than 99\% of the cells found in the bloodstream and play t
 \end{figure}
 
 \subsection{Shear-thinning behaviour}
-Whole blood can display a complex flow behaviour due to the multiple and diverse components that it carries. At a macroscopic level, \ie\,considering blood a single-phase medium, the apparent viscosity $\mu$ grows in the presence of more RBCs, like in most suspensions. The concentration of RBCs is formally called hematocrit (Hct) and is given as a percentage of total blood volume. The Hct typically lays around 40--45\%, depending on sex, but may rise or fall in an individual based on hydration levels and age factors. Chien \etal\,\cite{Chien1971} confirmed the upward trend in viscosity for higher concentrations of RBCs experimentally, which we display in \autoref{fig:ShearThin}. The apparent viscosity was also shown to be shear-thinning in the tested range, with changes of about one order of magnitude. The answer to what causes this behaviour is multifaceted and could when thoroughly addressed, cover whole books. Here, we will limit ourselves to briefly discussing some of the key points that are relevant in the flow regime that is studied afterwards, the brain arterial flow.
+Whole blood can display a complex flow behaviour due to the multiple and diverse components that it carries. At a macroscopic level, \textit{i.e.}\,considering blood a single-phase medium, the apparent viscosity $\mu$ grows in the presence of more RBCs, like in most suspensions. The concentration of RBCs is formally called hematocrit (Hct) and is given as a percentage of total blood volume. The Hct typically lays around 40--45\%, depending on sex, but may rise or fall in an individual based on hydration levels and age factors. Chien \textit{et\,al.}\,\cite{Chien1971} confirmed the upward trend in viscosity for higher concentrations of RBCs experimentally, which we display in \autoref{fig:ShearThin}. The apparent viscosity was also shown to be shear-thinning in the tested range, with changes of about one order of magnitude. The answer to what causes this behaviour is multifaceted and could when thoroughly addressed, cover whole books. Here, we will limit ourselves to briefly discussing some of the key points that are relevant in the flow regime that is studied afterwards, the brain arterial flow.
 
 \begin{figure}[htb]
 	\centering
@@ -187,7 +187,7 @@ At low shear rates ($\dot{\gamma}<0.01$\,s$^{-1}$), numerous ``rouleaux'' stacks
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/carreau-yasuda_chien.pdf}
-	\caption[Aggregation effect of RBCs]{Measurement data from Chien \etal\,\cite{Chien1970} for (heparin-treated) whole blood (Hct\,=\,45\%) and for RBCs in an 11\% albumin-Ringer solution. This solution is commonly used to treat patients after or during a strong blood loss and reduces RBC aggregation, leading to a smaller apparent viscosity at low shearing.}\label{fig:cy_model_chien}
+	\caption[Aggregation effect of RBCs]{Measurement data from Chien \textit{et\,al.}\,\cite{Chien1970} for (heparin-treated) whole blood (Hct\,=\,45\%) and for RBCs in an 11\% albumin-Ringer solution. This solution is commonly used to treat patients after or during a strong blood loss and reduces RBC aggregation, leading to a smaller apparent viscosity at low shearing.}\label{fig:cy_model_chien}
 \end{figure}
 
 In the human body shear rates vary strongly on the location and type of vessel. The largest shearing occurs typically in arterioles, where 1600 s$^{-1}$ are commonly observed\,\cite{Lipowsky1978, Lipowsky1980}. Although this might sound counter-intuitive, the rough estimate using Poiseuille's law reveals that the shear rate is inversely proportional to the cube of the vessel radius $r$, $\dot{\gamma} \propto 1/r^3$ in a volume drive flow, thus suggesting higher shearing in small calibre vessels. In this regime ($d<$\,0.3\,mm), blood displays the characteristic Fåhræus-Lindqvist effect\,\cite{fareus1931} causing a drop in the apparent viscosity due to RBCs accumulating in the vessel centre and leaving a cell-free layer at the vessel wall. In this work, we do not consider this effect and restrict ourselves to vessels clearly above the critical 0.3\,mm diameter mark. The largest artery in the body, the aorta features shear rates around 150\,s$^{-1}$, while its venous counterpart, the vena cava, only presents $\dot{\gamma}$\,=\,9\,s$^{-1}$ due to its overall smaller flow velocity\,\cite{Lipowsky1978, Lipowsky1980}. In the case of brain arteries, Reynolds numbers and shear rates lay within the range spanned by arterioles and the aorta. Maximal values for shearing are usually observed at bifurcations, which are very common in the brain. When considering aneurysms, however, the lower bound for $\dot\gamma$ falls by an order of magnitude. In the cases of giant side-wall aneurysms ($>$ 20\,mm), as will be shown further below in Chapter 5, the flow can become notoriously slow leading to shear rates in the range of 1--10\,s$^{-1}$. In this regime assuming a constant viscosity is arguably problematic and is best avoided by considering a more complex rheology model.
@@ -205,7 +205,7 @@ In practice, blood rheology in and around intracranial aneurysms can be modelled
 
 
 \subsubsection*{Newtonian Model}
-Newtonian behaviour is adopted by most simulation studies, both in large vessels and in aneurysms. Common values for the employed viscosity are between 3.5 and 4\,mPa$\cdot$s\,\cite{Valen-Sendstad2018, Berg2019, Berg2019_rev}. In literature, several publications have addressed the question of whether Newtonian assumptions are reasonable or not for computing the Wall Shear Stress (WSS) in IA with mixed conclusions. One part of the community\cite{Lynch2022, Suzuki2021, Xiang2012} argues that prescribing a constant viscosity despite physical evidence against it leads to relevant hemodynamic changes, even in aortic flow. In aneurysm studies, changes were mostly quantitative, with WSS being underestimated by 30\% in slow-flow regions. Khan \etal\,\cite{Khan2017} challenged this idea and conducted an analysis including the comparison of first-order solvers and their higher-order solver \textit{Oasis}. While confirming some of the trends in WSS from the other publications, they reported that the solver choice played a larger role in the WSS prediction. The concerns about the simulation fidelities are very valid, as well as the implications of boundary conditions on the hemodynamics. However, in the quest to tackle shear-thinning models, there seems to be a misinterpretation of the phenomena causing the drop in viscosity. The authors suggest that the aggregation of RBCs is the leading cause of the shear-thinning behaviour in aneurysm hemodynamics. However, as already described by Chien \etal\,\cite{Chien1970}, the aggregation of RBCs is a phenomenon that occurs at very low shear rates, typically below 1\,s$^{-1}$. In the range of shear rates that are common for aneurysms, the viscosity of blood is mostly guided by the alignment of RBCs instead of aggregation. While transient phenomena of viscosity are surely an important topic, this criticism could be unjustified. Nevertheless, Khan \etal\,\cite{Khan2017} mention that the Newtonian assumption is probably not well suited for treated IA, where flow velocities are substantially smaller. The take from this discussion is that (i) numerical viscosities are important to be kept in check to avoid erroneous results and that (ii) no good argument for choosing a Newtonian rheology over a shear-thinning one is given. For this reason, we will pursue the modelling of blood as a shear-thinning fluid.
+Newtonian behaviour is adopted by most simulation studies, both in large vessels and in aneurysms. Common values for the employed viscosity are between 3.5 and 4\,mPa$\cdot$s\,\cite{Valen-Sendstad2018, Berg2019, Berg2019_rev}. In literature, several publications have addressed the question of whether Newtonian assumptions are reasonable or not for computing the Wall Shear Stress (WSS) in IA with mixed conclusions. One part of the community\cite{Lynch2022, Suzuki2021, Xiang2012} argues that prescribing a constant viscosity despite physical evidence against it leads to relevant hemodynamic changes, even in aortic flow. In aneurysm studies, changes were mostly quantitative, with WSS being underestimated by 30\% in slow-flow regions. Khan \textit{et\,al.}\,\cite{Khan2017} challenged this idea and conducted an analysis including the comparison of first-order solvers and their higher-order solver \textit{Oasis}. While confirming some of the trends in WSS from the other publications, they reported that the solver choice played a larger role in the WSS prediction. The concerns about the simulation fidelities are very valid, as well as the implications of boundary conditions on the hemodynamics. However, in the quest to tackle shear-thinning models, there seems to be a misinterpretation of the phenomena causing the drop in viscosity. The authors suggest that the aggregation of RBCs is the leading cause of the shear-thinning behaviour in aneurysm hemodynamics. However, as already described by Chien \textit{et\,al.}\,\cite{Chien1970}, the aggregation of RBCs is a phenomenon that occurs at very low shear rates, typically below 1\,s$^{-1}$. In the range of shear rates that are common for aneurysms, the viscosity of blood is mostly guided by the alignment of RBCs instead of aggregation. While transient phenomena of viscosity are surely an important topic, this criticism could be unjustified. Nevertheless, Khan \textit{et\,al.}\,\cite{Khan2017} mention that the Newtonian assumption is probably not well suited for treated IA, where flow velocities are substantially smaller. The take from this discussion is that (i) numerical viscosities are important to be kept in check to avoid erroneous results and that (ii) no good argument for choosing a Newtonian rheology over a shear-thinning one is given. For this reason, we will pursue the modelling of blood as a shear-thinning fluid.
 
 
 \subsubsection*{Carreau-Yasuda}
@@ -220,7 +220,7 @@ The parameter $\mu_\infty$ denotes the viscosity at an infinite shear rate, whic
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/carreau-yasuda_gambaruto.pdf}
-	\caption[Carreau-Yasuda model]{Fitted Carreau-Yasuda model with data from Gambaruto \etal\,\cite{Gambaruto2011}. The experimental data (in red) were obtained from a patient with a hematocrit of 40\%.}
+	\caption[Carreau-Yasuda model]{Fitted Carreau-Yasuda model with data from Gambaruto \textit{et\,al.}\,\cite{Gambaruto2011}. The experimental data (in red) were obtained from a patient with a hematocrit of 40\%.}
 	\label{fig:cy_model_gamb}
 \end{figure}
 For the specific case of blood, the constants provided are $\mu_\infty$\,=\,0.0032\,Pa$\cdot$s, $\mu_0$ = 0.0456\,Pa$\cdot$s, $\lambda$\,=\,10.03\,s, and $n$\,=\,0.344. These values were determined through experimental measurements (Hct\,=\,40\%) and were obtained by non-linear least squares fit\,\cite{Gambaruto2011}.
@@ -234,20 +234,17 @@ An alternative to Carreau-Yasuda is the Casson model expressed by the following 
 
 Here, $\tau_y$ represents the yield stress and $\mu_C$ the Casson viscosity. This model provides a good fit for the viscoplastic behaviour of blood, where a certain threshold stress $\tau_y$ must be exceeded before the fluid starts to flow. To address numerical challenges, such as division by zero at very low shear rates, a modified version of the Casson model has been introduced. The modified Casson model incorporates a new parameter, $m$, which acts as an apparent relaxation time, governing the transition of viscosity as the shear rate tends to zero:
 
-\begin{equation}
+\begin{equation*}
 	\mu = {\left( \sqrt{\mu_C} + \sqrt{\tau_y\frac{(1-\exp{(-m\dot{\gamma})})}{\dot{\gamma}}} \right)}^2\label{eqn:casson}
-\end{equation}
+\end{equation*}
 
 The parameter $m$ ensures a smooth transition and avoids singularities in the model. A larger value of $m$ implies a longer apparent relaxation time, leading to a slower decrease in viscosity with increasing shear rate, akin to a slower response of the material to applied shear stress.
-
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/casson_model.pdf}
 	\caption[Modified Casson model]{Experimental measurement by Suzuki \textit{et al.}\,\cite{Suzuki2021} for three example Hematocrit values (Hct). The colour on the right describes the hematocrit of the extracted samples, which belong to different patients with intracranial aneurysms.}\label{fig:casson}
 \end{figure}
-
-Arguably, for our flow regime, the Carreau-Yasuda model can replicate the Casson (see \autoref{fig:ranges_visc}). The reason for still considering this new model is the well-documented fitting of its parameters to the Hct and their thorough validation in a recent study\,\cite{Suzuki2021}. There samples of whole blood of 15 IA patients at $310K$ were analyzed and the dependencies shown in \autoref{eqn:casson_fit} were obtained. The Hct values found in the study range from 32\% to 44\%, and should therefore be taken with consideration for larger concentrations. In \autoref{fig:casson}, the measurements and three sample curves at different Hct are plotted.
-
+Arguably, for our flow regime, the Carreau-Yasuda model can replicate the Casson (see \autoref{fig:ranges_visc}). The reason for still considering this new model is the well-documented fitting of its parameters to the Hct and their thorough validation in a recent study\,\cite{Suzuki2021}. There samples of whole blood of 15 IA patients at $310K$ were analyzed and the dependencies shown in \autoref{eqn:casson_fit} were obtained.
 \begin{equation}
 	\begin{split}
 		\mu_C &= (0.073\cdot\text{Hct} + 0.599) \mpas\\
@@ -255,6 +252,7 @@ Arguably, for our flow regime, the Carreau-Yasuda model can replicate the Casson
 	\end{split}
 	\label{eqn:casson_fit}
 \end{equation}
+The Hct values found in the study range from 32\% to 44\%, and should therefore be taken with consideration for larger concentrations. In \autoref{fig:casson}, the measurements and three sample curves at different Hct are plotted.
 
 
 \begin{tcolorbox}[conclusions]
@@ -379,19 +377,19 @@ With this bilinear form, we are going to show that for the standard Galerkin dis
 	\vspace*{1cm}
 \end{theorem}
 \noindent In the convection-diffusion equation, the coercivity condition reads as follows:
-\begin{align}
+\begin{align*}
 	a(\varphi, \varphi) & = \int_{\Omega} u\varphi\partial_x\varphi + \varepsilon{(\partial_x\varphi)}^2\,dx                                 \\
 	                    & = \int_{\Omega} \frac{u}{2}\partial_x\varphi^2 + \varepsilon{(\partial_x\varphi)}^2\,dx                            \\
 	                    & = \frac{u}{2}{\left[\varphi^2\right]}^{\Gamma_1}_{\Gamma_0} + \int_{\Omega} \varepsilon{(\partial_x\varphi)}^2\,dx \\
 	                    & = \varepsilon \norm{\varphi}^2_{H^1(\Omega)}
-\end{align}
+\end{align*}
 Therefore, for $\varepsilon\rightarrow0$ or in other words, for pure convection, the coercivity condition is not met and uniqueness and existence cannot be guaranteed. This phenomenon can also be observed in finite differences when central schemes are used for the space discretization of convective terms. A discretization with central finite differences of the convection-diffusion problem will lead to the same linear system with first-order Lagrange elements. For that reason, the Galerkin FEM can be seen as a central scheme. In finite difference discretizations, the problem is usually tackled by exchanging higher-order central schemes with upwind schemes (UD). These, as the name suggests, employ the data found upwind of the flow velocity to discretize spatial gradients.
-\begin{equation}
+\begin{equation*}
 	\partial^{UD}_x\varphi =
 	\begin{cases} \frac{\varphi(x) - \varphi(x-\Delta x)}{\Delta x}, \quad u > 0 \\
 		\frac{\varphi(x+\Delta x) - \varphi(x)}{\Delta x}, \quad \text{else}
 	\end{cases} +\mathcal{O}(\Delta x)
-\end{equation}
+\end{equation*}
 An interesting note is, that these schemes can also be interpreted as central differences with added diffusion terms. Consider for example the case $u>0$:
 \begin{equation*}
 	\begin{split}
@@ -402,9 +400,9 @@ An interesting note is, that these schemes can also be interpreted as central di
 \end{equation*}
 Thus, a first-order upwinding scheme can be seen as a central scheme with an added diffusion term of the order $\varepsilon$ to satisfy the coercivity constraint. Luckily, the VMS-type stabilization that we will employ later also tackles this problem. While the compatibility constraint is alleviated through a relaxation of the mass balance, the convection phenomena are handled by a resulting shift in the test function. This shift, as will be seen later, is proportional to the convective velocity and acts similarly to a flux delimiter.
 
-\subsection{Variational Multiscale Method}\label{chap2:sec2:subsec2}
-One strategy that allows for a stable approximation of the solution of the Navier-Stokes equations for same-order Lagrange elements under the presence of large convection terms is the Variational MultiScale method (VMS). VMS-type discretizations have in common that they split the solution into a resolved large scale $\vec{U}_h$ and a subgrid contribution $\vec{U}'$. While the large scales are solved, the subgrid scales are usually modelled, incorporating a stabilizing effect into the system\,\cite{Codina2002, Hughes2017}. This idea shares many similarities with other turbulence models, such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes (RANS). It can be shown, that the stabilization technique that is going to be introduced is closely related to an LES approach\,\cite{Hughes2017}. As hinted before, there are many VMS formulations for the Navier-Stokes equations, each of which stems from different assumptions made during the derivation. To put into context the VMS-type stabilization that is used here, we will derive the method from the most general point of view and discuss the key assumptions at the moment when they are introduced. For this purpose, the variables $\vec{u}$ and $p$ are bundled into a single vector $\vec{U} = {[\vec{u}, p]}^T$, as well as the respective test functions of the momentum and mass equations $\vec{V} = {[\vec{w}, q]}^T$. We also introduce the Navier-Stokes operator $\mathcal{L}$ and the right-hand side $\vec{F}$ in a notation consistent with\,\cite{Codina2002}.
-\begin{equation}
+\subsection{Variational Multiscale Method}
+One strategy that allows for a stable approximation of the solution of the Navier-Stokes equations for same-order Lagrange elements under the presence of large convection terms is the Variational MultiScale method (VMS). VMS-type discretizations have in common that they split the solution into a resolved large scale $\vec{U}_h$ and a subgrid contribution $\vec{U}'$. While the large scales are solved, the subgrid scales are usually modelled, incorporating a stabilizing effect into the system\,\cite{Codina2002, Hughes2017}. This idea shares many similarities with other turbulence models, such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes. It can be shown, that the stabilization technique that is going to be introduced is closely related to an LES approach\,\cite{Hughes2017}. As hinted before, there are many VMS formulations for the Navier-Stokes equations, each of which stems from different assumptions made during the derivation. To put into context the VMS-type stabilization that is used here, we will derive the method from the most general point of view and discuss the key assumptions at the moment when they are introduced. For this purpose, the variables $\vec{u}$ and $p$ are bundled into a single vector $\vec{U} = {[\vec{u}, p]}^T$, as well as the respective test functions of the momentum and mass equations $\vec{V} = {[\vec{w}, q]}^T$. We also introduce the Navier-Stokes operator $\mathcal{L}$ and the right-hand side $\vec{F}$ in a notation consistent with\,\cite{Codina2002}.
+\begin{equation*}
 	\mathcal{L}(\vec{u}_{conv}, \vec{U}) = \begin{bmatrix}
 		\rho\partial_t \vec{u} + \rho(\vec{u}_{conv}\cdot\nabla)\vec{u} + \nabla p - \nabla\cdot2\mu\varepsilon(\vec{u}) \\
 		\nabla \cdot \vec{u}
@@ -413,7 +411,7 @@ One strategy that allows for a stable approximation of the solution of the Navie
 		\rho\vec{g} \\
 		0
 	\end{bmatrix}
-\end{equation}
+\end{equation*}
 
 Therefore, the strong form of the Navier-Stokes Equations can be equally written as:
 \begin{equation}
@@ -426,27 +424,27 @@ Therefore, the strong form of the Navier-Stokes Equations can be equally written
 	\label{eqn:short_strong}
 \end{equation}
 The weak form of the Navier-Stokes equations can be obtained by multiplying the strong form \autoref{eqn:short_strong} with tests functions $\vec{V}$ contained in the Sobolev space $H^1(\Omega)$ and integrating the terms over $\Omega$.
-\begin{equation}
+\begin{equation*}
 	\int_{\Omega} \vec{V} \cdot \mathcal{L}(\vec{u}_{conv}, \vec{U}) \,dV = \int_{\Omega} \vec{V} \cdot \vec{F} \,dV, \quad \forall \vec{V} \in H^1(\Omega)
-\end{equation}
+\end{equation*}
 
 VMS-type methods, as described above, now introduce a decomposition of the solution into a resolved part $\vec{U}_h$ and a subgrid part $\vec{U}'$. The coarse scales are solved on the existing mesh with, in our case, linear elements, while the subgrid scales are infinite-dimensional and will be modelled instead. The same decomposition is applied to the test functions $\vec{V}$.
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\vec{U} &= \vec{U}_h + \vec{U}', \qquad \vec{U} \in W =: \left\{ \vec{u}, p \in H^1(\Omega) \mid \vec{u} = \vec{u}_d\,\text{on}\,\Gamma_{d} \right\}\\
 		\vec{V} &= \vec{V}_h + \vec{V}', \qquad \vec{V} \in W_0 =: \left\{ \vec{w}, q \in H^1(\Omega) \mid \vec{w} = \vec{0}\,\text{on}\,\Gamma_{d} \right\}
 	\end{split}
-\end{equation}
+\end{equation*}
 The functions $\vec{U}_h$ and $\vec{V}_h$ belong to the finite-dimensional subspaces $W_h$ and $W_{h,0}$ of $W$ and $W_0$ that are described by classic linear elements on a triangulated mesh. The spaces of the subscales $W'$, $W_0'$ are therefore infinitely dimensional and complete the large scale space in $W$ and $W_0$.
-\begin{equation}
+\begin{equation*}
 	W' = {W} \backslash {W_h}, \quad W_0' = W_0 \backslash {W}_{h,0}
-\end{equation}
+\end{equation*}
 If now the splitting is introduced into the weak form of the Navier-Stokes equations, the following equation is obtained:
-\begin{equation}
+\begin{equation*}
 	\int_{\Omega} (\vec{V}_h+\vec{V}') \cdot \mathcal{L}(\vec{u}_{conv}, \vec{U}_h + \vec{U}') \,dV = \int_{\Omega} (\vec{V}_h+\vec{V}') \cdot \vec{F} \,dV
-\end{equation}
+\end{equation*}
 
-\paragraph{The convective velocity} $\vec{u}_{conv}$ was silently introduced before with the operator $\mathcal{L}$ for a practical reason. In the most general form of the stabilizations, $\vec{u}_{conv}$ is nothing but the velocity itself and thus when introducing the decomposition, the convective term produces cross terms. These cross-terms are complicated to handle when computing an approximation for the subscales since they are non-linear. Bazilevs \etal\,\cite{Bazilevs2007} studied the hypothetical case of using a perturbation series expansion to handle the non-linearity, concluding that if the subscales are to be solved through Green's functions, only the first term of the series can be kept, \ie\,the large scale velocity $\vec{u}_h$. Nevertheless, there are many publications that, while neglecting $\vec{u}'$ in the subscale equations, keep it in the large-scale equation yielding cross terms related to the ones from LES models. Since, to the writer's knowledge, there is no general proof about the fact that the latter option bears any advantage, we will assume that the convective velocity is solely dictated by the large scales. Further, the convective velocity $\vec{u}_h$ will be either determined by an iterative process, such as the Newton method or treated semi-implicitly in transient simulations, allowing us to see the problem as a linear one for the derivation $\mathcal{L}(\vec{u}_{h}, \cdot) \rightarrow \mathcal{L}(\cdot)$. Since the weak formulation was posed for any test function, it has to hold for large and small scales independently. Therefore, we split the problem into:
+\paragraph{The convective velocity} $\vec{u}_{conv}$ was silently introduced before with the operator $\mathcal{L}$ for a practical reason. In the most general form of the stabilizations, $\vec{u}_{conv}$ is nothing but the velocity itself and thus when introducing the decomposition, the convective term produces cross terms. These cross-terms are complicated to handle when computing an approximation for the subscales since they are non-linear. Bazilevs \textit{et\,al.}\,\cite{Bazilevs2007} studied the hypothetical case of using a perturbation series expansion to handle the non-linearity, concluding that if the subscales are to be solved through Green's functions, only the first term of the series can be kept, \textit{i.e.}\,the large scale velocity $\vec{u}_h$. Nevertheless, there are many publications that, while neglecting $\vec{u}'$ in the subscale equations, keep it in the large-scale equation yielding cross terms related to the ones from LES models. Since, to the writer's knowledge, there is no general proof about the fact that the latter option bears any advantage, we will assume that the convective velocity is solely dictated by the large scales. Further, the convective velocity $\vec{u}_h$ will be either determined by an iterative process, such as the Newton method or treated semi-implicitly in transient simulations, allowing us to see the problem as a linear one for the derivation $\mathcal{L}(\vec{u}_{h}, \cdot) \rightarrow \mathcal{L}(\cdot)$. Since the weak formulation was posed for any test function, it has to hold for large and small scales independently. Therefore, we split the problem into:
 \begin{equation}
 	\begin{split}
 		&\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}_h + \vec{U}') \,dV = \int_{\Omega} \vec{V}_h \cdot \vec{F} \,dV\\
@@ -458,15 +456,15 @@ If now the splitting is introduced into the weak form of the Navier-Stokes equat
 	\mathcal{L}(\vec{U}_h + \vec{U}') - \vec{F} = \vec{V}^\bot, \qquad \vec{V}^\bot \in W_0^\bot
 	\label{eq:oss}
 \end{equation}
-Codina \etal\,\cite{Codina2002, Codina2004, Codina2008} studied $\vec{V}^\bot$ as an $L_2$ projection of the large scale residual under different assumptions, generating so-called Orthogonal Subscales. The additional term appearing in the subscales needs to be computed either implicitly by extending the existing linear system with an additional $L_2$ projection\,\cite{Codina2008} or explicitely\,\cite{Codina2002}. While the additional computational effort has been reported to be moderate, so seem its benefits\,\cite{Codina2004, Codina2008}. The diffusion induced by the stabilization is reduced, increasing accuracy on one side, but limiting stability on the other. For that reason, most VSM-type methods\,\cite{Bazilevs2007, Brooks1982, Hughes2017, Tezduyar2000} resort to the second strategy, namely assuming $\vec{V}^\bot = 0$.
+Codina \textit{et\,al.}\,\cite{Codina2002, Codina2004, Codina2008} studied $\vec{V}^\bot$ as an $L_2$ projection of the large scale residual under different assumptions, generating so-called Orthogonal Subscales. The additional term appearing in the subscales needs to be computed either implicitly by extending the existing linear system with an additional $L_2$ projection\,\cite{Codina2008} or explicitely\,\cite{Codina2002}. While the additional computational effort has been reported to be moderate, so seem its benefits\,\cite{Codina2004, Codina2008}. The diffusion induced by the stabilization is reduced, increasing accuracy on one side, but limiting stability on the other. For that reason, most VSM-type methods\,\cite{Bazilevs2007, Brooks1982, Hughes2017, Tezduyar2000} resort to the second strategy, namely assuming $\vec{V}^\bot = 0$.
 \begin{equation}
 	\mathcal{L}(\vec{U}_h + \vec{U}') - \vec{F} = 0
 	\label{eq:asgs}
 \end{equation}
 \autoref{eq:asgs} is a special case of \autoref{eq:oss}, called Algebraic Subgrid Scales (ASGS), in which the computation of the subgrid scales is simpler. \autoref{eq:asgs} can be rearranged to separate the scales and introduce the residual $\mathcal{R}$.
-\begin{equation}
+\begin{equation*}
 	\mathcal{L}(\vec{U}') = \vec{F} - \mathcal{L}(\vec{U}_h) = \mathcal{R}(\vec{U}_h)
-\end{equation}
+\end{equation*}
 Here it can be nicely seen, that the subscales represent in some form the errors found in the large-scale solutions of the system. Conversely, finding an exact solution to the Navier-Stokes equations causes the subscales to vanish, which is a beneficial property of this approach.
 
 \paragraph{The temporal discretization of the subscales} is likewise a matter of debate that is best discussed at this point. Since the split of the solution into both scales introduces a time derivative of $\vec{U}'$, it is expected that an additional set of equations needs to be integrated in time. In most VMS-type methods this term is neglected $\partial_t\vec{U}'\approx0$ under the assumption of quasi-static subscales (QSS)\,\cite{Tezduyar2000, Bazilevs2007, Masud2011}. It is argued, that the subscales react to the effects of the large scales and do not greatly change their behaviour due to their past. Others have studied the effect of considering the temporal derivatives, giving rise to the dynamics subscales\,\cite{Codina2002, Codina2007}. These are more robust for different choices of timesteps and less prone to oscillations than the QSS counterpart\,\cite{Gonzalez2022}. Nevertheless, for the present work, we will stick to the conventional treatment of the subscales as is mostly done in the hemodynamics field.
@@ -477,7 +475,7 @@ Here it can be nicely seen, that the subscales represent in some form the errors
 The expression \,\eqref{eqn:QSS} is the basis for the subscale modelling. The principal idea is finding an appropriate description of the inverse operator $\mathcal{L}^{-1}_{QSS}$ so that $\vec{U}'$ can be computed and re-injected into the large-scale equation, which we have so far, not commented. Since subscale modelling is a complex topic, an own subsection is dedicated to it.
 
 \subsection{Subscale Modelling}\label{chap2:sec2:subsec3}
-When deriving an expression for the subscales, we restrict the domain of each approximation to an element $K\in\Tau_h$. There are many different approaches to deriving the same set of stabilization quantities, \eg\,using Green's functions, Bubble elements and Fourier Transformations. The latter will be used for the demonstration following the main steps from\,\cite{Principe2010} and\,\cite{Codina2002}. On the subscales, we will assume viscosity variations to be negligible, \ie\,$\nabla\mu\approx0$. Additionally, all fluxes across the boundaries of $K$ will be neglected on the subscales. We denote the residuals of the momentum and continuity equations as $\vec{\mathcal{R}}_M$ and $\mathcal{R}_C$, respectively. Then, the problem to solve here is more precisely given by:
+When deriving an expression for the subscales, we restrict the domain of each approximation to an element $K\in\Tau_h$. There are many different approaches to deriving the same set of stabilization quantities, \eg\,using Green's functions, Bubble elements and Fourier Transformations. The latter will be used for the demonstration following the main steps from\,\cite{Principe2010} and\,\cite{Codina2002}. On the subscales, we will assume viscosity variations to be negligible, \textit{i.e.}\,$\nabla\mu\approx0$. Additionally, all fluxes across the boundaries of $K$ will be neglected on the subscales. We denote the residuals of the momentum and continuity equations as $\vec{\mathcal{R}}_M$ and $\mathcal{R}_C$, respectively. Then, the problem to solve here is more precisely given by:
 \begin{equation}
 	\begin{split}
 		\begin{bmatrix}
@@ -493,9 +491,9 @@ When deriving an expression for the subscales, we restrict the domain of each ap
 	\label{eqn:subscale_problem}
 \end{equation}
 As mentioned above, the derivation will use Fourier transformations of the unknown subscales, denoted by $\mathcal{F}$ (here $i$ represents $\sqrt{-1}$).
-\begin{equation}
+\begin{equation*}
 	\mathcal{F}\{g(\vec x)\} = \int_{K} \exp{(-i\vec{k}\cdot\vec{x})} g(\vec{x})\,dV
-\end{equation}
+\end{equation*}
 The Fourier Transform of the partial derivatives are then computed with the following steps:
 \begin{equation}
 	\begin{split}
@@ -505,38 +503,38 @@ The Fourier Transform of the partial derivatives are then computed with the foll
 	\end{split}
 \end{equation}
 Where we applied partial differentiation to obtain the intermediate step. The approximation comes from the assumed boundary conditions of problem\,\eqref{eqn:subscale_problem}. Also, as pointed out in\,\cite{Codina2002}, it is expected that the subscales are characterized by large wave numbers $\vec{k}$ since lower frequencies are solved by the large scales. This gives dominance to the second term in the derivative of the Fourier Transform, limiting the action of boundary contributions. With this, we can proceed by reformulating problem\,\eqref{eqn:subscale_problem} in terms of Fourier transformations:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\left[\rho(\vec{u}_{h}\cdot i\vec{k}) + \mu(\vec{k}\cdot\vec{k})\right]\hat{\vec{u}} + i\vec{k} \hat{p} = \hat{\vec{\mathcal{R}}}_M\\
 		i\vec{k} \cdot \hat{\vec{u}} = \hat{\mathcal{R}}_C
 	\end{split}
-\end{equation}
+\end{equation*}
 By performing the same operation to the divergence of the momentum equation, we obtain an analogous of the Pressure Poisson Equation. It is now assumed without loss of generality, that the potential of the momentum residual is contained within the pressure subscale, allowing $\nabla\cdot\mathcal{R}_M = 0$\,\cite{Codina2002}.
-\begin{equation}
+\begin{equation*}
 	\left[\rho(\vec{u}_{h}\cdot i\vec{k}) + \mu(\vec{k}\cdot\vec{k})\right]\hat{\mathcal{R}}_C - (\vec{k}\cdot\vec{k}) \hat{p} = 0
-\end{equation}
+\end{equation*}
 Here we also included the fact that $i\vec{k} \cdot \hat{\vec{u}} = \hat{\mathcal{R}}_C$. Then it is clear that the pressure subscale is approximated by:
-\begin{equation}
+\begin{equation*}
 	\hat{p} = \left[i\rho\frac{(\vec{u}_{h}\cdot \vec{k})}{(\vec{k}\cdot\vec{k})} + \mu\right]\hat{\mathcal{R}}_C
-\end{equation}
+\end{equation*}
 Contrary to what one might expect without previously knowing the derivation of the subscale model, the approximation for $\hat{p}$ is not simply reinjected into the momentum equation\,\cite{Codina2002}. This is mostly argued due to simplicity, as keeping the continuity residual $\mathcal{R}_C$ in the velocity subscales would result in a non-SPD stabilization tensor (since there is no contribution of $\vec{\mathcal{R}}_M$ on the pressure stabilization either). Instead, the velocity subscales are given by:
-\begin{equation}
+\begin{equation*}
 	\hat{\vec{u}}  = \left[i\rho(\vec{u}_{h}\cdot \vec{k}) + \mu(\vec{k}\cdot\vec{k})\right]^{-1}{\hat{\vec{\mathcal{R}}}}_M
-\end{equation}
+\end{equation*}
 In\,\cite{Codina2002}, it is shown that by neglecting the boundary contributions (as done above) and applying consequently Plancherel's Theorem as well as the Mean Value Theorem, the stabilization parameters might be identified by the absolute values of the factors in front of the residuals and a mean value frequency ($\vec{k}_0$):
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\vec{u}' &\approx \left[\rho^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2(\vec{k}_0\cdot\vec{k}_0)^2\right]^{-1/2}\vec{\mathcal{R}}_M := \tau_M\vec{\mathcal{R}}_M\\
 		p' &\approx (\vec{k}_0\cdot\vec{k}_0)^{-1} \left[\rho^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2(\vec{k}_0\cdot\vec{k}_0)^2\right]^{1/2}\mathcal{R}_C := \tau_C\mathcal{R}_C
 	\end{split}
-\end{equation}
+\end{equation*}
 Through this derivation, the subscales have been modelled as piece-wise constant functions that act on each element individually. Therefore, they can be interpreted as bubble functions enriching the space of the large scales with their modelled effects.
 
 \subsubsection*{Reference Element Stabilization Tensor}
 The mean value frequency is an unknown, yet existing frequency for which the subscales are ideally solved. It is intuitive to think that it is related to some quantity proportional to a derivative operator. These are proportional to the inverse mesh size along the direction of the gradient. In\,\cite{Codina2002}, $\vec{k}_0$ is given as a product of the inverse mesh size measured by the perimeter of the element and a mesh independent factor. In other studies\,\cite{Principe2010}, the derivation is done right away from a reference domain, in this case, the unit-reference element, obtaining an expression of the shape:
-\begin{equation}
+\begin{equation*}
 	\tau_M = \left[\rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}
-\end{equation}
+\end{equation*}
 Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Principe2010}. The velocity $\vec{u}$ is interpolated to the cell centres from the nodes, where it resides. The illustrative derivation of\,\cite{Principe2010} tackled the problem of subscales for the Convection Diffusion Reaction equations. In other words\,\cite{Bazilevs2007, Masud2011}, these are used in an extended form for the Navier-Stokes Equations as:
 \begin{equation}
 	\begin{split}
@@ -545,7 +543,7 @@ Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Pri
 	\end{split}
 	\label{eqn:tensor_based_stab}
 \end{equation}
-Consistent with our derivation, this method expresses the stabilization parameter $\tau_C$ as a function of $\tau_M$. The timestep component now found in $\tau_M$ is however an addition that in strict terms speaking should not appear in QSS. Since time components do not directly play a role following that assumption, they should neither appear in the computed approximation of the inverse operator. Unfortunately, both in tests ran for this work as well as in related literature\,\cite{Hsu2010, Hsu2010}, not including the term in the stabilization leads in most engineering applications to convergence issues. Apart from this, we observe that a dominant fraction of the literature related to VMS for the transient Navier-Stokes Problem considers it\,\cite{Whiting2001, Yan2018, Masud2011, Bazilevs2007}. Naturally, including this member in the stabilization comes at a cost. Since the timestep is included with an inverse quadratic exponential, it will dominate the stabilization parameter for, \ie\,for $\dt \ll 1$, $\tau_M \rightarrow \dt / \rho$. Thus, the timestep becomes with this formulation a constraint in two ways: (i) large timesteps may not be sufficient to resolve certain phenomena in the flow and (ii) a too small timestep may force the stabilization to an insufficient level.
+Consistent with our derivation, this method expresses the stabilization parameter $\tau_C$ as a function of $\tau_M$. The timestep component now found in $\tau_M$ is however an addition that in strict terms speaking should not appear in QSS. Since time components do not directly play a role following that assumption, they should neither appear in the computed approximation of the inverse operator. Unfortunately, both in tests ran for this work as well as in related literature\,\cite{Hsu2010, Hsu2010}, not including the term in the stabilization leads in most engineering applications to convergence issues. Apart from this, we observe that a dominant fraction of the literature related to VMS for the transient Navier-Stokes Problem considers it\,\cite{Whiting2001, Yan2018, Masud2011, Bazilevs2007}. Naturally, including this member in the stabilization comes at a cost. Since the timestep is included with an inverse quadratic exponential, it will dominate the stabilization parameter for, \textit{i.e.}\,for $\dt \ll 1$, $\tau_M \rightarrow \dt / \rho$. Thus, the timestep becomes with this formulation a constraint in two ways: (i) large timesteps may not be sufficient to resolve certain phenomena in the flow and (ii) a too small timestep may force the stabilization to an insufficient level.
 
 Returning to the proposed stabilization by\,\cite{Bazilevs2007}, we likewise find an interpretation of the frequency vector $\vec{k}$ as a mapping from the actual element, denoted by $K$ shape to a reference element $K_{ref}$. The reference element is taken, in the context of $P1$ elements, as to be the unit triangle (see \autoref{fig:transformation}). More precisely and following the description of\,\cite{Bazilevs2007}, let one element $K\in\Omega$ be determined by a set of nodes $\vec{x}(i)$ for which a continuously differentiable bijective mapping $\vec{x} = \vec{x}(\vec{\xi}): K_{ref} \rightarrow K$ is defined.
 \begin{figure}[ht]
@@ -572,7 +570,7 @@ In a series of implementations with the unit triangle as a reference, we have en
 	\end{pmatrix}
 \end{align}
 Take a unit triangle stretched by a mesh size $h$ to be the element $K$.
-\begin{equation}
+\begin{equation*}
 	x^1 = \begin{pmatrix}
 		0 \\
 		0
@@ -585,9 +583,9 @@ Take a unit triangle stretched by a mesh size $h$ to be the element $K$.
 		0 \\
 		h
 	\end{pmatrix}
-\end{equation}
+\end{equation*}
 For these points, the previously written transformations are:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\frac{\partial \vec{x}}{\partial \vec{\xi}} &= \begin{pmatrix}
 			h & 0 \\
@@ -602,9 +600,9 @@ For these points, the previously written transformations are:
 			0      & h^{-2}
 		\end{pmatrix}, \qquad G:G = 2h^{-4}
 	\end{split}
-\end{equation}
+\end{equation*}
 Suppose now that instead of taking the point enumeration as before, the indices are permuted once, namely:
-\begin{equation}
+\begin{equation*}
 	x^1 = \begin{pmatrix}
 		h \\
 		0
@@ -617,9 +615,9 @@ Suppose now that instead of taking the point enumeration as before, the indices 
 		0 \\
 		0
 	\end{pmatrix}
-\end{equation}
+\end{equation*}
 Then the metrics change to:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\frac{\partial \vec{x}}{\partial \vec{\xi}} &= \begin{pmatrix}
 			-h & h \\
@@ -636,7 +634,7 @@ Then the metrics change to:
 		\end{pmatrix},\qquad
 		G:G = 7h^{-4}
 	\end{split}
-\end{equation}
+\end{equation*}
 It can be seen clearly, that $G$ attains different values for the same physical triangle. This issue is best seen in simulations of low Re flows, where $G:G$ is the dominant factor in the stabilization. The pressure field has a notable irregularity that however does not compromise stability. It has been observed, that this phenomenon is quickly masked when the timesteps become smaller or when convection starts dominating.
 
 \subsubsection*{Proposal: Principal Component Stabilization Tensor}
@@ -647,8 +645,7 @@ Alternatively to the reference element, one can consider a reference equilateral
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth]{chapter2/Figures/Metric_Tensor/Triangles.pdf}
-	\caption[Principal components of triangles]{Two triangles in a 2D space (red) with their circumsphers (black) and principal axes (blue, green).}
-	\label{fig:triangles}
+	\caption[Principal components of triangles]{Two triangles in a 2D space (red) with their circumsphers (black) and principal axes (blue, green).}\label{fig:triangles}
 \end{figure}
 This bears the advantage, that the ellipsoid retains the stretching and orientation information regardless of the order of the nodes spanning it. A minimal ellipse, as shown in \autoref{fig:transformation}, can be readily computed with the eigenvalues and eigenvectors of its nodes as follows. Take $X\in \mathbb{R}^{n,d}$ as to be the non-square matrix of nodal positions of any linear (or higher order) element in $d>1$ dimensions centred around the origin. Then, its main directions (as exploited in the Principal Component Analysis) are given by:
 \begin{equation}
@@ -656,27 +653,28 @@ This bears the advantage, that the ellipsoid retains the stretching and orientat
 	\label{eqn:PCA}
 \end{equation}
 In other words, if we look for the axis of the largest variance of a set of points $X$, we need to solve the optimization given by \autoref{eqn:PCA}. Luckily, we can avoid this potentially expensive computation by considering for a short instance the Singular Value Decomposition:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
-		X^TX = (U\Sigma V^T)^T U\Sigma {V}^T = V^T\Sigma^T U^T U\Sigma V^T = V \Sigma^2 V^T
+		X^TX = {(U\Sigma V^T)}^T U\Sigma V^T = V^T\Sigma^T U^T U\Sigma V^T = V \Sigma^2 V^T
 		\label{eq:svd}
 	\end{split}
-\end{equation}
+\end{equation*}
 Verbally speaking, \autoref{eq:svd} states that to find the principal components of $X$ we need to solve the eigenvalue problem of $X^TX$, which will yield the orthonormal column vectors $w$ of $V$ and the squared singular values in the quadratic matrix $\Sigma^2$. Note, that at the same time, we confirm that $X^TX$ yields an SPD matrix. With this knowledge, we can map the nodes on a circumcircle or radius 1 to the ellipse of another triangle with:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		X^{2D}_{ellipse} = X^{2D}_{circle} \sqrt{\frac{2}{3}} V \sqrt{\Sigma^2} V^T\\
 		X^{3D}_{ellipsoid} = X^{3D}_{sphere} \sqrt{\frac{3}{4}}V \sqrt{\Sigma^2} V^T
 	\end{split}
-\end{equation}
+\end{equation*}
 Another execution of the transformation can be seen in \autoref{fig:ellipses}, where the reference equilateral tetrahedron on the left is transformed into the right one. This transformation maps from the reference frame to the physical frame, while $G$ is supposed to be the square inverse mapping. Since our transformation is bijective, the inverse exists and is unique. Furthermore, it is avoided to compute a costly eigendecomposition for computational purposes.
 \begin{equation}
 	G = \left(\frac{3}{2}1_{\{d=2\}} + \frac{4}{3}1_{\{d=3\}}\right) (X^TX)^{-1}
 	\label{eqn:new_metric}
 \end{equation}
-\begin{figure}[t]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth, trim=0cm 0cm 0cm 0cm, clip]{chapter2/Figures/Metric_Tensor/Ellipse.pdf}
+	\vspace*{-0.5cm}
 	\caption[Principal components of tetrahedra]{Execution of the transformation from a reference equilateral tetrahedron (left) to another one with the nodal coordinates (0,0,0), (0.5,0,0), (0,0.5,0), (0,0,0.5). The corresponding stretching factors are $\lambda_1=0.217,$ and $\lambda_2=\lambda_3=0.433$.}
 	\label{fig:ellipses}
 \end{figure}
@@ -684,39 +682,39 @@ In the implementation of this method, the timestep component, which would influe
 
 
 \subsubsection*{Velocity projected meshsize}
-Another validated stabilization parameter is presented in the works of Tezduyar \etal\,\cite{Tezduyar1986, Tezduyar2000}. It is based on a velocity projected mesh size, much like before, but is instead computed using the gradient of the test functions $\nabla \varphi_k$ of each node in an element:
+Another validated stabilization parameter is presented in the works of Tezduyar \textit{et\,al.}\,\cite{Tezduyar1986, Tezduyar2000}. It is based on a velocity projected mesh size, much like before, but is instead computed using the gradient of the test functions $\nabla \varphi_k$ of each node in an element:
 \begin{equation}
 	h = \frac{\norm{\vec{u}_h}}{\sum_{k\in K} \abs{\vec{u}_h \cdot \nabla \varphi_k}}
 	\label{eqn:vel_proj_h}
 \end{equation}
 The stabilization considers an element Reynolds number $Re_{UGN}$ to switch between different stabilization coefficients in $\tau_C$. This term is also commonly referred to as the least squares on the incompressibility.
-\begin{equation}
+\begin{equation*}
 	Re_{UGN} = \frac{\rho\norm{\vec{u}_h} h}{\mu}
-\end{equation}
+\end{equation*}
 The resulting stabilization however requires special treatment, if the velocities in the computation are or can be zero, as might be the case for instance at the beginning. There, it is recommended to use an average mesh size instead of the velocity projected mesh size (shown in \autoref{eqn:vel_proj_h}).
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\tau_M &= \left[\left(\frac{2\rho}{\dt}\right)^2 + \left(\frac{\rho\norm{\vec{u}_h}}{h}\right)^2 + \left(\frac{\mu}{h^2}\right)^2\right]^{-1/2}\\[1em]
 		\tau_C &= \rho(1_{\{Re_{UGN} < 3\}}Re_{UGN}/3 + 1_{\{Re_{UGN} \leq 3|\}}) \norm{\vec{u}_h}h
 	\end{split}
-\end{equation}
+\end{equation*}
 
 \subsection{Weak Formulation of the Large Scales}
 With the now cleared choice of subscales, they can be fed back into the large-scale equations presented in \autoref{eqn:small_large_scales}. Before doing so, the equations will be rearranged using partial integration, to eliminate higher-order derivatives and to simplify the introduction of the subscales. Note, that as stated before, the subscales yield no boundary contributions by assumption.
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}_h + \vec{U}') \,dV &= \int_{\Omega} \vec{V}_h \cdot \vec{F} \,dV \\[1em]
 		\underbrace{\int_{\Omega} \vec{V}_h \cdot \left[\mathcal{L}(\vec{U}_h) - \vec{F}\right] \,dV}_{\text{Galerkin Terms}} + \underbrace{\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}') \,dV}_{\text{Stabilization Terms}} &= 0 \\[1em]
 	\end{split}
-\end{equation}
+\end{equation*}
 Consider first the conventional Galerkin terms. The integrals are split using partial derivatives and transformed using the Gau\ss-Divergence Theorem to obtain boundary integrals. The boundary conditions are then applied, obtaining one surface integral that is active on boundaries with imposed stress conditions.
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \left[\mathcal{L}(\vec{U}_h) - \vec{F}\right] \,dV &= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right]\,dV +\\ &+ \int_{\Omega}\vec{w}_h\cdot \left[\nabla p_h - \nabla\cdot2\mu\varepsilon(\vec{u}_h)\right]\,dV + \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV\\
 		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ & + \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) \,dV + \\ &+ \oint_{\partial \Omega} \vec{n}\cdot \left(pI - 2\mu\varepsilon(\vec{u}_h)\right)\cdot\vec{w}_h \,dA + \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV\\
 		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ &+ \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) \,dV +\\ &+ \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV+ \int_{\Gamma_n} \vec{t}_{n}\cdot\vec{w}_h \,dA
 	\end{split}
-\end{equation}
+\end{equation*}
 The stabilization terms are treated similarly except for the convective term, which is also transformed. This facilitates introducing the long expressions for $\vec{U}'$ later.
 \begin{equation}
 	\begin{split}
@@ -734,7 +732,7 @@ The term $\nabla\cdot2\mu\varepsilon(\vec{w}_h)$ is commonly dropped at this poi
 	                                                       & + \int_{\Omega} -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV                                                                                                              \\
 \end{align*}
 Since there is a regularity in the expressions above with the ones found in the Galerkin terms, a common alias for the test functions acting on the convective term is introduced $\vec{w}_{supg} = \vec{w}_h + \tau_M\rho(\vec{u}_h\cdot\nabla)\vec{w}_h$.
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}_h + \vec{U}') \,dV
 		&= \int_{\Omega} \vec{w}_{supg}\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\
@@ -744,51 +742,51 @@ Since there is a regularity in the expressions above with the ones found in the 
 		&+\int_{\Omega} \tau_M \left[\rho\partial_t \vec{u}_h + \rho(\vec{u}_{h}\cdot\nabla)\vec{u}_h + \nabla p_h - \rho \vec{g}\right] \cdot \nabla q_h\,dV +\\
 		&+ \int_{\Omega} -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV\\
 	\end{split}
-\end{equation}
-The SUPG test function $\vec{w}_{supg}$ has a didactic visual interpretation, as shown for a simple 1D example in \autoref{fig:wsupg}. The functions contain an upwind component, \ie\,a tilt in the weight towards the provenience of the velocity that scales with the gradient in the velocity direction and stabilization parameter $\tau_M$. In other words, $\vec{w}_{supg}$ acts like an adaptive Upwind scheme that reacts to the flow conditions providing enough diffusion in flow direction to maintain stability, while retaining accuracy where the convection is minor. This method is likewise exploited in other element pairings, such as $P2$-$P1$, although no incompatibility between velocity and pressure shape functions is present there. The pressure-velocity compatibility in the presented VMS-type method comes from the term $\tau_M \nabla p_h \cdot \nabla q_h$. The reason why this term adds control over the pressure can be best seen by considering the linear system that follows from the discrete system. Take $A$ as to be a matrix composed by the blocks $A_{\vec{u}, \vec{w}}$, $A_{p, \vec{w}}$, $A_{\vec{u}, q}$, $A_{p, q}$. The subscripts of the block denote the functions that appear in it.\\
+\end{equation*}
+The SUPG test function $\vec{w}_{supg}$ has a didactic visual interpretation, as shown for a simple 1D example in \autoref{fig:wsupg}. The functions contain an upwind component, \textit{i.e.}\,a tilt in the weight towards the provenience of the velocity that scales with the gradient in the velocity direction and stabilization parameter $\tau_M$. In other words, $\vec{w}_{supg}$ acts like an adaptive Upwind scheme that reacts to the flow conditions providing enough diffusion in flow direction to maintain stability, while retaining accuracy where the convection is minor. This method is likewise exploited in other element pairings, such as $P2$-$P1$, although no incompatibility between velocity and pressure shape functions is present there. The pressure-velocity compatibility in the presented VMS-type method comes from the term $\tau_M \nabla p_h \cdot \nabla q_h$. The reason why this term adds control over the pressure can be best seen by considering the linear system that follows from the discrete system. Take $A$ as to be a matrix composed by the blocks $A_{\vec{u}, \vec{w}}$, $A_{p, \vec{w}}$, $A_{\vec{u}, q}$, $A_{p, q}$. The subscripts of the block denote the functions that appear in it.\\
 
 \noindent $A_{\vec{u}, \vec{w}}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		&\int_{\Omega} \vec{w}_{supg}\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h \right] - \tau_M\rho(\vec{u}_h\cdot\nabla)\vec{w}_h\cdot\rho\vec{g}\,dV +\\
 		+&\int_{\Omega} \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV\\
 	\end{split}
-\end{equation}
+\end{equation*}
 
 \noindent $A_{p, \vec{w}}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \int_{\Omega} \tau_M \rho(\vec{u}_h\cdot\nabla)\vec{w}_h\cdot \nabla p_h\,dV
 	\end{split}
-\end{equation}
+\end{equation*}
 
 \noindent $A_{\vec{u}, q}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		&\int_{\Omega} q\nabla\cdot\vec{u}_h + \tau_M \left[\rho\partial_t \vec{u}_h + \rho(\vec{u}_{h}\cdot\nabla)\vec{u}_h\right] \cdot \nabla q_h\,dV
 	\end{split}
-\end{equation}
+\end{equation*}
 
 \noindent $A_{p, q}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} \tau_M \nabla p_h \cdot \nabla q_h\,dV
 	\end{split}
-\end{equation}
+\end{equation*}
 To complete the terms consider $B_{\vec{w}}$ and $B_q$ as to the the right-hand side of the momentum and continuity equations.
 \noindent $B_{\vec{w}}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Gamma_n} -\vec{t}_{n}\cdot\vec{w}_h \,dA + \int_{\Omega} \vec{w}_{h}\cdot\rho \vec{g} \,dV
 	\end{split}
-\end{equation}
+\end{equation*}
 
 \noindent $B_{q}$ contains the discretization of:
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\int_{\Omega} \tau_M \rho \vec{g} \cdot \nabla q_h\,dV
 	\end{split}
-\end{equation}
+\end{equation*}
 In a plain Galerkin discretization the square block matrix $A_{p, q}$ is indeed 0 everywhere, requiring $A_{p, \vec{w}}$ to provide the needed information to compute $p$. This, as discussed before, is not generally the case in the same order Lagrange elements. The stabilization however ads non-zero contributions to $A_{p, q}$ that make it SPD. The latter quality can be easily seen since the matrix is diagonally dominant with strictly positive main diagonal entries.
 \begin{figure}[htbp]
 	\centering
@@ -800,22 +798,22 @@ The last remaining component to discuss is the time discretization of the proble
 
 \subsection{Time Discretization}
 The time derivatives are commonly discretized using finite differences rather than finite elements. The latter family of methods is also called Space-Time FEM and has a superior complexity due to an added dimension in the finite element space. Finite differences on the other hand are more straightforward since the spatial structure does not need to change drastically. The functions $\vec{u}_h$ and $p_h$ are approximated in our case through a sum of scaled, piece-wise linear functions $\varphi_i(\vec{x})$ satisfying $\varphi_i(\vec{x}_j) = \delta_{ij}$ for any two nodes $i$, $j$ in the mesh. The time dependency of the problem is shifted onto the scaling factors, allowing for a separation of both problems.
-\begin{equation}
+\begin{equation*}
 	\vec{u}_h = \sum_i \vec{u}_i(t) \varphi_i(\vec{x}),\qquad p_h = \sum_i p_i(t) \varphi_i(\vec{x})
-\end{equation}
+\end{equation*}
 For that reason, solving the problem can be seen as solving any system of the shape:
-\begin{equation}
+\begin{equation*}
 	\partial_t u = f(t, u)
-\end{equation}
+\end{equation*}
 
 \subsubsection*{Time Integration}
-A classic scheme used in hemodynamics simulations is the Backward Differentiation Formula (BDF). It is a per-definition implicit time scheme, \ie\,it uses a right-hand side that is defined at the unknown timestep $t^{n+1}$ ($t^{n} = n\dt$). The order of convergence of the scheme depends on the number of terms that are considered of $u$ to build the derivative. For a simple first-order BDF1 scheme, also simply called the Backwards Euler method, develop a Taylor series around $u^{n}$ considering the information known at $u^{n+1}$:
-\begin{equation}
+A classic scheme used in hemodynamics simulations is the Backward Differentiation Formula (BDF). It is a per-definition implicit time scheme, \textit{i.e.}\,it uses a right-hand side that is defined at the unknown timestep $t^{n+1}$ ($t^{n} = n\dt$). The order of convergence of the scheme depends on the number of terms that are considered of $u$ to build the derivative. For a simple first-order BDF1 scheme, also simply called the Backwards Euler method, develop a Taylor series around $u^{n}$ considering the information known at $u^{n+1}$:
+\begin{equation*}
 	\begin{split}
 		u^{n} = u^{n+1} - \partial_t u^{n+1}\dt + \mathcal{O}(\dt^2)\\[1em]
 		\partial_t u^{n+1} = \frac{u^{n+1} - u^{n}}{\dt} + \mathcal{O}(\dt)
 	\end{split}
-\end{equation}
+\end{equation*}
 The obtained integration scheme is implicit and A-stable, or in simpler terms, it enjoys special robustness regarding the time step size. Non-A-stable methods, as all explicit integration rules, are more tightly bound to smaller timesteps since the integration can otherwise diverge. If another development is added using two prior timesteps, the convergence order can be raised to two while maintaining A-stability. For that subtract 4 times \autoref{eqn:+2dt} from \autoref{eqn:+dt}.
 \begin{equation}
 	u^{n-1} = u^{n+1} - 2\partial_t u^{n+1}\dt + 2\partial_{tt} u^{n+1}\dt^2 + \mathcal{O}(\dt^3)
@@ -836,9 +834,9 @@ BDF2 (\autoref{eq:bdf2}) has some major benefits that motivate its choice in thi
 
 \subsubsection*{Treatment of the non-linearities}
 Using implicit schemes benefits stability, but requires handling non-linear terms. In the stabilized Navier-Stokes equations there are several non-linearities involving shear-dependent viscosities, SUPG test functions and lastly, and most importantly, the non-linear velocity convection. The problem can be rewritten as a root-finding problem for $\vec{f}(\vec{u})$, where $A$ is the fully discretized system of equations and $b$ is the right-hand side.
-\begin{equation}
+\begin{equation*}
 	\vec{f}(\vec{u}) = A(\vec{u})\vec{u} - \vec{b}
-\end{equation}
+\end{equation*}
 The main approach followed when facing such a problem is finding an iterative rule that provides improving guesses on the non-linear variable at the next timestep $n+1$.
 
 \paragraph{Picard iterations} (or Fixed-point iterations) are the most basic iterative approach. The system is solved using an initial guess $\vec{u}^k = \vec{u}^n$ and without updating the right-hand side, the new solutions are plugged in as new $\vec{u}^k$ in hopes of converging towards an approximate $\vec{u}^{n+1}$.
@@ -846,19 +844,19 @@ The main approach followed when facing such a problem is finding an iterative ru
 	\vec{u}^{k+1} = \vec{g}(\vec{u}^{k}) = A^{-1}(\vec{u}^{k})\vec{b}
 	\label{eqn:picard}
 \end{equation}
-This method is based on two conditions, the first being that there exists a closed subset $\mathcal{D}$ in which if $\vec{u}\in\mathcal{D}$ then also $\vec{f}(\vec{u})\in\mathcal{D}$. Secondly, $\vec{f}(\vec{u})$ needs to be a contraction, \ie\,that
-\begin{equation}
+This method is based on two conditions, the first being that there exists a closed subset $\mathcal{D}$ in which if $\vec{u}\in\mathcal{D}$ then also $\vec{f}(\vec{u})\in\mathcal{D}$. Secondly, $\vec{f}(\vec{u})$ needs to be a contraction, \textit{i.e.}\,that
+\begin{equation*}
 	\norm{\vec{g}(\vec{x}) - \vec{g}(\vec{y})} \leq \alpha \norm{\vec{x}-\vec{y}}
-\end{equation}
+\end{equation*}
 for $\alpha<1$, $x,y\in\mathcal{D}$. In other words, that $\vec{f}$ needs to be Lipschitz continuous with a constant smaller 1 to ensure that iterating following \autoref{eqn:picard} does not leave the space containing the fixed-point. This can be shown by developing the iteration rule. Suppose that $\vec{u}$ is indeed a fixed-point of \autoref{eqn:picard} and that all the conditions above are met.
-\begin{equation}
+\begin{equation*}
 	\begin{split}
 		\vec{u} - \vec{u}^{k+1} &= \vec{g}(\vec{u}) - \vec{g}(\vec{u}^{k})\\[1em]
 		\norm{\vec{u} - \vec{u}^{k+1}} &\leq \norm{\vec{g}(\vec{u}) - \vec{g}(\vec{u}^{k})}\\[1em]
 		&\leq \alpha \norm{\vec{u} - \vec{u}^{k}}\\[1em]
 		&\leq \alpha^k \norm{\vec{u} - \vec{u}^{0}}\\
 	\end{split}
-\end{equation}
+\end{equation*}
 The first-order convergence in the sense of these methods is only provided for an $\alpha<1$. The order of convergence is tight to the fact that $\vec{g}(\vec{u}^{k})$ is a first-order approximation of $\vec{u}^{k+1}$. This can be quickly seen by building a Taylor expansion around $\vec{u}^{k+1}$ and neglecting any derivative terms. Picard iterations have the advantage that their implementation cost is minimal compared to other more performing approaches, like the Newton-Raphson method. The latter, which can also be seen as a higher-order fixed-point method, requires an expensive computation of a Jacobian and its inverse. When handling systems, whose dynamics are highly non-linear it is very important to implement such a routine to ensure a proper resolution of the underlying physics. In our simulations, we will be targeting flow with notably low Reynolds numbers peaking approximately at $Re\,=\,1000$. In this range, it is possible to use an alternative approach to Newton-Raphson, which is said to have a second-order convergence while its implementation only adds a few terms to the linear system that can then be solved like in a fixed-point method.
 
 \paragraph{Linearized Newton} steps employ a second-order development of the convective term as follows:
@@ -871,12 +869,12 @@ The first-order convergence in the sense of these methods is only provided for a
 	\end{split}
 	\label{eqn:lin_newton}
 \end{equation}
-Where we assumed $\vec{u}$ to have a Lipschitz-continuous gradient $\nabla \vec{u}$ to merge the second-order error terms into the present one. Under the conditions for regular convergence of fixed-point iterations and the latter condition, substituting the unknown $(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1}$ by the iteration rule \autoref{eqn:lin_newton} yields quadratic convergence. In practice it has been seen that the method is quadratic in convergence, however, it has a smaller tolerance in regards to the initial error. Therefore, we have seen that too large time steps or a cold initial start with a non-physical initial condition are indeed problematic for this iteration rule.
+Where we assumed $\vec{u}$ to have a Lipschitz-continuous gradient $\nabla \vec{u}$ to merge the second-order error terms into the present one. Under the conditions for regular convergence of fixed-point iterations and the latter condition, substituting the unknown $(\nabla\vec{u})^{k+1}\cdot\vec{u}^{k+1}$ by the iteration rule\,\eqref{eqn:lin_newton} yields quadratic convergence. In practice it has been seen that the method is quadratic in convergence, however, it has a smaller tolerance in regards to the initial error. Therefore, we have seen that too large time steps or a cold initial start with a non-physical initial condition are indeed problematic for this iteration rule.
 
 \paragraph{Semi-implicit time integration} is an equally present choice in the field of computed hemodynamics. The principle is simple here, using a previous timestep velocity in the integration.
-\begin{equation}
+\begin{equation*}
 	(\vec{u}^{n+1}\cdot\nabla)\vec{u}^{n+1} = (\vec{u}^{n}\cdot\nabla)\vec{u}^{n+1} + \mathcal{O}(\dt)
-\end{equation}
+\end{equation*}
 The basic semi-implicit timesteps in theory introduce an error that scales linearly with the size of timesteps. In practice, it does however not greatly affect the convergence behaviour of the overall systems, even when the time derivatives are of higher order\,\cite{Valen-Sendstad2014}. Nevertheless, it is possible to improve the scheme from a convergence-order point of view. For this purpose, the linearization includes the information of a previous timestep.
 \begin{equation}
 	\begin{split}
@@ -886,19 +884,19 @@ The basic semi-implicit timesteps in theory introduce an error that scales linea
 	\end{split}
 	\label{eqn:newton_gregory}
 \end{equation}
-The Newton-Gregory backward polynomial (\autoref{eqn:newton_gregory}), if used, is usually matched by an equal-order BDF scheme, since both require the same quantity of information and yield a proportional convergence order. When inspecting \autoref{eqn:newton_gregory}, it can be seen that the sought velocity is extrapolated, giving a double weight to the current velocity and balancing it out with the past. This carries a benefit to any integration in which the velocity evolves continuously in smooth steps, but can become fatal if the CFL number is too large.
+The Newton-Gregory backward polynomial (\autoref{eqn:newton_gregory}), if used, is usually matched by an equal-order BDF scheme, since both require the same quantity of information and yield a proportional convergence order. When inspecting \autoref{eqn:newton_gregory}, it can be seen that the sought velocity is extrapolated, giving a double weight to the current velocity and balancing it out with the past. This carries a benefit to any integration in which the velocity evolves continuously in smooth steps, but can become fatal if the ratio between the temporal and spatial stepping is too unbalanced considering the flow velocities. This is formally expressed through the Courant-Friedrichs-Lewy (CFL) number defined in \autoref{eq:clf}. Numerical instabilities, particularly in fully explicit schemes, appear when the CFL number surpasses a threshold value (usually 1).
+\begin{equation}
+	\text{CFL} = \norm{\vec{u}} \frac{\dt}{h}
+	\label{eq:clf}
+\end{equation}
 
 \paragraph{Non-linerities in viscosity and stabilization parameters} have so far not been the focus of the discussion, due to the prominence of the convective term. Both terms can be dealt with similarly, however, sub-increments for the viscosity model will be neglected in this work due to their overall slow dynamics compared to the core of the flow.
-
 
 \section{Validation Cases}
 In the previous section, a VMS-type method has been derived using common models from literature and a new proposal for stabilization parameters. Further, well-known time integration schemes and treatment options for the non-linearities have been shown and briefly discussed concerning their stability, convergence and implementation. To display the theoretical thoughts, two test cases have been examined during the course of this work. The simulation framework bases on an in-house C++ library that provides mesh handling tools, a message parsing interface parallelization and a series of FEM solvers, including one for the incompressible Navier-Stokes equations\,\cite{Hachem2010, Coupez2013}. In the frame of this thesis, the latter was extended by the second-order BDF scheme, the Newton-Gregory extrapolation, as well as the complete computation of the tensor-based stabilizations (\autoref{eqn:new_metric}, \autoref{eqn:tensor_based_stab}).
 
-
-
-
 \subsection{Flow Past a Cylinder in 2D}
-The first case corresponds to the well-known flow past a cylinder in 2D. This test case has been thoroughly examined by the community and permits a good comparison and verification of the used methods. The case was set up following the indications of Main \etal\,\cite{Main2018}, who implemented the case to validate a new shifted boundary method. The domain is given in \autoref{fig:two_figures} including the sizes of the cylinder and the edges in unit scale.
+The first case corresponds to the well-known flow past a cylinder in 2D. This test case has been thoroughly examined by the community and permits a good comparison and verification of the used methods. The case was set up following the indications of Main \textit{et\,al.}\,\cite{Main2018}, who implemented the case to validate a new shifted boundary method. The domain is given in \autoref{fig:two_figures} including the sizes of the cylinder and the edges in unit scale.
 \begin{figure}[htbp]
 	\centering
 	\begin{minipage}[b]{0.46\textwidth}
@@ -915,38 +913,37 @@ The first case corresponds to the well-known flow past a cylinder in 2D. This te
 	\caption[Geometry and mesh for 2D flow past a cylinder]{Case setup of the 2D flow past a cylinder. On the left is a sketch of the computational domain following the dimensions given in\,\cite{Main2018}. On the right is a view of the used mesh.}\label{fig:two_figures}
 \end{figure}
 In this case, a uniform velocity is imposed at the left inlet, while the upper and lower boundaries enforce a zero normal velocity and no traction. The outlet on the right is set as a traction-free boundary and the cylinder ($d=1$) as a no-slip patch. The case is run for two well-studied Re numbers, 100 and 300. Both cause a regular formation of vortices in the wake of the cylinder, however, for the latter Re, these are more developed (see \autoref{fig:scovazzi_pressure} for a better image of the phenomenon at $Re\,=\,300$). The simulations have been run for a unit Newtonian viscosity $\mu$ and a unit density $\rho$. The control over the Re was thus exerted through the inflow velocity $u_\infty$.
-\begin{equation}
+\begin{equation*}
 	Re\,=\,\frac{\rho u_\infty d}{\mu}
-\end{equation}
+\end{equation*}
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{chapter2/Figures/Scovazzi/pressure_scovazzi.png}
 	\caption[Pressure fields]{Pressure field taken during the simulation at Re\,=\,300.}\label{fig:scovazzi_pressure}
 \end{figure}
 The generated mesh consists of 13622 triangle elements with a maximal isotropic edge length of $h$\,=\,0.7 in the upper and lower tranches and $h$\,=\,0.25 in the core of the domain. In a ring of thickness 1 around the cylinder the mesh is constructed with 20 layers of structured elements, which blend into the non-structured surroundings with a linear mesh grading from $h$\,=\,0.075 to $h$\,=\,0.25. The timestep size for the simulations was chosen to obtain approximately a maximal CFL number of 1.
-\begin{equation}
-	\text{CFL} = \norm{\vec{u}} \frac{\dt}{h}
-\end{equation}
+
 \paragraph{The time integration} was first inspected, running simulations with the first and second-order BDF schemes on the case with Re\,=\,300. To isolate the effect of the time scheme, the timestep was frozen in the stabilization parameters to the minimal value of $10^{-5}$. The simulations were run for CFL\,=\,$\{1,2,4,8\}$ and the phase shift between the formation of the first vortices in each case was computed.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.8\linewidth]{chapter2/Figures/Scovazzi/BDF1vsBDF2.pdf}
+	\vspace*{-0.5cm}
 	\caption[BDF convergence order]{Log-log plot of the phase shift error $\varepsilon(\Delta \varphi)$ against the timestep size.}\label{fig:BDFs}
 \end{figure}
 In the simulations, there are two main phenomena that can be seen when varying the schemes and timesteps. Firstly, more diffusive schemes and larger timesteps, consistently push the generation of the first vortex to later stages of the simulation. While both schemes show their expected order of convergence, as can be seen in \autoref{fig:BDFs}, the second order scheme shows overall much smaller delays. This motivates the choice of BDF2 for the rest of the tests since no measurable increase in computation time could be recorded and all the simulations showed a stable behaviour.
 
 \paragraph{Drag and lift} comparisons are the next important element to consider. The drag number, or drag coefficient ($c_D$), is a dimensionless quantity that represents the drag force acting on an object moving through a fluid.
-\begin{equation}
+\begin{equation*}
 	c_D = \frac{2F_D}{\rho u_\infty^2 d}
-\end{equation}
+\end{equation*}
 where $F_D$ is the drag force exerted by the fluid onto the cylinder surface. The lift number, or lift coefficient ($c_L$), is used to quantify the lift generated by an object, such as an airfoil, in a fluid flow. It depends on the same quantities as the drag, except the force, which is in this case the one acting in the vertical direction ($F_L$). Naturally, the lift of the flow past a cylinder should be on average 0. Even though it is arguably an objective evaluation criterion, it is seldom included in studies. Nevertheless, it is provided below for a better reference.
-\begin{equation}
+\begin{equation*}
 	c_L = \frac{2F_L}{\rho u_\infty^2 d}
-\end{equation}
+\end{equation*}
 Lastly, the Strouhal number (St) is considered, which is likewise a dimensionless number that describes oscillating flow mechanisms. It is used to characterize the frequency of vortex shedding and other periodic flow phenomena as the present one.
-\begin{equation}
+\begin{equation*}
 	St = \frac{f d}{u_\infty}
-\end{equation}
+\end{equation*}
 where $f$ is the frequency of vortex shedding that in our case has been computed from a Fast-Fourier-Transformation of $F_L$.
 
 \begin{figure}[htbp]
@@ -956,20 +953,21 @@ where $f$ is the frequency of vortex shedding that in our case has been computed
 	\vspace*{0.4cm}
 
 	\includegraphics[width=\linewidth, trim={0 0 0 1cm}, clip]{chapter2/Figures/Scovazzi/Re300.pdf}
-	\caption[Drag and Lift of cylinder at Re\,=\,100 and Re\,=\,300]{Drag (left) and lift (right) computed on the cylinder at Re\,=\,100 (top) and Re\,=\,300 (bottom) for the computations using the preimplemented stabilization (Tezduyar \etal\,\cite{Tezduyar2000}) and the newly proposed principal component tensor stabilization.}\label{fig:scovazzi}
+	\vspace*{-0.2cm}
+	\caption[Drag and Lift of cylinder at Re\,=\,100 and Re\,=\,300]{Drag (left) and lift (right) computed on the cylinder at Re\,=\,100 (top) and Re\,=\,300 (bottom) for the computations using the preimplemented stabilization (Tezduyar \textit{et\,al.}\,\cite{Tezduyar2000}) and the newly proposed principal component tensor stabilization.}\label{fig:scovazzi}
 \end{figure}
 
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}{c | c c c c c}
-		Re\,=\,100 & Proposed stab. & Tezduyar \etal & Ref.\,\cite{Tezduyar2000} & Ref.\,\cite{Rajani2009} & Ref.\,\cite{Main2018} \\
+		Re\,=\,100 & Proposed stab. & Tezduyar \textit{et\,al.} & Ref.\,\cite{Tezduyar2000} & Ref.\,\cite{Rajani2009} & Ref.\,\cite{Main2018} \\
 		\midrule
 		$c_D$      & 1.391          & 1.402          & 1.417 - 1.422             & 1.335                   & 1.35                  \\
 		$c_L$      & 2e-4           & 1e-3           & -                         & -                       & -                     \\
 		St         & 0.168          & 0.167          & 0.167 - 0.169             & 0.157                   & 0.167                 \\
 		           &                &                &                           &                         &                       \\[-1em]
 		\midrule
-		Re\,=\,300 & Proposed stab. & Tezduyar \etal & Ref.\,\cite{Rajani2009}   & Ref.\,\cite{mittal1997} & Ref.\,\cite{Main2018} \\
+		Re\,=\,300 & Proposed stab. & Tezduyar \textit{et\,al.} & Ref.\,\cite{Rajani2009}   & Ref.\,\cite{mittal1997} & Ref.\,\cite{Main2018} \\
 		\midrule
 		$c_D$      & 1.414          & 1.415          & 1.367                     & 1.38                    & 1.38                  \\
 		$c_L$      & 1e-3           & 8e-4           & -                         & -                       & -                     \\
@@ -999,10 +997,10 @@ The FDA Nozzle, proposed by the U.S. Food and Drug Administration (FDA), is a si
 This configuration creates regions of accelerating and decelerating flow, shear stress variations, and recirculating flow, mimicking the flow dynamics observed in medical devices. Although medical devices are not part of the context of this thesis, this case presents interesting CFD challenges to tackle. The numerous studies handling it provide a didactic explanation of how different approaches, such as turbulence models, influence the obtained results within different Re regions. For the analysis, throat Reynolds numbers of Re\,=\,500 and Re\,=\,2000 will be considered. The prior lay in a similar range as the blood flow in brain arteries and showcased a fully laminar flow. For that reason, it is easier to validate the computational framework, since transient turbulent effects are not present. The case of Re\,=\,2000 on the other hand sheds light on the solver's behaviour in the transition zone. Here, in some cases, the jet breaks down in the rear end of the nozzle causing turbulent effects. The appearance of this breakdown depends on the used turbulence models, mesh refinement and experimental setup, and thus introduces an interesting discussion about to what degree it is reasonable or not to refine the computations.
 
 \subsubsection*{Case setup}
-The FDA Nozzle has been experimentally tested by 3 teams participating in the computational challenge by Stewart \etal\,\cite{Stewart2012}. The used liquid was a blood-like, Newtonian solution containing water, glycerin, and sodium iodide with a density of 1056\,kg/m$^3$. The viscosity of the fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
-\begin{equation}
+The FDA Nozzle has been experimentally tested by 3 teams participating in the computational challenge by Stewart \textit{et\,al.}\,\cite{Stewart2012}. The used liquid was a blood-like, Newtonian solution containing water, glycerin, and sodium iodide with a density of 1056\,kg/m$^3$. The viscosity of the fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
+\begin{equation*}
 	\dot{Q}_{\Rey500} = 5.21\cdot10^{3}\,\text{mm}^3/\text{s},\qquad \dot{Q}_{\Rey2000} = 2.08\cdot10^{4}\,\text{mm}^3/\text{s}
-\end{equation}
+\end{equation*}
 The walls of the nozzle are set to no-slip conditions and the outlet is rendered traction-free. The nozzle has been generated for an axial extension of 168\,mm ranging from $z$\,=\,-88\,mm to $z$\,=\,80\,mm. The interior of the nozzle was meshed with unstructured tetrahedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the nozzle, elements are generated with an edge length of 0.2\,mm and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The time discretization is done using BDF2 with regular timesteps at \dt\,=\,0.5\,ms and \dt\,=\,0.1\,ms for Re\,=\,500 and Re\,=\,2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
 
 \subsubsection*{Results}
@@ -1013,7 +1011,7 @@ Per-timestep convergence was obtained in the case of Re\,=\,500 within 4 iterati
 		\centering
 		\includegraphics[width=\linewidth]{chapter2/Figures/FDA/Re2000/profiles.jpg}
 	\end{minipage}
-	\vspace{0.5cm}
+	\vspace{0.9cm}
 	\begin{minipage}{0.4\linewidth}
 		\centering
 		\begin{tikzpicture}
@@ -1025,7 +1023,8 @@ Per-timestep convergence was obtained in the case of Re\,=\,500 within 4 iterati
 			\node[anchor=south] at (colorbar.north) {Velocity [mm/s]};
 		\end{tikzpicture}
 	\end{minipage}
-	\caption[Transient and converged FDA Nozzle at Re 2000]{Opacity-coded velocity at Re\,=\,2000 at two states. Top: Initial transient phase with the presence of vortex structures. Bottom: Converged stage past on which the results have been computed.}\label{fig:FDA_Velocity_Re2000}
+	\vspace*{-0.5cm}
+	\caption[Transient and converged FDA Nozzle at Re 2000]{Opacity-coded velocity at Re\,=\,2000 at two states. Top: Initial transient phase with the presence of vortical structures. Bottom: Converged stage past on which the results have been computed.}\label{fig:FDA_Velocity_Re2000}
 \end{figure}
 Once the jet reaches the outlet, it causes reentering flow through its shedding vortices. The reflux in turn affects the local coercivity causing convergence issues. Once the vortices are evacuated, the flow starts approaching its steady-state profile. In the last section on the right of \autoref{fig:nonlin_conv}, the seemingly two parallel curves follow from an alternating 2 and 3 subiterations needed for convergence.
 
@@ -1036,14 +1035,15 @@ Once the jet reaches the outlet, it causes reentering flow through its shedding 
 \end{figure}
 
 Once a steady state was reached with an initial residual below $10^{-6}$ for both Re, the results were extracted along the main axis of the nozzle, recording the axial velocity $u_z$, pressure and mass flow. The latter was transformed into a percentile error using the theoretically imposed value as suggested in\,\cite{Stewart2012}:
-\begin{equation}
+\begin{equation*}
 	E_Q = 100\% \times \frac{\dot{Q} - \dot{Q}_{theory}}{\dot{Q}_{theory}}
-\end{equation}
+\end{equation*}
 The obtained profiles for Re\,=\,500 in \autoref{fig:ctrl_FDA_Re500} show mass conservation errors below 0.6\%. The pressures have been plotted including measurement data\,\cite{Stewart2012} and a reference computation. It can be clearly seen that there is a systematic mismatch between CFD computations for the pressure and experimental recordings. This mismatch however exists between the measurements and all reported simulations of the reference study\,\cite{Stewart2012}. This has been at least partly attributed to normalization errors in the experimental setup. The axial velocity at the centerline on the other hand fit the measurements consistently throughout the nozzle.
 \begin{figure}[htbp]
 	\centering
 	\input{chapter2/Figures/FDA/Re500/Fig_Ctrl}
-	\caption[Centerline results for the FDA Nozzle at Re\,=\,500]{Resulting mass conservation errors, pressures and axial velocities along the main nozzle axis at Re\,=\,500. Results are plotted against measurements and reference computations found in Stewart \etal\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re500}
+	\vspace*{-1cm}
+	\caption[Centerline results for the FDA Nozzle at Re\,=\,500]{Resulting mass conservation errors, pressures and axial velocities along the main nozzle axis at Re\,=\,500. Results are plotted against measurements and reference computations found in Stewart \textit{et\,al.}\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re500}
 \end{figure}
 Further, cross-sections of the flow were compared to Particle Imaging Velocimetry (PIV) measurements at six locations:
 \[
@@ -1053,29 +1053,32 @@ The resulting profiles were extracted along the positive x-axis values and shown
 \begin{figure}[htb]
 	\centering
 	\input{chapter2/Figures/FDA/Re500/Fig_radial}
+	\vspace*{-0.7cm}
 	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,500]{Axial velocity profiles of the FDA Nozzle at Re\,=\,500 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re500}
 \end{figure}
 When considering the Re\,=\,2000, the mass flow is similarly well fit with a mean error below 0.2\%. In this case, the pressure is well predicted by the simulations throughout the given values. The centerline velocity is like-wise well fit, excepting the sections past $z$\,=\,48\,mm. There, the PIV returns a strongly decaying peak velocity that is subject to large variations among three different experimental setups. This suggests the breakdown of the jet and subsequent turbulent structures that diffuse kinetic energy in the stream. For reference, the results of a laminar simulation conducted for the previously mentioned study\,\cite{Stewart2012} are shown. There, as in our case (see \autoref{fig:FDA_Velocity_Re2000}), the jet does not yet break down retaining most of its structured properties from the previous sections.
 \begin{figure}[htbp]
 	\centering
 	\input{chapter2/Figures/FDA/Re2000/Fig_Ctrl}
-	\caption[Centerline results for the FDA Nozzle at Re\,=\,2000]{Resulting mass conservation errors, pressures and axial velocities along the main Nozzle axis at Re\,=\,2000. Results are plotted against measurements and reference computations found in Stewart \etal\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re2000}
+	\vspace*{-1cm}
+	\caption[Centerline results for the FDA Nozzle at Re\,=\,2000]{Resulting mass conservation errors, pressures and axial velocities along the main Nozzle axis at Re\,=\,2000. Results are plotted against measurements and reference computations found in Stewart \textit{et\,al.}\,\cite{Stewart2012}.}\label{fig:ctrl_FDA_Re2000}
 \end{figure}
 The breakdown can be also seen in the radial cross-sections, which this time are taken at slightly modified locations (again, based on the curves provided in\,\cite{Stewart2012}):
 \[
 	z \in \{-88\,\text{mm}, -80\,\text{mm}, 8\,\text{mm}, 32\,\text{mm}, 60\,\text{mm}, 80\,\text{mm}\}
 \]
 Similarly to before, the first four sections confirm a good match between theory and practice. In the latter two sections, the jet flattens out in the experiment, while the conducted simulations of this work and the reference publication remain similar.
-\begin{figure}[ht]
+\begin{figure}[htb]
 	\centering
 	\input{chapter2/Figures/FDA/Re2000/Fig_radial}
-	[Axial velocity profiles of the FDA Nozzle at Re\,=\,2000]{Axial velocity profiles of the FDA Nozzle at Re\,=\,2000 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re2000}
+	\vspace*{-0.7cm}
+	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,2000]{Axial velocity profiles of the FDA Nozzle at Re\,=\,2000 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re2000}
 \end{figure}
 
 \subsubsection*{Discussion}
 As stated before, this case serves two purposes. First, validating the numerical framework for a more simple, fully laminar setup at Re\,=\,500, and second providing a perspective on the performance in a more complex flow regime, Re\,=\,2000. The fully laminar matches experimental data and other reported results from laminar simulations\,\cite{Stewart2012}, reassuring us about the validity of our method. Hereby, it is worth noting that the obtained results are based on a mesh that is far from the resolutions that are otherwise used for benchmarking the FDA Nozzle\,\cite{Jain2020, Bergersen2019}. This is important to consider since simulations of hemodynamics cannot afford excessive computational demands.
 
-For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the mismatch among cutting-edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminutive perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen? Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue of tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher-order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \etal\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
+For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the mismatch among cutting-edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminutive perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen? Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue of tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher-order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \textit{et\,al.}\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
 
 \nolinenumbers~\\
 

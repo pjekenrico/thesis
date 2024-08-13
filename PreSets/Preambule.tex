@@ -8,7 +8,13 @@
 \sisetup{per-mode=symbol-or-fraction, load-configurations=abbr}
 \setcounter{tocdepth}{2}
 \usepackage{graphicx,subfigure,subfigmat}
-\usepackage[format=hang,justification=justified,font={small,it}]{caption}
+
+\usepackage[format=plain,justification=justified,font={small,it}]{caption}
+\DeclareCaptionFormat{custom}
+{%
+    \textbf{#1#2}\textit{\small #3}
+}
+\captionsetup{format=custom}
 \usepackage{enumitem}
 \usepackage{amsthm}
 \usepackage{longtable}

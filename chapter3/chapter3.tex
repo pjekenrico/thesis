@@ -51,7 +51,7 @@ As such, the Womersley number measures the oscillatory character of a flow with 
 		Inferior Vena Cava         & 400              & 1500--2500       & 13          \\
 		\bottomrule
 	\end{tabular}
-	\caption{Hemodynamic parameters for various anatomical regions from\,\cite{Menon2024} and measurements of\,\cite{Cebral2009_data}.}\label{table:hemodynamics}
+	\caption[Reynolds and Womersley numbers in human vessels]{Hemodynamic parameters for various anatomical regions from\,\cite{Menon2024} and measurements of\,\cite{Cebral2009_data}.}\label{table:hemodynamics}
 \end{table}
 
 
@@ -63,7 +63,7 @@ The CoW and its adjacent arteries are an important study subject since they host
 	\fontsize{11.200000}{12.800000}\selectfont
 	\def\svgwidth{0.8\linewidth} \input{chapter3/Figures/cow}
 	\vspace{0.3cm}
-	\caption{Schematic view of a complete CoW and the ophthalmic arteries\cite{Jeken-Rico2023}.}
+	\caption[Scheme of the Circle of Willis]{Schematic view of a complete CoW and the ophthalmic arteries\cite{Jeken-Rico2023}.}
 	\label{fig:cow_scheme}
 \end{figure}
 
@@ -109,8 +109,7 @@ The segmentation yields a binary mask identifying vessels and the background. Us
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.4\linewidth]{chapter3/Figures/Meshing/extrusion_scheme.pdf}
-	\caption{Sketch of the interpolation between the vessel cross-section (in the back) and the circular profile (front).}
-	\label{fig:transfinite}
+	\caption[Vessel extrusion]{Sketch of the interpolation between the vessel cross-section (in the back) and the circular profile (front).}\label{fig:transfinite}
 \end{figure}
 The parameterization of the extruded circle is based on the least-squares fit of a circle on the original, irregular boundary. To this end, every node and edge belonging to a boundary patch is fetched. The nodal positions of the given patch are shifted by the mean position towards the origin and registered in a matrix $X\in\mathbb{R}^{n\times3}$, a singular value decomposition can be run on $X$ to obtain the surface normal.
 \begin{equation*}
@@ -129,7 +128,7 @@ Where $[\cdot]_\times$ indicates the skew-symmetric matrix spanned by $\cdot$ an
 \begin{figure}[htb]
 	\centering
 	\input{chapter3/Figures/Meshing/Rotation}
-	\caption{Projection of the cut onto a 2D plane in the reference coordinate system $\xi,\,\eta$.}
+	\caption[Projecting the irregular cuts in 2D]{Projection of the cut onto a 2D plane in the reference coordinate system $\xi,\,\eta$.}
 \end{figure}
 Note, that all the nodes are by construction on a plane, thus making the third component of the rotated zero. The cross-section in the $(\xi, \eta)$ plane can now be fitted with a simple least-squares algorithm to a circle:
 \begin{equation*}
@@ -147,13 +146,13 @@ The centre coordinates $\xi_0, \eta_0$ are then rotated, translated back to the 
 	\begin{minipage}{.48\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Extrusion.png}
-		\caption{Extruded outlet with a length of six times its diameter.}\label{fig:extrusion}
+		\caption[Extrusion with a structured mesh]{Extruded outlet with a length of six times its diameter.}\label{fig:extrusion}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{.48\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{chapter3/Figures/Meshing/Visualization_Remeshing.png}
-		\caption{Outcome of remeshing the structured extrusion.}\label{fig:remeshing}
+		\caption[Extrusion with isotropic meshing]{Outcome of remeshing the structured extrusion.}\label{fig:remeshing}
 	\end{minipage}
 \end{figure}
 To generate a tetrahedra-based mesh, the open-source meshing library \href{https://gmsh.info/}{gmsh} is used. It supports the input of open \textit{stl}\footnote{STL\@: Stereolithography files composed of triangles in 3D.} files and generates high-quality meshes exploiting elaborated conformal mappings. Aside from the meshing of the interior, it is also possible to generate structured boundary layers along the vessel walls.
@@ -189,8 +188,8 @@ that englobe popular choices in IA literature. The aneurysm itself was kept at a
 		% Include the PNG image with a manual shift
 		\node (png) at (pdf.west) [xshift=11.2cm, yshift=-1.28cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
 	\end{tikzpicture}
-	\caption{Velocity magnitude along the designated line at systole for different mesh resolutions in the vessels.}
-	\label{fig:conv_space}
+	\vspace*{-1cm}
+	\caption[Velocity convergence in space over line]{Convergence of the velocity magnitude along the designated line at systole for different mesh resolutions in the vessels.}\label{fig:conv_space}
 \end{figure}
 
 In \autoref{fig:conv_space} the velocity was plotted at the last frame of the simulation (diastole) as an example of the dynamics. It can be seen that the differences among the resolutions are overall small and of a quantitative nature, particularly, for mesh sizes below 0.2\,mm. Further, we observe that the transition at $l$\,=\,4\,mm between the coarse vessel and the refined aneurysm mesh is smooth and not perceivable from the fluid plot. The flow in the aneurysm shows no alterations between the different resolutions.
@@ -223,7 +222,7 @@ The aneurysm refinement has been analyzed separately, refining it with isotropic
 		\includegraphics[width=\linewidth]{chapter3/Figures/Convergence/TAWSS_snapshot.png}
 		\vspace{-2.1cm}
 	\end{minipage}
-	\caption[Convergence aneurysm refinement]{Computation of TAWSS and OSI for different levels of refinement at the aneurysm. Left: Errors for both quantities are computed by nearest neighbour interpolation from fine results onto the coarse mesh and integration over the surface. Right: TAWSS error from the coarsest resolution.}\label{fig:osi_tawss}
+	\caption[OSI and TAWSS convergence]{Computation of TAWSS and OSI for different levels of refinement in the tangential. Left: Errors for both quantities are computed by nearest neighbour interpolation from fine results onto the coarse mesh and integration over the surface. Right: TAWSS error from the coarsest resolution.}\label{fig:osi_tawss}
 \end{figure}
 
 The integrated errors with respect to the finest resolution have been recorded along with the local TAWSS error obtained from the last cardiac cycle in \autoref{fig:osi_tawss}. The errors, in this case, have been computed by mapping the OSI and TAWSS fields from the finer meshes to the coarsest one using nearest neighbour interpolation. This interpolator, even though sub-optimal, manages to avoid a large number of undefined values which otherwise follow from the use of a smooth interpolation on meshes with a slight mismatch of the surfaces. Since the indicators (OSI and TAWSS) are restricted to the boundaries by their intrinsic nature, it is easy for nodes to be slightly shifted outside the intersections of the convex hulls spanned by the meshes. Any linear or higher-order interpolation fails there and yields invalid results. Nearest-neighbour interpolation however is impervious to these issues at the cost of a larger interpolation error. The obtained results show little deviations in TAWSS whose values are within the range of 0.5--2\,Pa for the bulge. The maximal deviations are found on the neck sections of the aneurysm, where due to larger velocity gradients the WSS differs more notably (see right of \autoref{fig:osi_tawss}). Similar results hold for the OSI over the bulge.
@@ -231,7 +230,7 @@ The mesh size of the surface model exported from 3D Slicer lies around an estima
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\linewidth]{chapter3/Figures/Study/mesh_details.png}
-	\caption{Visualization of the CoW of patient A with highlighted mesh features (orange circles). Linear isotropic refinement (left) and structured tetrahedral boundary layers (right).}\label{fig:mesh2}
+	\caption[Mesh overview]{Visualization of the CoW of patient A with highlighted mesh features (orange circles). Linear isotropic refinement (left) and structured tetrahedral boundary layers (right).}\label{fig:mesh2}
 \end{figure}
 
 
@@ -247,8 +246,8 @@ The time scheme also contributes to the accumulation of errors and was therefore
 		% Include the PNG image with a manual shift
 		\node (png) at (pdf.west) [xshift=11.6cm, yshift=-1.35cm] {\includegraphics[width=4cm,angle=30,origin=c]{chapter3/Figures/Convergence/line.png}};
 	\end{tikzpicture}
-	\caption{Velocity magnitude along designated green at systole for different time step sizes.}
-	\label{fig:conv_time}
+	\vspace*{-1cm}
+	\caption[Velocity convergence in time over line]{Velocity magnitude along designated green at systole for different time step sizes.}\label{fig:conv_time}
 \end{figure}
 The errors coming from the time scheme are below $0.1$\,mm/s for all the curves. To remain consistent with the stabilization $\Delta t$ and for the sake of simplicity and computational efficiency, semi-implicit stepping will be adopted from now on with $\Delta t$\,=\,0.001\,s.
 
@@ -263,8 +262,7 @@ From an equation point of view, the WSS ($\tau_{wss}$) is a projection of the no
 \begin{figure}[ht]
 	\centering
 	\input{chapter3/Figures/Meshing/WSS}
-	\caption{WSS derivation.}
-	\label{fig:wss_theory}
+	\caption[Derivation of WSS]{WSS derivation.}\label{fig:wss_theory}
 \end{figure}
 In literature, it is common to find a different, scalar definition of WSS, \autoref{eq:wss_def_2}, which in the case of incompressibility corresponds exactly to the $L_2$ norm of $\tau_{wss}$.
 \begin{equation}
@@ -312,6 +310,7 @@ Considering the presented studies and the absence of direct measurements for the
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth]{chapter3/Figures/Waveforms/waveform_comparison.pdf}
+	\vspace*{-0.5cm}
 	\caption[Generalized Inflow Waveforms]{Two waveforms $\dot{Q}_1$\,\cite{Tanaka2006} and $\dot{Q}_2$\,\cite{Hoi2011} are used in this thesis. The first is typical for adults and the second for older adults ($>60$ years). The length of the cardiac cycle is $T=0.9$\,s for $\dot{Q}_1$ and $T=0.95$\,s for $\dot{Q}_2$. The shorter period contributes to the higher values of $\dot{Q}_1$, since it was scaled to a mean value of $302$\, ml/min\,\cite{Tanaka2006}.}
 	\label{fig:waveforms}
 \end{figure}
@@ -386,7 +385,7 @@ For the first exploratory work, we consider 3 patients (A-C) with unruptured sac
 	\begin{minipage}[b]{0.48\textwidth}
 		\includegraphics[width=\linewidth, trim={0 0 0 13.1cm}, clip]{chapter3/Figures/Study/operation_details.png}
 	\end{minipage}
-	\caption{Left: DSA image of the aneurysm of patient B. Right: Capture of the aneurysm during surgery. The red pouch is the pronounced lateral daughter sack showing notable wall thinning and immediate rupture risk.}
+	\caption[Medical image check]{Left: DSA image of the aneurysm of patient B. Right: Capture of the aneurysm during surgery. The red pouch is the pronounced lateral daughter sack showing notable wall thinning and immediate rupture risk.}
 	\label{fig:check_IA}
 \end{figure}
 
@@ -395,8 +394,8 @@ Patient A has a complete CoW with a 7.5\,mm aneurysm at the left ICA-PCom bifurc
 \begin{figure}[htbp]
 	\centering
 	\input{chapter3/Figures/Study/overview}
-	\caption{Overview of cases A-C (top to bottom) in the different extensions \textit{Simplified}-\textit{Full} (left to right). \textit{Simplified} - Neglection of the adjacent PCom. \textit{Middle} - Simulation of ICA and proximal vessels. \textit{Full} - Full computation of the CoW.}
-	\label{fig:geo}
+	\vspace*{-0.5cm}
+	\caption[Case overview of the three patients]{Overview of cases A-C (top to bottom) in the different extensions \textit{Simplified}-\textit{Full} (left to right). \textit{Simplified} - Neglection of the adjacent PCom. \textit{Middle} - Simulation of ICA and proximal vessels. \textit{Full} - Full computation of the CoW.}\label{fig:geo}
 \end{figure}
 
 For each of the segmented geometries, three extensions of ascending complexity (see \autoref{fig:geo}) are generated to assess the implications of Murray's law on simulated hemodynamics. Geometries with the keyword \textit{Simplified} are constrained to the main supplying artery that leads to the IA. Communicating arteries and A2 segments (see \autoref{fig:cow_scheme}) are in this case neglected. \textit{Middle} extends the prior \textit{Simplified} complexity by adding the PCom. Finally, the keyword \textit{Full} denotes the full CoW. All meshes have been generated following the steps outlined in the previous sections (see \autoref{fig:mesh2}).
@@ -408,7 +407,7 @@ For this case study, we have used the Carreau-Yasuda model presented in Chapter 
 	\begin{minipage}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{chapter3/Figures/Study/BCs.png}
-		\caption{{Volumetric flow through the left ICA outlets of patient A and the targeted flow by Murray's Law.}}\label{fig:flow_rates}
+		\caption[Quality of boundary resistance model]{{Volumetric flow through the left ICA outlets of patient A and the targeted flow by Murray's Law.}}\label{fig:flow_rates}
 	\end{minipage}
 	\hfill
 	\begin{minipage}[b]{0.48\textwidth}
@@ -432,7 +431,7 @@ For this case study, we have used the Carreau-Yasuda model presented in Chapter 
 			\arrayrulecolor{black}\hline
 		\end{tabular}
 		\vspace{1cm}
-		\caption{Element count in million elements and computation time per cardiac cycle of different meshes.}\label{tab:elem_count}
+		\caption[Computation times and mesh sizes]{Element count in million elements and computation time per cardiac cycle of different meshes.}\label{tab:elem_count}
 	\end{minipage}
 \end{figure}
 
@@ -446,7 +445,7 @@ The overall flow distribution can be visually followed from the velocity magnitu
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.9\linewidth]{chapter3/Figures/Study/Volume.png}
-	\caption{Maximum velocity projection of patients A-C (top to bottom) for all complexity levels \textit{Simplified-Full} (left to right) at diastole.}\label{fig:volume}
+	\caption[Quantitative flow distribution at systole for all cases]{Maximum velocity projection of patients A-C (top to bottom) for all complexity levels \textit{Simplified-Full} (left to right) at diastole.}\label{fig:volume}
 \end{figure}
 
 The detailed presentation of the average blood transported through each vessel is provided in \autoref{tab:flow_perc}. Notably, in the \textit{Full} configuration, the flow through the A2 segment of the ACA is consistently smaller, exhibiting a deviation of up to 5 percentage points compared to the \textit{Middle} and \textit{Simplified} configurations. The \textit{Middle} configuration is characterized by guiding flow away from the MCA towards the A1 segment of the ACA, representing a distinct pattern in the distribution of blood flow. These observations are relevant for the later discussion of the biases of Murray's law.
@@ -473,7 +472,7 @@ The detailed presentation of the average blood transported through each vessel i
 		                   & \textit{Simplified} & 27.3\%                  & -                       & -                       & -                      & 12.7\% & -     & -     & -     \\
 		\arrayrulecolor{black}\cmidrule(lr){1-10}
 	\end{tabular}
-	\caption{{Outflow per cardiac cycle with respect to the total inflow of each patient. In the \textit{Large} configuration of case C, the flow in the right MCA was the consequence of imposing Murray's law on the vessels of the M1-M2 bifurcation. The mass flow for the \textit{Middle} and \textit{Small} is taken at the A1 ACA segment due to the inherent cut of the domain.}}\label{tab:flow_perc}
+	\caption[Outflow split for all models]{{Outflow per cardiac cycle with respect to the total inflow of each patient. In the \textit{Large} configuration of case C, the flow in the right MCA was the consequence of imposing Murray's law on the vessels of the M1-M2 bifurcation. The mass flow for the \textit{Middle} and \textit{Small} is taken at the A1 ACA segment due to the inherent cut of the domain.}}\label{tab:flow_perc}
 \end{table}
 
 \subsubsection*{Intraaneurysmal flow}
@@ -481,14 +480,15 @@ The flow structures in the domes are visualized in \autoref{fig:streamlines} for
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\linewidth]{chapter3/Figures/Study/Streamlines.png}
-	\caption{Cross-section cuts at the IA neck of patients A-C (top to bottom) with inscribed velocity magnitudes at diastole. Velocity streamlines are superposed with the aneurysm necks to highlight the structure of the flow.}\label{fig:streamlines}
+	\vspace*{-0.5cm}
+	\caption[Intraaneurysmal velocities]{Cross-section cuts at the IA neck of patients A-C (top to bottom) with inscribed velocity magnitudes at diastole. Velocity streamlines are superposed with the aneurysm necks to highlight the structure of the flow.}\label{fig:streamlines}
 \end{figure}
 
 The WSS magnitude for peak diastole and systole are shown in \autoref{fig:wss} (a) and (b) respectively. Patient A (first row) is characterized by a stable, qualitatively similar WSS pattern across all extensions. Here, only the \textit{Simplified} case demonstrates smaller patches of higher shearing that are not present in the \textit{Middle} and \textit{Full} systems. Patients B and C instead exhibit persistently altered WSS patterns for all of the domain extensions. Setting the \textit{Simplified} system aside, one can observe shifts in patterns between the \textit{Middle} and \textit{Full} extensions in the second and third columns respectively. Most notable here is the daughter sack in patient B's aneurysm (second row of \autoref{fig:wss}). During diastole, the WSS is relatable between the \textit{Middle} and \textit{Full} systems. At systole, on the contrary, the shearing increases for the \textit{Middle} system, but remains low for the \textit{Full} system, leading to two distinct characterizations. Following the \textit{Full} system, the daughter sack could be identified as a risk factor due to low WSS exposure, whereas the \textit{Middle} simulation would not. Daughter sacks play hereby an important role since their appearance is linked to an augmented risk of rupture. The last patient case in the bottom row of \autoref{fig:wss} (a) and (b), again shows an inconsistent WSS among the different extensions, especially aggravated at the {dent} separating the two sacks.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=\linewidth]{chapter3/Figures/Study/WSS_bulge.png}
-	\caption{WSS distributions on the aneurysms A-C (top to bottom) for the different complexity levels at diastole (a) and peak systole (b).}\label{fig:wss}
+	\caption[WSS at systole and diastole]{WSS distributions on the aneurysms A-C (top to bottom) for the different complexity levels at diastole (a) and peak systole (b).}\label{fig:wss}
 \end{figure}
 
 Following the same structure of Fig.\,\autoref{fig:wss} (a) and (b), the OSI is displayed in \autoref{fig:osi}. The observed stable WSS profile of aneurysm A inevitably leads to a nearly absent oscillatory shearing with only small localized peaks (see the first row in \autoref{fig:osi}). Large dissent of the OSI distributions is again found in patients B and C (second and third rows of \autoref{fig:osi}), where especially the distal lobe of patient C points out. There, overall high values are found on the visible face in the \textit{Full} CoW simulation, in contrast to the other cases.
@@ -496,7 +496,7 @@ Following the same structure of Fig.\,\autoref{fig:wss} (a) and (b), the OSI is 
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\linewidth]{chapter3/Figures/Study/OSI_bulge.png}
-	\caption{OSI distributions for cases A-C (top to bottom) under different geometry extensions.}\label{fig:osi}
+	\caption[OSI distributions]{OSI distributions for cases A-C (top to bottom) under different geometry extensions.}\label{fig:osi}
 \end{figure}
 
 \subsection{Discussion}
@@ -506,17 +506,15 @@ The further analysis of the hemodynamics in the IA has shown differences that ex
 
 The additional blood suppliers in the case of \textit{Full} simulations, such as the neighbouring ICA and the BA, are participants in causing blood to traverse communicating vessels into other circulation segments. Although most of the interhemispheric flow was observed at the ACom, hence distal to the aneurysm fundus, the influence of the inflow streams cannot be generally disregarded from being important\,\cite{Castro2006}. In our study, equal flow rates for the ICAs were imposed, aligning with a popular choice shown in large-scale studies\,\cite{Valen-Sendstad2018} due to a lack of measurement data. As stated before, this is irrefutably one of the biases taken into consideration that could be lifted by measurements in follow-up work. The second factor causing altered results between the \textit{Full} CoW and \textit{Middle} simulations is, as stated, the interaction between both anterior and posterior circulations. By not imposing a boundary midway in a posterior communicating artery, more slack is left for the flow to unravel its natural characteristics thereby providing a more physiological hemodynamic profile. Examples of this, among others, are pressure drops at posterior arterial junctions and bifurcations that effectively alter upstream pressure distributions and are of notable relevance\,\cite{Mynard2015, Chnafa2017}.
 
-The flow in these communicating vessels holds significant medical importance, given that they host 60--70\% of all IAs on the Circle of Willis, which itself constitutes 85\% of all IAs\,\cite{Hacein11}. While the role of CFD in diagnosing and analyzing IA growth and remodelling processes remains uncertain, it is crucial to acknowledge that modelling choices significantly impact the hemodynamics of communicating vessels\,\cite{Zhang2016}. Moreover, statistical evidence indicates that the absence or hypoplasia of certain communicating segments is associated with a higher likelihood of developing IAs\,\cite{Hindenes2023, Feng2023}. As such, it becomes imperative to continually evaluate and refine CFD models to capture the hemodynamics of the CoW more effectively. One promising outlook is the use of perfusion imaging\,\cite{Zhang2016, Schollenberger2021}. Thanks to a quantification of the perfusion of different brain parts, the flow into different sections of the brain can be mapped through a brain atlas, giving direct feedback about the flow traversing the outlets of the CoW. While this method is still in its infancy and requires an elaborate MRI procedure, it holds the potential to provide a more accurate boundary condition for CFD simulations.
+The flow in these communicating vessels holds significant medical importance, given that they host 60--70\% of all IAs on the Circle of Willis, which itself constitutes 85\% of all IAs\,\cite{Hacein11}. While the role of CFD in diagnosing and analyzing IA growth and remodelling processes remains uncertain, it is crucial to acknowledge that modelling choices significantly impact the hemodynamics of communicating vessels\,\cite{Zhang2016}. Moreover, statistical evidence indicates that the absence or hypoplasia of certain communicating segments is associated with a higher likelihood of developing IAs\,\cite{Hindenes2023, Feng2023}. As such, it becomes imperative to continually evaluate and refine CFD models to capture the hemodynamics of the CoW more effectively. One promising outlook is the use of perfusion imaging\,\cite{Zhang2016, Schollenberger2021}. Thanks to a quantification of the perfusion of different brain parts, the flow into different sections of the brain can be mapped through a brain atlas, giving direct feedback about the flow traversing the outlets of the CoW. While this method is still in its infancy and requires an elaborate MRI procedure, it holds the potential to provide a more accurate boundary condition for CFD simulations.\\
 
+\nolinenumbers
 
 \begin{tcolorbox}[conclusions]
 
 	In this chapter, we have presented the brain's anatomy and how to translate its complex hemodynamics into a numerical framework, including details on mesh generation and boundary conditions. The main research was dedicated to assessing the sensitivity of the aneurysm hemodynamics for varying domain extensions. To this goal, three patients harbouring ICA-PCom aneurysms were considered in this study. For each one, simulations are run on two reduced domain extensions commonly seen in literature and contrasted with the full CoW flow. The analysis showed notable alterations of the flow in some cases biased mostly by imposing Murray's law on communicating vessels, whose primary role deviates from other arteries. The obtained results recommend taking into account the overall anatomy of each patient and considering possible implications of the flow from contralateral or posterior circulations. By confirming hypoplasia or the absence of communicating segments on MR angiography, studies can further reinforce their choice of BCs or motivate a sensitivity study otherwise.
 
 \end{tcolorbox}
-
-
-\nolinenumbers
 
 \newpage
 \bibliographystyle{apsrev}
