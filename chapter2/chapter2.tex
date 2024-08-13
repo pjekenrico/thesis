@@ -15,8 +15,6 @@
 
 \end{tcolorbox}
 
-\linenumbers
-
 \section{The Incompressible Navier-Stokes Equations}
 The Navier-Stokes equations stem, as mentioned before from the conservation of mass and momentum in an open and bounded domain $\Omega \subset \mathbb {R}^{n}$ in which no material enters or leaves. For the former quantity, the conservation can be expressed through:
 \begin{equation*}
@@ -647,7 +645,7 @@ Alternatively to the reference element, one can consider a reference equilateral
 	\includegraphics[width=\linewidth]{chapter2/Figures/Metric_Tensor/Triangles.pdf}
 	\caption[Principal components of triangles]{Two triangles in a 2D space (red) with their circumsphers (black) and principal axes (blue, green).}\label{fig:triangles}
 \end{figure}
-This bears the advantage, that the ellipsoid retains the stretching and orientation information regardless of the order of the nodes spanning it. A minimal ellipse, as shown in \autoref{fig:transformation}, can be readily computed with the eigenvalues and eigenvectors of its nodes as follows. Take $X\in \mathbb{R}^{n,d}$ as to be the non-square matrix of nodal positions of any linear (or higher order) element in $d>1$ dimensions centred around the origin. Then, its main directions (as exploited in the Principal Component Analysis) are given by:
+This bears the advantage, that the ellipsoid retains the stretching and orientation information regardless of the order of the nodes spanning it. A minimal ellipse, as shown in \autoref{fig:transformation}, can be readily computed with the eigenvalues and eigenvectors of its nodes as follows. Take $X\in\mathbb{R}^{n,d}$ as to be the non-square matrix of nodal positions of any linear (or higher order) element in $d\,>$\,1 dimensions centred around the origin. Then, its main directions (as exploited in the Principal Component Analysis) are given by:
 \begin{equation}
 	\vec{w}_1 = \text{argmax}_{||\vec{w}||_2=1}||X\vec{w}||_2=\text{argmax}_{\vec{w}}\,\frac{{\vec{w}}^T {X}^T X \vec{w}}{\vec{w}^T\vec{w}}
 	\label{eqn:PCA}
@@ -659,7 +657,7 @@ In other words, if we look for the axis of the largest variance of a set of poin
 		\label{eq:svd}
 	\end{split}
 \end{equation*}
-Verbally speaking, \autoref{eq:svd} states that to find the principal components of $X$ we need to solve the eigenvalue problem of $X^TX$, which will yield the orthonormal column vectors $w$ of $V$ and the squared singular values in the quadratic matrix $\Sigma^2$. Note, that at the same time, we confirm that $X^TX$ yields an SPD matrix. With this knowledge, we can map the nodes on a circumcircle or radius 1 to the ellipse of another triangle with:
+Verbally speaking, \autoref{eq:svd} states that to find the principal components of $X$ we need to solve the eigenvalue problem of ${X}^T X$, which will yield the orthonormal column vectors $w$ of $V$ and the squared singular values in the quadratic matrix $\Sigma^2$. Note, that at the same time, we confirm that ${X}^T X$ yields an SPD matrix. With this knowledge, we can map the nodes on a circumcircle or radius 1 to the ellipse of another triangle with:
 \begin{equation*}
 	\begin{split}
 		X^{2D}_{ellipse} = X^{2D}_{circle} \sqrt{\frac{2}{3}} V \sqrt{\Sigma^2} V^T\\
@@ -668,7 +666,7 @@ Verbally speaking, \autoref{eq:svd} states that to find the principal components
 \end{equation*}
 Another execution of the transformation can be seen in \autoref{fig:ellipses}, where the reference equilateral tetrahedron on the left is transformed into the right one. This transformation maps from the reference frame to the physical frame, while $G$ is supposed to be the square inverse mapping. Since our transformation is bijective, the inverse exists and is unique. Furthermore, it is avoided to compute a costly eigendecomposition for computational purposes.
 \begin{equation}
-	G = \left(\frac{3}{2}1_{\{d=2\}} + \frac{4}{3}1_{\{d=3\}}\right) (X^TX)^{-1}
+	G = \left(\frac{3}{2}1_{\{d=2\}} + \frac{4}{3}1_{\{d=3\}}\right) ({X}^TX)^{-1}
 	\label{eqn:new_metric}
 \end{equation}
 \begin{figure}[ht]
@@ -897,24 +895,25 @@ In the previous section, a VMS-type method has been derived using common models 
 
 \subsection{Flow Past a Cylinder in 2D}
 The first case corresponds to the well-known flow past a cylinder in 2D. This test case has been thoroughly examined by the community and permits a good comparison and verification of the used methods. The case was set up following the indications of Main \textit{et\,al.}\,\cite{Main2018}, who implemented the case to validate a new shifted boundary method. The domain is given in \autoref{fig:two_figures} including the sizes of the cylinder and the edges in unit scale.
-\begin{figure}[htbp]
+\begin{figure}[htb]
 	\centering
-	\begin{minipage}[b]{0.46\textwidth}
-		\centering
-		\vspace{-3cm}
-		\input{chapter2/Figures/Scovazzi/Cylinder}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[b]{0.46\textwidth}
-		\centering
-		\vspace{2cm}
-		\includegraphics[width=\linewidth]{chapter2/Figures/Scovazzi/Mesh1.pdf}
-	\end{minipage}
+	\vspace*{-0.5cm}
+	\begin{align*}
+		\begin{minipage}[b]{0.46\textwidth}
+			\input{chapter2/Figures/Scovazzi/Cylinder}
+		\end{minipage}
+		\hspace*{0.7cm}
+		\begin{minipage}[b]{0.46\textwidth}
+			\includegraphics[width=\linewidth]{chapter2/Figures/Scovazzi/Mesh1.pdf}
+			\vspace*{0.02cm}
+		\end{minipage}
+	\end{align*}
+	\vspace*{-1.3cm}
 	\caption[Geometry and mesh for 2D flow past a cylinder]{Case setup of the 2D flow past a cylinder. On the left is a sketch of the computational domain following the dimensions given in\,\cite{Main2018}. On the right is a view of the used mesh.}\label{fig:two_figures}
 \end{figure}
-In this case, a uniform velocity is imposed at the left inlet, while the upper and lower boundaries enforce a zero normal velocity and no traction. The outlet on the right is set as a traction-free boundary and the cylinder ($d=1$) as a no-slip patch. The case is run for two well-studied Re numbers, 100 and 300. Both cause a regular formation of vortices in the wake of the cylinder, however, for the latter Re, these are more developed (see \autoref{fig:scovazzi_pressure} for a better image of the phenomenon at $Re\,=\,300$). The simulations have been run for a unit Newtonian viscosity $\mu$ and a unit density $\rho$. The control over the Re was thus exerted through the inflow velocity $u_\infty$.
+In this case, a uniform velocity is imposed at the left inlet, while the upper and lower boundaries enforce a zero normal velocity and no traction. The outlet on the right is set as a traction-free boundary and the cylinder ($d$\,=\,1) as a no-slip patch. The case is run for two well-studied Re numbers, 100 and 300. Both cause a regular formation of vortices in the wake of the cylinder, however, for the latter Re, these are more developed (see \autoref{fig:scovazzi_pressure} for a better image of the phenomenon at Re\,=\,300). The simulations have been run for a unit Newtonian viscosity $\mu$ and a unit density $\rho$. The control over the Re was thus exerted through the inflow velocity $u_\infty$.
 \begin{equation*}
-	Re\,=\,\frac{\rho u_\infty d}{\mu}
+	\text{Re}\,=\,\frac{\rho u_\infty d}{\mu}
 \end{equation*}
 \begin{figure}[ht]
 	\centering
@@ -1052,6 +1051,7 @@ Further, cross-sections of the flow were compared to Particle Imaging Velocimetr
 The resulting profiles were extracted along the positive x-axis values and shown in \autoref{fig:FDA_Re500}. The axial velocity is well reconstructed in the first four locations but shows a mismatch of approximately 50\,mm/s at the last recorded location. There, the measured values indicate a more strongly diffused pipeflow compared to the simulation.
 \begin{figure}[htb]
 	\centering
+	\vspace*{-0.3cm}
 	\input{chapter2/Figures/FDA/Re500/Fig_radial}
 	\vspace*{-0.7cm}
 	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,500]{Axial velocity profiles of the FDA Nozzle at Re\,=\,500 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re500}
@@ -1070,6 +1070,7 @@ The breakdown can be also seen in the radial cross-sections, which this time are
 Similarly to before, the first four sections confirm a good match between theory and practice. In the latter two sections, the jet flattens out in the experiment, while the conducted simulations of this work and the reference publication remain similar.
 \begin{figure}[htb]
 	\centering
+	\vspace*{-0.3cm}
 	\input{chapter2/Figures/FDA/Re2000/Fig_radial}
 	\vspace*{-0.7cm}
 	\caption[Axial velocity profiles of the FDA Nozzle at Re\,=\,2000]{Axial velocity profiles of the FDA Nozzle at Re\,=\,2000 on locations marked in red along the blended-in nozzle.}\label{fig:FDA_Re2000}
@@ -1078,9 +1079,7 @@ Similarly to before, the first four sections confirm a good match between theory
 \subsubsection*{Discussion}
 As stated before, this case serves two purposes. First, validating the numerical framework for a more simple, fully laminar setup at Re\,=\,500, and second providing a perspective on the performance in a more complex flow regime, Re\,=\,2000. The fully laminar matches experimental data and other reported results from laminar simulations\,\cite{Stewart2012}, reassuring us about the validity of our method. Hereby, it is worth noting that the obtained results are based on a mesh that is far from the resolutions that are otherwise used for benchmarking the FDA Nozzle\,\cite{Jain2020, Bergersen2019}. This is important to consider since simulations of hemodynamics cannot afford excessive computational demands.
 
-For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the mismatch among cutting-edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminutive perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen? Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue of tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher-order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \textit{et\,al.}\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.
-
-\nolinenumbers~\\
+For Reynolds numbers of 2000 and above there has been a large effort from turbulence research to better understand the mismatch among cutting-edge CFD simulations and experiments, such as the ones referenced to before. In experiments, small impurities in the initial flow or minor asymmetries in the mould can cause a diminutive perturbation of the flow along its path. This perturbation is naturally amplified by the sudden expansion, causing the jet to degenerate into a turbulent structure. In computations, asymmetries inherent to the mesh, the numerical method or simply round-off errors are the ones triggering the same effect. The question is, at what stage does this happen? Two highly recommendable studies\,\cite{Jain2020, Bergersen2019} employed different numerical techniques to investigate this issue of tracking the jet breakdown along the nozzle. In both cases, it was concluded that the breakdown location is shifted farther and farther towards the outlet when increasing the fidelity of the numerics through mesh refinement and higher-order schemes. This is a natural consequence following from a higher spectrum of flow structures being simulated with increasing accuracy. Bergersen \textit{et\,al.}\,\cite{Bergersen2019} expanded this analysis further by considering upstream perturbations and their magnified effects downstream. This sketched a reason why these experimental phenomena happen and why the disagreement appears in the transitional regime. Interested readers are incited to examine the referenced publications for more details on this thrilling subject.\\\vspace*{1cm}
 
 \begin{tcolorbox}[conclusions]
 

@@ -1,9 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \pagestyle{fancy}
-\linenumbers
 
-\chapter{Patient-specific analysis with flow-diverter treatment}\minitoc\newpage\label{chap.5}
+\chapter{Flow Diversion: A Study of Three Ruptured Aneurysms}\minitoc\newpage\label{chap.5}
 \begin{tcolorbox}[abstract]
 
 	In the previous chapters, we have developed the numerical framework for VMS in fluid simulations, examined the specifics of brain arterial hemodynamics, and created a tool for modelling Flow-Diverter Stents (FDS) based on geometric constraints. Leveraging the experience and tools acquired, we now apply this framework to three patient cases featuring two variations of intracranial aneurysms, each presenting unique challenges to clinicians. These cases highlight situations where FDS treatment is considered highly promising, despite the still high fatality rates. First, we address the giant aneurysm ($>$\,25\,mm) previously discussed. This case will be thoroughly analyzed from medical and anatomical perspectives before delving into the simulation of pre-and postoperative hemodynamics. The second case involves blister-like aneurysms, formations that are barely visible on CT imaging and are characterized by critically thin and fragile walls. Both types of aneurysms are poorly understood and necessitate further research to enhance treatment outcomes. Through our simulations, we demonstrate the capabilities of the framework and, more importantly, provide hemodynamic results for these scarcely documented aneurysms, correlating our findings with existing literature.
@@ -146,13 +145,13 @@ For the CFD study, two 3D angiography images are available: one from before the 
 The inflow conditions were imposed using parabolic profiles according to averaged waveforms for individuals in the same age group as the patient\,\cite{Tanaka2006}. We assumed the inflow conditions to remain the same pre- and postoperatively\,\cite{Cebral2011}, though we acknowledge this as a potential source of bias, as discussed by Cebral \textit{et al.}\,\cite{Cebral2011}. Outlets were modelled using linear resistances as described in Chapter 3. The targeted flow was chosen to depend on the cube of the MCA and ACA diameters, adhering to Murray's Law. Blood rheology was imposed through the modified Casson model presented in the second chapter. The hematocrit was measured at every visit, resulting in an average of 34.1\%, which was used in all computations.
 
 \subsubsection*{FSI Setup}
-Since the aneurysm demonstrated clear pulsatility, we investigated the implications of considering rigid arterial walls by comparing our results to fully coupled FSI simulations of the case. These were carried out in cooperation with Aurèle Goetz, another PhD candidate involved in the project. The fluid dynamics are solved as described in previous chapters, with the nuance that an Arbitrary Lagrangian-Eulerian (ALE) description is employed. The mesh is adapted to follow the wall motions by solving a diffusion equation as done in the work of\,\cite{HABCHI2013306, Sha20}. Arterial tissue is modelled as hyperelastic using a Neo-Hookean formulation with a Simo-Taylor volumetric model\,\cite{NeoH, SimoTaylor}. The solid dynamics equations use a mixed formulation in displacement and pressure and are also solved with a VMS-type method\,\cite{Aurele}. The coupling between the two solvers is organized in a partitioned way with an under-relaxed fixed-point algorithm\,\cite{FELIPPA198061}. Fluid stresses are applied as Neumann conditions on the solid interface, and solid dynamics yield displacement updates for the fluid. Iterations continue until convergence is achieved, with a tolerance set to $10^{-5}$\,mm on the average solid displacement. An Aitken $\Delta^2$ scheme is used for momentum acceleration, enhancing computational efficiency and convergence\,\cite{Kuttler, BREUER2012107}.
+Since the aneurysm demonstrated clear pulsatility, we investigated the implications of considering rigid arterial walls by comparing our results to fully coupled FSI simulations of the case. These were carried out in cooperation with Aurèle Goetz, another PhD candidate involved in the project. The fluid dynamics are solved as described in previous chapters, with the nuance that an Arbitrary Lagrangian-Eulerian description is employed. The mesh is adapted to follow the wall motions by solving a diffusion equation as done in the work of\,\cite{HABCHI2013306, Sha20}. Arterial tissue is modelled as hyperelastic using a Neo-Hookean formulation with a Simo-Taylor volumetric model\,\cite{NeoH, SimoTaylor}. The solid dynamics equations use a mixed formulation in displacement and pressure and are also solved with a VMS-type method\,\cite{Aurele}. The coupling between the two solvers is organized in a partitioned way with an under-relaxed fixed-point algorithm\,\cite{FELIPPA198061}. Fluid stresses are applied as Neumann conditions on the solid interface, and solid dynamics yield displacement updates for the fluid. Iterations continue until convergence is achieved, with a tolerance set to $10^{-5}$\,mm on the average solid displacement. An Aitken $\Delta^2$ scheme is used for momentum acceleration, enhancing computational efficiency and convergence\,\cite{Kuttler, BREUER2012107}.
 
 The aneurysm wall is computed as an outward extrusion of the segmented lumen. Due to the contact of the aneurysm membrane with surrounding brain tissue over most of the bulge, a rather high thickness of 0.5\,mm is employed. The material properties are fitted to obtain movement in agreement with the observed displacements, with greatly diminished stiffness at the dome, where the aneurysm has been observed to pulsate mostly. For reasons of computational feasibility, the FSI case was meshed with a lower spatial and temporal resolution as shown in \autoref{tab:comp_times}.
 
 \subsubsection*{Computation Times}
 The simulation jobs were executed on 64 cores of the previously mentioned computing facility (see Chapter 3). The computation times with the different integration modalities are shown in \autoref{tab:comp_times}. The preoperative case required longer computation times due to the 2--5 subiterations per time step needed for convergence. The postoperative case, computed as a CFD simulation, was faster, requiring approximately half the time per cardiac cycle. The FSI simulation of the ruptured aneurysm took the longest time, at 50 hours per cycle, despite its lower spatial and temporal resolutions. The explicit coupling between the solid and fluid solvers, along with slower convergence rates for the solid solver, are the main reasons for this increase in computation time.
-\begin{table}
+\begin{table}[htb]
 	\centering
 	\renewcommand{\arraystretch}{1.3}
 	\setlength{\tabcolsep}{6pt}
@@ -177,7 +176,7 @@ The aneurysm hemodynamics before the insertion of the FDS is characterized by a 
 	\begin{tabular}{ccc}
 		\multicolumn{1}{c}{}                                                        &
 		\multicolumn{1}{c}{\textbf{Preoperative}}                                   &
-		\multicolumn{1}{c}{\textbf{Postoperative}}                                    \\[1em]
+		\multicolumn{1}{c}{\textbf{Postoperative}}                                    \\
 		\rotatebox[origin=c]{90}{\textbf{TAWSS and OSI}}                            &
 		\begin{minipage}{0.45\linewidth}
 			\centering
@@ -186,7 +185,7 @@ The aneurysm hemodynamics before the insertion of the FDS is characterized by a 
 		\begin{minipage}{0.45\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post.jpg}
-		\end{minipage}     \\[3cm]
+		\end{minipage}     \\[2cm]
 		\rotatebox[origin=c]{90}{\textbf{Velocity at Systole}}                      &
 		\begin{minipage}{0.45\linewidth}
 			\centering
@@ -197,7 +196,7 @@ The aneurysm hemodynamics before the insertion of the FDS is characterized by a 
 			\includegraphics[width=\linewidth]{chapter5/Figures/Hemodynamics/post_v.jpg}
 		\end{minipage}   \\
 	\end{tabular}
-	\caption[TAWSS and OSI]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics}
+	\caption[TAWSS and OSI]{Preoperative and postoperative hemodynamics of the aneurysm computed with CFD\@. Notable changes include a decrease in TAWSS and flow velocities, as well as an increase in OSI from preoperative to postoperative states.}\label{fig:hemodynamics}
 \end{figure}
 
 \subsubsection*{Post-operative hemodynamics}
@@ -211,19 +210,19 @@ The Pulsatility Index (PI) in the postoperative state was computed at 1.24, rese
 		\multicolumn{1}{c}{}                                                                                        &
 		\multicolumn{1}{c}{\textbf{Diastole}}                                                                       &
 		\multicolumn{1}{c}{\textbf{Mean}}                                                                           &
-		\multicolumn{1}{c}{\textbf{Systole}}                                                                          \\[1em]
+		\multicolumn{1}{c}{\textbf{Systole}}                                                                          \\
 		\rotatebox[origin=c]{90}{\textbf{Preoperative}}                                                             &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_diastole.jpg}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 7cm, clip]{chapter5/Figures/Hemodynamics/preop_diastole.jpg}
 		\end{minipage}  &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_mean.jpg}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 7cm, clip]{chapter5/Figures/Hemodynamics/preop_mean.jpg}
 		\end{minipage}      &
 		\begin{minipage}{0.3\linewidth}
 			\centering
-			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/preop_systole.jpg}
+			\includegraphics[width=\linewidth, trim=0 5cm 0 7cm, clip]{chapter5/Figures/Hemodynamics/preop_systole.jpg}
 		\end{minipage}      \\[1cm]
 		\rotatebox[origin=c]{90}{\textbf{Postoperative}}                                                            &
 		\begin{minipage}{0.3\linewidth}
@@ -239,7 +238,7 @@ The Pulsatility Index (PI) in the postoperative state was computed at 1.24, rese
 			\includegraphics[width=\linewidth, trim=0 5cm 0 0, clip]{chapter5/Figures/Hemodynamics/postop_systole.jpg}
 		\end{minipage}     \\
 	\end{tabular}
-	\caption[Velocity streamlines]{Preoperative and postoperative hemodynamics of the aneurysm.}\label{fig:hemodynamics2}
+	\caption[Velocity streamlines]{Preoperative and postoperative hemodynamics of the aneurysm computed with CFD. In the preoperative case a large vortex is persistent, whereas the postoperative one changes orientation and structure.}\label{fig:hemodynamics2}
 \end{figure}
 
 
@@ -259,6 +258,7 @@ A search in the anatomy of the human brain revealed other possible factors that 
 Returning to the matter at hand, the pressures over the cardiac cycle show mostly a linear relationship with the flow rate, excepting the FSI simulation, where a dephasing of pressure and inflow is apparent. For a clearer representation, consider the centerline pressure during systole alone displayed in \autoref{fig:ctrl_p_systole}. There, we have equalized the pressures at the inflow according to the downstream autoregulation hypothesis of Cebral \textit{et\,al.}\,\cite{Cebral2011}. In the cavernous sections, pressure drops minimally until halfway into the clinoidal section. There, the tapering of the ICA begins, leading to a fall of 200\,Pa. At the aneurysm, the pre-treatment case sees a flat pressure profile, whereas the post-treatment case continues its nearly linear decay. At the distal end of the aneurysm, the tables turn, causing a sharp drop in the preoperative pressure of nearly 26\,mmHg due to the distal stenosis and the sudden contraction of the flow. The postoperative FSI case displays an identical behaviour to its rigid counterpart until reaching the aneurysm. At that point, a surplus of flow enters the bulge causing it to inflate. Consequently, the resistance in the vessel diminishes yielding a pressure plateau.
 \begin{figure}[htb]
 	\centering
+	\vspace*{-0.5cm}
 	\begin{tikzpicture}
 		% Include the PDF image
 		\node (pdf) at (0,0) {\includegraphics[width=\linewidth]{chapter5/Figures/Pressures/pressure_systole.pdf}};
@@ -288,20 +288,21 @@ In the present giant aneurysm, thrombosis is likely to have happened based on th
 \subsubsection*{Flow structure-mediated rupture}
 The last proposed theory that will be discussed is presented by Li \textit{et\,al.}\,\cite{Li2019}. In their work, 10 patients with delayed aneurysm rupture were compared to 20 control patients, whose aneurysms remained stable. Simulations of the hemodynamics were carried out for both groups, including the simulations of the stents and porosity modelling of coils, when present. A large number of flow indicators, including TAWSS and OSI, were compared. Among the indicators, there was one categorical property related to flow stability. The latter was described as, ``flow patterns that persist (do not move or change) during the cardiac cycle.'' according to prior work from Cebral \textit{et\,al.}\,\cite{Cebral_Mut_Weir_Putman_2010}. When a stable flow was maintained after stenting, the aneurysms were less likely to have ruptured. The authors proposed that the structure of the flow could likewise impact the thrombus formation. By doing so, their theory could be related to the previously presented thrombus-mediated rupture, although evidence was not provided.
 
-In regards to our case, we can confirm a transition from a ``stable'' vortex preoperatively to a more irregular flow postoperatively (shown in \autoref{fig:hemodynamics2}). This transition can also be observed qualitatively in Cebral's paper\,\cite{Cebral2011}. There is however a certain degree of vagueness in the determination of stability that hovers menacingly over the interpretation. Here, newer flow structure identifiers introduced on the analysis of the topological skeleton\,\cite{Morbiducci2020} could provide a better quantifiable measure of the flow stability. Although first efforts are being made to apply the topological skeleton to intracranial aneurysms\cite{Mazzi2020}, clear guidelines for analysis are not yet available.
+In the present case, we can confirm a transition from a ``stable'' vortex preoperatively to a more irregular flow postoperatively (shown in \autoref{fig:hemodynamics2}). This transition can also be observed qualitatively in Cebral's paper\,\cite{Cebral2011}. There is however a certain degree of vagueness in the determination of stability that could be overcome by quantifiable identifiers, such as the topological skeleton\,\cite{Morbiducci2020}. Although first efforts are being made to apply the topological skeleton to intracranial aneurysms\cite{Mazzi2020}, clear guidelines for analysis are not yet available.
 
 In the discussion regarding ``stability'', we have observed the ``unstable'' flow to be a result of the change of shape of the vasculature and not to result from the embedded stent. Since the work of Li \textit{et\,al.}\,\cite{Li2019}, seems to consider only the postoperative state, it is difficult to compare the results to our case. Likewise, the timescales of the ruptures are not provided, making a relationship with the present case somewhat impossible. Li \textit{et\,al.}\,\cite{Li2019} also includes the modelling of coils as a porous medium in their work. While this is undoubtedly a reasonable strategy to compute mean velocities and other smooth quantities, it remains questionable whether factors like flow stability in the bulge are the same as when embedding the coils into the mesh. From a medical viewpoint, the use of coils did not influence the likelihood of delayed aneurysm rupture, which was also confirmed elsewhere\,\cite{Kulcsar2011, Hirato2023}.
 
 \subsubsection*{Limitations}
 In the simulation of the case, no patient-specific inflow rate was available. To test the sensitivity, the preoperative case was simulated using flow rates scaled by $\pm$25\%. Although the flow patterns remained similar, we acknowledge that the nature of the waveform can impact the oscillatory components of the flow and needs to be tested further. Due to the poor quality of the postoperative images at the outlets, segmenting them was difficult and could feed back into the outflow boundary conditions. Lastly, it is important to point out that the mesh resolution at the stent was chosen following suggestions from literature\,\cite{Janiga2015, Larrabide2016} instead of convergence studies. This should be included in further work, to safely confirm the parameter choices. Furthermore, it would be interesting to study giant aneurysms using minimally dissipative solvers, such as the ones proposed by Valen-Sendstad\,\cite{Valen-Sendstad2014}, to assess solver sensitivity.
 
+\vspace*{1cm}
 
 \begin{tcolorbox}[conclusions]
 
-	After conducting a thorough analysis of the flow dynamics of the present giant aneurysm, we contrasted the observations with hypotheses on the rupture pathways found in the literature. We have confirmed that under the same modelling assumptions as in the pressure-mediated rupture, no pressure increase could be observed. Thrombus-induced autolysis appears to be the most likely hypothesis but requires more supporting data to be considered bullet-proof. Methodically, we have seen that FSI can play a crucial role in these cases, where uncertainties around the wall constitution can be overcome through imaging data. The alteration of the pressure dynamics particularly can have a strong impact on the conclusions and should be addressed when observed. Further, we point out some shortcomings of literature in this field, particularly the use of clearly defined indicators for (un-) ``stable'' flows and also the modelling of thrombus formation, to obtain a better grasp of the temporal progression of the wall weakening. With these careful considerations, researchers might ultimately provide helpful indications to clinicians, who so far, have to rely mostly on intuition when dealing with these intricate cases.
+	After conducting a thorough analysis of the flow dynamics of the present giant aneurysm, we contrasted the observations with hypotheses on the rupture pathways from literature. We have confirmed that under the same modelling assumptions as in the pressure-mediated rupture, no pressure increase could be observed. Thrombus-induced autolysis appears to be the most likely hypothesis but requires more supporting data to be considered bullet-proof. A simulation of the thrombosis would also provide valuable information to estimate possible time scales in the autolysis process. Methodically, we have seen that FSI can play a crucial role in pressure estimations. The otherwise omnipresent uncertainties around the wall constitution were overcome thanks to supporting imaging data.
 \end{tcolorbox}
 
-
+\newpage
 
 \section{Wide and Blood Blister Aneurysms}
 A further application of flow-diverter stents is the research around blister aneurysms, formally known as Blood Blister-like Aneurysms (BBAs). These formations are uncommon, highly dangerous and poorly understood\,\cite{Meling2017, Peschillo2016}. In the following section, we will provide a brief introduction to the specific properties of these aneurysms and present a patient case that has been followed for some months at the cooperating medical institution. Additionally, a second ruptured wide-necked aneurysm is included that, although not categorized as a BBA, shares many structural and pathologic traits. With these two cases, we once again apply the computation framework to obtain the hemodynamics in the pre-and postoperative states. As a hypothetical scenario, a second stent is deployed telescopically into the first one to quantify its impact on the flow.
@@ -360,7 +361,7 @@ The obtained computation times per cardiac cycle are given in \autoref{tab:comp_
 		                           & \# of processors & 64           & 128          & 128   \\
 		\hline
 	\end{tabular}
-	\caption[Computation times]{Computation times per cardiac cycle and used resources. Note that the number of cores used was conditioned by server availability and not necessarily by optimized distributions. All meshes have an isotropic mesh size of 0.2\,mm and a resolution at the stent as described in Chapter 4.}
+	\caption[Computation times for uncoliable aneurysm simulations]{Computation times per cardiac cycle and used resources. Note that the number of cores used was conditioned by server availability and not necessarily by optimized distributions. All meshes have an isotropic mesh size of 0.2\,mm and a resolution at the stent as described in Chapter 4.}
 	\label{tab:comp_times_blister}
 \end{table}
 
@@ -393,7 +394,7 @@ The insertion of the first stent yields an estimated metal coverage of 21\% and 
 		                           & mean(OSI)   & 0.002        & 0.001        & 0.002 \\
 		\hline
 	\end{tabular}
-	\caption[Bulge TAWSS and OSI]{Bulge averaged TAWSS and OSI values for both patients in all computed configurations.}\label{tab:OSI_WSS_blister}
+	\caption[Bulge TAWSS and OSI]{Bulge-averaged TAWSS and OSI values for both patients in all computed configurations.}\label{tab:OSI_WSS_blister}
 \end{table}
 
 \begin{figure}[htb]
@@ -514,8 +515,8 @@ The use of a second stent in this case shares the same criticism as in the previ
 
 \subsubsection*{Limitations}
 Similarly to the previous study, we point out that inflow conditions were in this case generalized and can impact the results. In the case of patient 1, we modelled the PCom as a regular outflow, while a well-developed CoW was seen on MR scans. A better choice in this case would be conducting a study on the CoW to extract local flow rates and impose them as boundary conditions, as discussed in Chapter 3. In both cases, we utilized the postoperative images for segmentation. In the preoperative ones, there were more perforators visible (ophthalmic and anterior choroidal arteries) that could be added or modelled later for increased fidelity. Retrospectively, we learned that the Silk Vista stent has 8 wires with a thickness of 50\,$\mu$m braided into the remaining 40 with 30\,$\mu$m. This effect is not accounted for in this study but should be considered in the future.\\
+
 \vspace*{1cm}
-\nolinenumbers
 
 \begin{tcolorbox}[conclusions]
 
