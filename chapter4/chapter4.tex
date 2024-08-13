@@ -302,11 +302,14 @@ To immerse the thin wires into a computational mesh of tetrahedral elements, sev
 Exact representations of the stent surface could potentially be obtained by computing the intersection of the patient vasculature with the 3D stent geometry. However, this would require merging wire intersections, generating a large quantity of ill-posed elements that are cumbersome to handle. Secondly, computing the intersection of the resulting structure with the volume mesh has proven unviable in several test cases due to uncontrolled growth of memory requirements and difficulties with existing diminutive edges. One consistent challenge observed in all publications is combining a body-fitted mesh of the stent with boundary layers\,\cite{Larrabide2012, Larrabide2016}. These layers are crucial for accurately computing flow indicators, such as wall shear stress, which are essential for understanding the remodelling of aneurysmal tissue and are of significant interest in various hemodynamics simulations\,\cite{Meng2014}. However, due to the proximity of the device to the vessel wall, it is generally not possible to extrude structured boundary elements, presenting a significant area for improvement.
 \begin{figure}[htb]
 	\centering
-	\begin{minipage}[b]{0.6\textwidth}
+	\begin{minipage}[t]{0.62\textwidth}
+		\vspace*{0.75cm}
+		\mbox{}\\[-\baselineskip]
 		\input{chapter4/Figures/Stent/meshing_overview}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.39\textwidth}
+	\begin{minipage}[t]{0.35\textwidth}
+		\mbox{}\\[-\baselineskip]
 		\caption[Meshing of embedded device]{From top left to bottom right: Stages of mesh refinement used in the embedding procedure illustrated on a simple 2D mesh with an arc-section being removed and refined.}\label{fig:meshing_overview}
 	\end{minipage}
 \end{figure}
@@ -345,14 +348,17 @@ The developed virtual stenting can be evaluated by comparing the experiment resu
 \end{figure}
 
 \subsection{New In-Vitro Validation}
-To progress towards more realistic deployment scenarios, a MicroVention's Flow-Redirection Endoluminal Device (FRED\@; Aliso Viejo, California) was implanted in a resin model of an idealized basilar tip aneurysm. In the first step, images of the contrast agent-perfused mould were acquired using a bi-plane angiographic unit (Integris Allura Neuro; Philips Medical Systems, Best, the Netherlands) following institutional protocol, yielding an isotropic resolution of 0.274\,mm. These were then segmented with \href{https://www.slicer.org/}{3D Slicer}\,\cite{Kikinis2014} to obtain the surface of the model. After flushing the contrast agent, two 4\,mm devices were deployed and retrieved by an experienced radiologist without applying the push-and-pull technique\,\cite{Shapiro2014a} to maximize reproducibility. The stents, consisting of 64 wires, feature two interwoven radiopaque filaments that were segmented from the subsequently taken images (see \autoref{fig:ct_cellario} for a more detailed view).
+To progress towards more realistic deployment scenarios, a MicroVention's Flow-Redirection Endoluminal Device (FRED\@; Aliso Viejo, California) was implanted in a resin model of an idealized basilar tip aneurysm. In the first step, images of the contrast agent-perfused mould were acquired using a bi-plane angiographic unit (Integris Allura Neuro; Philips Medical Systems, Best, the Netherlands) following institutional protocol, yielding an isotropic resolution of 0.274\,mm. These were then segmented with \href{https://www.slicer.org/}{\textit{3D Slicer}}\,\cite{Kikinis2014} to obtain the surface of the model. After flushing the contrast agent, two 4\,mm devices were deployed and retrieved by an experienced radiologist without applying the push-and-pull technique\,\cite{Shapiro2014a} to maximize reproducibility. The stents, consisting of 64 wires, feature two interwoven radiopaque filaments that were segmented from the subsequently taken images (see \autoref{fig:ct_cellario} for a more detailed view).
 \begin{figure}[htb]
 	\centering
-	\begin{minipage}[b]{0.5\textwidth}
+	\begin{minipage}[t]{0.5\textwidth}
+		\vspace*{0.3cm}
+		\mbox{}\\[-\baselineskip]
 		\includegraphics[width=\linewidth]{chapter4/Figures/val_exp/exp_setup.pdf}
 	\end{minipage}%
 	\hfill
-	\begin{minipage}[b]{0.45\textwidth}
+	\begin{minipage}[t]{0.45\textwidth}
+		\mbox{}\\[-\baselineskip]
 		\caption[Experimental setup]{Resin mould of an idealized Circle of Willis used to validate experimentally the virtual deployment tool. Subfigure \textbf{a} shows the full mould including the entry and exit points for the catheter and pumps. Subfigure \textbf{b} shows a zoomed-in picture of the aneurysm. Subfigure \textbf{c} shows the middle slice of the rotational CT angiography image including one of the deployed stents.}\label{fig:exp_setup}
 	\end{minipage}
 \end{figure}
@@ -410,11 +416,11 @@ Beyond the scope of the paper on which the chapter is based, we have analyzed th
 \begin{equation*}
 	\text{PI} = \frac{\max(\bar{u}) - \min(\bar{u})}{\text{mean}(\bar{u})}
 \end{equation*}
-\begin{figure}[!htb]
+\begin{figure}[htb]
 	\centering
 	\vspace*{-0.1cm}
 	\includegraphics[width=\textwidth]{chapter5/Figures/Convergence/cut_full_comparison.pdf}
-	\renewcommand{\arraystretch}{1.4}
+	\renewcommand{\arraystretch}{1.35}
 	\setlength{\tabcolsep}{10pt}
 	\begin{tabular}{cccccc}
 		\toprule
@@ -429,8 +435,7 @@ Beyond the scope of the paper on which the chapter is based, we have analyzed th
 	\end{tabular}
 	\caption[Comparison between cut and full stents]{Comparison between the hemodynamics of using a full and a stent reduced to the areas facing the neck and branches. The intra-aneurysmal velocity magnitude $\bar{u}$ (black), the pressure (red) and the Pulsatility Index (PI) are given. Detailed values of the curves are shown in the table below.}\label{fig:fullvscut}
 \end{figure}
-As can be seen, the changes using the reduced model remain small and consistent throughout the different times of a cardiac cycle. The most strongly affected indicator is the PI, with a modest difference of $\approx$\,2\%.
-
+The changes using the reduced model remain small and consistent throughout the different times of a cardiac cycle. The most strongly affected indicator is the PI, with a modest difference of $\approx$\,2\%.
 
 \section{Discussion}
 Flow-diverter stents provide a useful tool for clinicians to treat otherwise untreatable fusiform or wide-necked intracranial aneurysms, saving countless lives. Sadly, in some cases, the devices do not trigger the desired effects that contribute to the healing process,\cite{Maragkos2020, Dandapat2021}. To better understand the root causes of the failed cases, it is important to find statistically relevant predictors for a positive outcome so that manufacturers and neuroradiologists can improve the design and adjust the deployment accordingly. Large-scale computational studies,\cite{Sarrami-Foroushani2021} have been carried out to assess the capabilities of computational fluid dynamics to evaluate the performance of flow diverter stents, laying the groundwork for in-silico trials. These efforts need to be extended towards stented IAs in critical locations, such as the anterior communicating artery or the posterior circulation, where rupture rates are notoriously higher\,\cite{Brown2014}. In these cases, simulations rely on a robust deployment method that can cope with high tortuosities and incorporate the effects of bending on the stent porosity. With these constraints in mind, we developed a fast deployment tool and analyzed it with a strong emphasis on validation.
@@ -443,14 +448,16 @@ The patient case was used to demonstrate the embedding technique and outline som
 
 Lastly, we would like to propose our method as a complementary tool in simulations of flow diverters as porous media\,\cite{Augsburger2011, Abdehkakha2021}, as it provides a continuous, geometry-informed estimation of local porosity. Instead of relying on a constant estimation, this approach can refine existing methods by merging the benefits of fast virtual stenting with optimized porous media computations. This integration could enhance the accuracy and efficiency of simulations, making it a valuable addition to the toolkit for researchers and clinicians.
 
+\subsubsection*{Limitations}
+Although mostly included in the discussion, we highlight here the main limitations to this study. The simulations are based on common choices from literature and lack patient data for imposing boundary conditions. Ultimately, this prevents us from concluding which of the models is the most physiologically accurate. The resolution of the MRA images had some local defects (unclear structure where the flow was in-plane) that sometimes could not be corrected with DSA images, since they were on the contralateral ICA or the BA\@. For that reason the segmentation quality of those vessels is less trustworthy. Futhermore, we could not carry out a study of Murray's law on the segmentation quality, although it might play an important role. This should certainly be studied, since tapering of the vessels is readily present in the brain and it can alter the imposed BCs.\\
+\vspace*{1cm}
 
+\nolinenumbers
 \begin{tcolorbox}[conclusions]
 
 	In this chapter of the thesis, we have introduced a tool to simulate the virtual deployment of flow-diverter stents for the treatment of intracranial aneurysms. The mathematical was motivated by design constraints of the devices and the geometrical properties of the vessel. Subsequently, we have executed the framework on literature examples, in-vitro experiments and lastly a retrospective patient case. The obtained results met well our expectations and provided a good orientation on porosity and metal coverage, avoiding the direct measurements from CT images. To be able to include the devices in fluid dynamics computations, a processing pipeline has been described where anisotropic meshing and level-set splitting are employed to generate high-fidelity unstructured meshes with excluded
 
 \end{tcolorbox}
-
-\nolinenumbers
 
 \newpage
 \bibliographystyle{apsrev}

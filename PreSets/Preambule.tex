@@ -40,14 +40,12 @@
 \usepackage{tikz}
 \newtheorem{theorem}{Theorem}
 \DeclareMathOperator{\tr}{tr}
-
 \usepackage[pdftex,pdfborder={0 0 0},
 	colorlinks=true,
 	linkcolor=black,
 	citecolor=black,
 	pagebackref=false,
-]{hyperref}	% Créera automatiquement les liens internes au PDF
-
+]{hyperref}
 \usepackage{tocbibind}
 \usepackage{geometry}
 \usepackage{fancyhdr}
@@ -106,3 +104,10 @@
         before upper=\textit{\textbf{Conclusions}}\vspace*{0.25cm}, % Space before the title
     }
 }
+\providecommand{\Tau}{\mathrm{T}}
+\providecommand{\varTau}{T}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\newcommand{\snorm}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\argmin}[1]{\mathop{\underset{#1}{\mathrm{argmin}}}\:}
+\newcommand{\argmax}[1]{\mathop{\underset{#1}{\mathrm{argmax}}}\:}

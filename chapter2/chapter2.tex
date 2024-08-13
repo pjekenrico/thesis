@@ -36,12 +36,12 @@ The derivative over the time-dependent domain can be simplified thanks to the Re
 
 \begin{proof}
 	\begin{equation*}
-		\frac{d}{dt}\int_{\Omega (t)}\vec {f}(t, \vec{x}) \,dV = \lim_{\dt\to 0} \frac{1}{\dt} \left(\int_{\Omega (t+\dt, \vec{x})}\vec{f}(t+\dt, \vec{x}) \,dV-\int_{\Omega (t)}\vec{f}(t, \vec{x}) \,dV\right)
+		\frac{d}{dt}\int_{\Omega (t)}\vec {f}(t, \vec{x}) \,dV = \lim_{\Delta t\to 0} \frac{1}{\Delta t} \left(\int_{\Omega (t+\Delta t, \vec{x})}\vec{f}(t+\Delta t, \vec{x}) \,dV-\int_{\Omega (t)}\vec{f}(t, \vec{x}) \,dV\right)
 	\end{equation*}
 	To drag the derivative into the integral it is necessary to reformulate the problem in terms of an initial position $\vec{X}$ and a mapping $\vec{x}=\vec{\phi}(t, \vec{X})$. With the corresponding derivative $\nabla\vec{\phi} = F(t, \vec{X})$ and the Jacobian $J = \det F$, the integral can be rewritten written in terms of the initial domain $\Omega(0)$ and the contents can therefore be merged:
 
 	\begin{align}
-		\frac{d}{dt}\int_{\Omega(t)}\vec{f}\,dV & = \lim_{\dt\to 0} \frac{1}{\dt} \int_{\Omega (0)}\left[(\vec{f}\circ\vec{\phi})J\right](t+\dt, \vec{X}) - \left[(\vec{f}\circ\vec{\phi})J\right](t, \vec{X})\,dV \\
+		\frac{d}{dt}\int_{\Omega(t)}\vec{f}\,dV & = \lim_{\Delta t\to 0} \frac{1}{\Delta t} \int_{\Omega (0)}\left[(\vec{f}\circ\vec{\phi})J\right](t+\Delta t, \vec{X}) - \left[(\vec{f}\circ\vec{\phi})J\right](t, \vec{X})\,dV \\
 		                                        & = \int_{\Omega (0)} \left[J\frac{\partial}{\partial t}(\vec{f}\circ\vec{\phi}) + (\vec{f}\circ\vec{\phi})\frac{\partial J}{\partial t}\right](t, \vec{X})\,dV
 	\end{align}
 	To simplify the derivative of the Jacobian, recall Jacobi's formula.
@@ -195,7 +195,7 @@ In the human body shear rates vary strongly on the location and type of vessel. 
 
 
 \subsection{Rheological Models}
-In practice, blood rheology in and around intracranial aneurysms can be modelled through many mathematical functions (Casson, Carreau-Yasuda, Power-Law, \etc). The flexibility in the modelling comes from the lower bound of shear rates that we consider here, which, as a reminder, lays around 1\,s$^{-1}$. Above this threshold, many complex phenomena, such as the elasticity of blood, are overruled by other flow properties allowing several equations to match a decaying profile. As a consequence, some model parameters, such as the relaxation time, may be greatly overestimated since they have no physical meaning with the data they are fit on. For a better display, \autoref{fig:ranges_visc} shows how the two models that we will discuss further below behave over a spectrum of shear rates and, particularly, over the range of expected values for the simulations. We will also briefly discuss the otherwise omnipresent Newtonian assumption on IA simulations for completeness.
+In practice, blood rheology in and around intracranial aneurysms can be modelled through many mathematical functions (Casson, Carreau-Yasuda, Power-Law, etc). The flexibility in the modelling comes from the lower bound of shear rates that we consider here, which, as a reminder, lays around 1\,s$^{-1}$. Above this threshold, many complex phenomena, such as the elasticity of blood, are overruled by other flow properties allowing several equations to match a decaying profile. As a consequence, some model parameters, such as the relaxation time, may be greatly overestimated since they have no physical meaning with the data they are fit on. For a better display, \autoref{fig:ranges_visc} shows how the two models that we will discuss further below behave over a spectrum of shear rates and, particularly, over the range of expected values for the simulations. We will also briefly discuss the otherwise omnipresent Newtonian assumption on IA simulations for completeness.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/Figures/Plot_Visco/ranges.pdf}
@@ -247,8 +247,8 @@ The parameter $m$ ensures a smooth transition and avoids singularities in the mo
 Arguably, for our flow regime, the Carreau-Yasuda model can replicate the Casson (see \autoref{fig:ranges_visc}). The reason for still considering this new model is the well-documented fitting of its parameters to the Hct and their thorough validation in a recent study\,\cite{Suzuki2021}. There samples of whole blood of 15 IA patients at $310K$ were analyzed and the dependencies shown in \autoref{eqn:casson_fit} were obtained.
 \begin{equation}
 	\begin{split}
-		\mu_C &= (0.073\cdot\text{Hct} + 0.599) \mpas\\
-		\tau_y &= (0.888\cdot\text{Hct} - 23.753) \mpa
+		\mu_C &= (0.073\cdot\text{Hct} + 0.599) \text{mPa}\cdot\text{s}\\
+		\tau_y &= (0.888\cdot\text{Hct} - 23.753) \text{mPa}
 	\end{split}
 	\label{eqn:casson_fit}
 \end{equation}
@@ -475,7 +475,7 @@ Here it can be nicely seen, that the subscales represent in some form the errors
 The expression \,\eqref{eqn:QSS} is the basis for the subscale modelling. The principal idea is finding an appropriate description of the inverse operator $\mathcal{L}^{-1}_{QSS}$ so that $\vec{U}'$ can be computed and re-injected into the large-scale equation, which we have so far, not commented. Since subscale modelling is a complex topic, an own subsection is dedicated to it.
 
 \subsection{Subscale Modelling}\label{chap2:sec2:subsec3}
-When deriving an expression for the subscales, we restrict the domain of each approximation to an element $K\in\Tau_h$. There are many different approaches to deriving the same set of stabilization quantities, \eg\,using Green's functions, Bubble elements and Fourier Transformations. The latter will be used for the demonstration following the main steps from\,\cite{Principe2010} and\,\cite{Codina2002}. On the subscales, we will assume viscosity variations to be negligible, \textit{i.e.}\,$\nabla\mu\approx0$. Additionally, all fluxes across the boundaries of $K$ will be neglected on the subscales. We denote the residuals of the momentum and continuity equations as $\vec{\mathcal{R}}_M$ and $\mathcal{R}_C$, respectively. Then, the problem to solve here is more precisely given by:
+When deriving an expression for the subscales, we restrict the domain of each approximation to an element $K\in\Tau_h$. There are many different approaches to deriving the same set of stabilization quantities, \textit{e.g.}\,using Green's functions, Bubble elements and Fourier Transformations. The latter will be used for the demonstration following the main steps from\,\cite{Principe2010} and\,\cite{Codina2002}. On the subscales, we will assume viscosity variations to be negligible, \textit{i.e.}\,$\nabla\mu\approx0$. Additionally, all fluxes across the boundaries of $K$ will be neglected on the subscales. We denote the residuals of the momentum and continuity equations as $\vec{\mathcal{R}}_M$ and $\mathcal{R}_C$, respectively. Then, the problem to solve here is more precisely given by:
 \begin{equation}
 	\begin{split}
 		\begin{bmatrix}
@@ -538,12 +538,12 @@ The mean value frequency is an unknown, yet existing frequency for which the sub
 Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Principe2010}. The velocity $\vec{u}$ is interpolated to the cell centres from the nodes, where it resides. The illustrative derivation of\,\cite{Principe2010} tackled the problem of subscales for the Convection Diffusion Reaction equations. In other words\,\cite{Bazilevs2007, Masud2011}, these are used in an extended form for the Navier-Stokes Equations as:
 \begin{equation}
 	\begin{split}
-		\tau_M &= \left[\frac{4\rho^2}{\dt^2} + \rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}\\
+		\tau_M &= \left[\frac{4\rho^2}{\Delta t^2} + \rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}\\
 		\tau_C &= \frac{1}{\tau_M\tr{G}}
 	\end{split}
 	\label{eqn:tensor_based_stab}
 \end{equation}
-Consistent with our derivation, this method expresses the stabilization parameter $\tau_C$ as a function of $\tau_M$. The timestep component now found in $\tau_M$ is however an addition that in strict terms speaking should not appear in QSS. Since time components do not directly play a role following that assumption, they should neither appear in the computed approximation of the inverse operator. Unfortunately, both in tests ran for this work as well as in related literature\,\cite{Hsu2010, Hsu2010}, not including the term in the stabilization leads in most engineering applications to convergence issues. Apart from this, we observe that a dominant fraction of the literature related to VMS for the transient Navier-Stokes Problem considers it\,\cite{Whiting2001, Yan2018, Masud2011, Bazilevs2007}. Naturally, including this member in the stabilization comes at a cost. Since the timestep is included with an inverse quadratic exponential, it will dominate the stabilization parameter for, \textit{i.e.}\,for $\dt \ll 1$, $\tau_M \rightarrow \dt / \rho$. Thus, the timestep becomes with this formulation a constraint in two ways: (i) large timesteps may not be sufficient to resolve certain phenomena in the flow and (ii) a too small timestep may force the stabilization to an insufficient level.
+Consistent with our derivation, this method expresses the stabilization parameter $\tau_C$ as a function of $\tau_M$. The timestep component now found in $\tau_M$ is however an addition that in strict terms speaking should not appear in QSS. Since time components do not directly play a role following that assumption, they should neither appear in the computed approximation of the inverse operator. Unfortunately, both in tests ran for this work as well as in related literature\,\cite{Hsu2010, Hsu2010}, not including the term in the stabilization leads in most engineering applications to convergence issues. Apart from this, we observe that a dominant fraction of the literature related to VMS for the transient Navier-Stokes Problem considers it\,\cite{Whiting2001, Yan2018, Masud2011, Bazilevs2007}. Naturally, including this member in the stabilization comes at a cost. Since the timestep is included with an inverse quadratic exponential, it will dominate the stabilization parameter for, \textit{i.e.}\,for $\Delta t \ll 1$, $\tau_M \rightarrow \Delta t / \rho$. Thus, the timestep becomes with this formulation a constraint in two ways: (i) large timesteps may not be sufficient to resolve certain phenomena in the flow and (ii) a too small timestep may force the stabilization to an insufficient level.
 
 Returning to the proposed stabilization by\,\cite{Bazilevs2007}, we likewise find an interpretation of the frequency vector $\vec{k}$ as a mapping from the actual element, denoted by $K$ shape to a reference element $K_{ref}$. The reference element is taken, in the context of $P1$ elements, as to be the unit triangle (see \autoref{fig:transformation}). More precisely and following the description of\,\cite{Bazilevs2007}, let one element $K\in\Omega$ be determined by a set of nodes $\vec{x}(i)$ for which a continuously differentiable bijective mapping $\vec{x} = \vec{x}(\vec{\xi}): K_{ref} \rightarrow K$ is defined.
 \begin{figure}[ht]
@@ -694,7 +694,7 @@ The stabilization considers an element Reynolds number $Re_{UGN}$ to switch betw
 The resulting stabilization however requires special treatment, if the velocities in the computation are or can be zero, as might be the case for instance at the beginning. There, it is recommended to use an average mesh size instead of the velocity projected mesh size (shown in \autoref{eqn:vel_proj_h}).
 \begin{equation*}
 	\begin{split}
-		\tau_M &= \left[\left(\frac{2\rho}{\dt}\right)^2 + \left(\frac{\rho\norm{\vec{u}_h}}{h}\right)^2 + \left(\frac{\mu}{h^2}\right)^2\right]^{-1/2}\\[1em]
+		\tau_M &= \left[\left(\frac{2\rho}{\Delta t}\right)^2 + \left(\frac{\rho\norm{\vec{u}_h}}{h}\right)^2 + \left(\frac{\mu}{h^2}\right)^2\right]^{-1/2}\\[1em]
 		\tau_C &= \rho(1_{\{Re_{UGN} < 3\}}Re_{UGN}/3 + 1_{\{Re_{UGN} \leq 3|\}}) \norm{\vec{u}_h}h
 	\end{split}
 \end{equation*}
@@ -807,27 +807,27 @@ For that reason, solving the problem can be seen as solving any system of the sh
 \end{equation*}
 
 \subsubsection*{Time Integration}
-A classic scheme used in hemodynamics simulations is the Backward Differentiation Formula (BDF). It is a per-definition implicit time scheme, \textit{i.e.}\,it uses a right-hand side that is defined at the unknown timestep $t^{n+1}$ ($t^{n} = n\dt$). The order of convergence of the scheme depends on the number of terms that are considered of $u$ to build the derivative. For a simple first-order BDF1 scheme, also simply called the Backwards Euler method, develop a Taylor series around $u^{n}$ considering the information known at $u^{n+1}$:
+A classic scheme used in hemodynamics simulations is the Backward Differentiation Formula (BDF). It is a per-definition implicit time scheme, \textit{i.e.}\,it uses a right-hand side that is defined at the unknown timestep $t^{n+1}$ ($t^{n} = n\Delta t$). The order of convergence of the scheme depends on the number of terms that are considered of $u$ to build the derivative. For a simple first-order BDF1 scheme, also simply called the Backwards Euler method, develop a Taylor series around $u^{n}$ considering the information known at $u^{n+1}$:
 \begin{equation*}
 	\begin{split}
-		u^{n} = u^{n+1} - \partial_t u^{n+1}\dt + \mathcal{O}(\dt^2)\\[1em]
-		\partial_t u^{n+1} = \frac{u^{n+1} - u^{n}}{\dt} + \mathcal{O}(\dt)
+		u^{n} = u^{n+1} - \partial_t u^{n+1}\Delta t + \mathcal{O}(\Delta t^2)\\[1em]
+		\partial_t u^{n+1} = \frac{u^{n+1} - u^{n}}{\Delta t} + \mathcal{O}(\Delta t)
 	\end{split}
 \end{equation*}
 The obtained integration scheme is implicit and A-stable, or in simpler terms, it enjoys special robustness regarding the time step size. Non-A-stable methods, as all explicit integration rules, are more tightly bound to smaller timesteps since the integration can otherwise diverge. If another development is added using two prior timesteps, the convergence order can be raised to two while maintaining A-stability. For that subtract 4 times \autoref{eqn:+2dt} from \autoref{eqn:+dt}.
 \begin{equation}
-	u^{n-1} = u^{n+1} - 2\partial_t u^{n+1}\dt + 2\partial_{tt} u^{n+1}\dt^2 + \mathcal{O}(\dt^3)
+	u^{n-1} = u^{n+1} - 2\partial_t u^{n+1}\Delta t + 2\partial_{tt} u^{n+1}\Delta t^2 + \mathcal{O}(\Delta t^3)
 	\label{eqn:+dt}
 \end{equation}
 \begin{equation}
-	u^{n} = u^{n+1} - \partial_t u^{n+1}\dt + \frac{1}{2}\partial_{tt} u^{n+1}\dt^2 + \mathcal{O}(\dt^3)
+	u^{n} = u^{n+1} - \partial_t u^{n+1}\Delta t + \frac{1}{2}\partial_{tt} u^{n+1}\Delta t^2 + \mathcal{O}(\Delta t^3)
 	\label{eqn:+2dt}
 \end{equation}
 \begin{equation}
-	u^{n-1} - 4u^{n} = -3u^{n+1} + 2\partial_t u^{n+1}\dt + \mathcal{O}(\dt^3)
+	u^{n-1} - 4u^{n} = -3u^{n+1} + 2\partial_t u^{n+1}\Delta t + \mathcal{O}(\Delta t^3)
 \end{equation}
 \begin{equation}
-	\partial_t u^{n+1} = \frac{3u^{n+1} - 4u^{n} + u^{n-1}}{2\dt} + \mathcal{O}(\dt^2)
+	\partial_t u^{n+1} = \frac{3u^{n+1} - 4u^{n} + u^{n-1}}{2\Delta t} + \mathcal{O}(\Delta t^2)
 	\label{eq:bdf2}
 \end{equation}
 BDF2 (\autoref{eq:bdf2}) has some major benefits that motivate its choice in this work. First, its computational cost is minimal, involving only the storage of one additional history variable and a few addition and multiplication operations. As a second-order method, it maintains an overall small diffusive effect over the fluid dynamics. Lastly, it also benefits the solution of the linear system since it enforces the diagonal dominance on the $A_{\vec{u}, \vec{w}}$ block over BDF1 for instance.
@@ -873,20 +873,20 @@ Where we assumed $\vec{u}$ to have a Lipschitz-continuous gradient $\nabla \vec{
 
 \paragraph{Semi-implicit time integration} is an equally present choice in the field of computed hemodynamics. The principle is simple here, using a previous timestep velocity in the integration.
 \begin{equation*}
-	(\vec{u}^{n+1}\cdot\nabla)\vec{u}^{n+1} = (\vec{u}^{n}\cdot\nabla)\vec{u}^{n+1} + \mathcal{O}(\dt)
+	(\vec{u}^{n+1}\cdot\nabla)\vec{u}^{n+1} = (\vec{u}^{n}\cdot\nabla)\vec{u}^{n+1} + \mathcal{O}(\Delta t)
 \end{equation*}
 The basic semi-implicit timesteps in theory introduce an error that scales linearly with the size of timesteps. In practice, it does however not greatly affect the convergence behaviour of the overall systems, even when the time derivatives are of higher order\,\cite{Valen-Sendstad2014}. Nevertheless, it is possible to improve the scheme from a convergence-order point of view. For this purpose, the linearization includes the information of a previous timestep.
 \begin{equation}
 	\begin{split}
-		u^{n} &= u^{n+1} + \frac{\partial u(t^{n+1})}{\partial t}\dt + \mathcal{O}(\dt^2)\\
-		u^{n-1} &= u^{n+1} + \frac{\partial u(t^{n+1})}{\partial t}2\dt + \mathcal{O}(\dt^2)\\
-		u^{n+1} &= 2 u^{n} - u^{n-1} + \mathcal{O}(\dt^2)\\
+		u^{n} &= u^{n+1} + \frac{\partial u(t^{n+1})}{\partial t}\Delta t + \mathcal{O}(\Delta t^2)\\
+		u^{n-1} &= u^{n+1} + \frac{\partial u(t^{n+1})}{\partial t}2\Delta t + \mathcal{O}(\Delta t^2)\\
+		u^{n+1} &= 2 u^{n} - u^{n-1} + \mathcal{O}(\Delta t^2)\\
 	\end{split}
 	\label{eqn:newton_gregory}
 \end{equation}
 The Newton-Gregory backward polynomial (\autoref{eqn:newton_gregory}), if used, is usually matched by an equal-order BDF scheme, since both require the same quantity of information and yield a proportional convergence order. When inspecting \autoref{eqn:newton_gregory}, it can be seen that the sought velocity is extrapolated, giving a double weight to the current velocity and balancing it out with the past. This carries a benefit to any integration in which the velocity evolves continuously in smooth steps, but can become fatal if the ratio between the temporal and spatial stepping is too unbalanced considering the flow velocities. This is formally expressed through the Courant-Friedrichs-Lewy (CFL) number defined in \autoref{eq:clf}. Numerical instabilities, particularly in fully explicit schemes, appear when the CFL number surpasses a threshold value (usually 1).
 \begin{equation}
-	\text{CFL} = \norm{\vec{u}} \frac{\dt}{h}
+	\text{CFL} = \norm{\vec{u}} \frac{\Delta t}{h}
 	\label{eq:clf}
 \end{equation}
 
@@ -999,9 +999,9 @@ This configuration creates regions of accelerating and decelerating flow, shear 
 \subsubsection*{Case setup}
 The FDA Nozzle has been experimentally tested by 3 teams participating in the computational challenge by Stewart \textit{et\,al.}\,\cite{Stewart2012}. The used liquid was a blood-like, Newtonian solution containing water, glycerin, and sodium iodide with a density of 1056\,kg/m$^3$. The viscosity of the fluid is reported to be 3.5\,mPa$\cdot$\,s, which resembles the plateau viscosity of blood used in many rheology models. In the numerical scenario, a constant parabolic inflow profile is applied, whose maximum velocity is set to match the following volumetric flow:
 \begin{equation*}
-	\dot{Q}_{\Rey500} = 5.21\cdot10^{3}\,\text{mm}^3/\text{s},\qquad \dot{Q}_{\Rey2000} = 2.08\cdot10^{4}\,\text{mm}^3/\text{s}
+	\dot{Q}_{\text{Re}500} = 5.21\cdot10^{3}\,\text{mm}^3/\text{s},\qquad \dot{Q}_{\text{Re}2000} = 2.08\cdot10^{4}\,\text{mm}^3/\text{s}
 \end{equation*}
-The walls of the nozzle are set to no-slip conditions and the outlet is rendered traction-free. The nozzle has been generated for an axial extension of 168\,mm ranging from $z$\,=\,-88\,mm to $z$\,=\,80\,mm. The interior of the nozzle was meshed with unstructured tetrahedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the nozzle, elements are generated with an edge length of 0.2\,mm and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The time discretization is done using BDF2 with regular timesteps at \dt\,=\,0.5\,ms and \dt\,=\,0.1\,ms for Re\,=\,500 and Re\,=\,2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
+The walls of the nozzle are set to no-slip conditions and the outlet is rendered traction-free. The nozzle has been generated for an axial extension of 168\,mm ranging from $z$\,=\,-88\,mm to $z$\,=\,80\,mm. The interior of the nozzle was meshed with unstructured tetrahedra with a varying anisotropy in the axial direction, resulting in 3.8M elements. In the first three sections of the nozzle, elements are generated with an edge length of 0.2\,mm and an aspect ratio of 4 in the axial direction. In the converging section, the elements are naturally aligned with the narrowing walls. After the expansion, the aspect ratio is dropped to 2 due to the possibly more chaotic flow. The time discretization is done using BDF2 with regular timesteps at $\Delta t$\,=\,0.5\,ms and $\Delta t$\,=\,0.1\,ms for Re\,=\,500 and Re\,=\,2000, respectively, to obtain approximately unit CFL numbers. Linearized Newton iterations are run between each timestep until the $L_2$ initial residual norm drops below $10^{-6}$. The residual norm of the linear solver was set to the same value. The subsequent simulations were carried out using the newly proposed stabilization (\autoref{eqn:new_metric}).
 
 \subsubsection*{Results}
 Per-timestep convergence was obtained in the case of Re\,=\,500 within 4 iterations, while for Re\,=\,2000 the convergence depended on the stage of the simulations. Before attaining the steady-state profile shown in the lower half of \autoref{fig:FDA_Velocity_Re2000}, the simulation passed two phases. The first is given by the progressive advancement of the jet in the nozzle (as seen on the upper half of \autoref{fig:FDA_Velocity_Re2000}). Convergence speed there is above 2, while only 5 iterations are required to meet the set tolerance (as seen in \autoref{fig:nonlin_conv}).
@@ -1087,6 +1087,6 @@ For Reynolds numbers of 2000 and above there has been a large effort from turbul
 	In this chapter, three main topics have been described and discussed: (i) the derivation of the equations dominating the flow of blood in human arteries, (ii) the numerical frameworks to approximate them and lastly (iii) two illustrative validation cases on which newly proposed methods were examined. The numerical experiments yielded satisfactory results giving credit to the introduced tensor metric, but more extensive verification and convergence tests should be carried out to confirm its validity. Further, the experiments have served a didactic purpose during the course of the project, since thanks to them some optimal schemes and modelling options were identified, saving some time in setting up the framework for patient-specific simulations. These introduce namely other, but equally complex challenges to tackle.
 \end{tcolorbox}
 
-
+\newpage
 \bibliographystyle{apsrev}
 {\footnotesize\bibliography{chapter2/Biblio}}
