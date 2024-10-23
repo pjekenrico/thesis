@@ -16,7 +16,7 @@
 \end{tcolorbox}
 
 \section{The Incompressible Navier-Stokes Equations}
-The Navier-Stokes equations stem, as mentioned before from the conservation of mass and momentum in an open and bounded domain $\Omega \subset \mathbb {R}^{n}$ in which no material enters or leaves. For the former quantity, the conservation can be expressed through:
+The Navier-Stokes equations stem, as mentioned before from the conservation of mass and momentum in an open and bounded domain $\Omega \subset \mathbb {R}^{n}$ (as shown in \autoref{fig:reynolds_transport_theorem}) in which no material enters or leaves. For the former quantity, the conservation can be expressed through:
 \begin{equation*}
 	\frac{d}{dt} \int_{\Omega(t)} \rho dV = 0,
 \end{equation*}
@@ -36,12 +36,11 @@ The derivative over the time-dependent domain can be simplified thanks to the Re
 	\begin{equation*}
 		\frac{d}{dt}\int_{\Omega (t)}\vec {f}(t, \vec{x}) \,dV = \lim_{\Delta t\to 0} \frac{1}{\Delta t} \left(\int_{\Omega (t+\Delta t, \vec{x})}\vec{f}(t+\Delta t, \vec{x}) \,dV-\int_{\Omega (t)}\vec{f}(t, \vec{x}) \,dV\right)
 	\end{equation*}
-	To drag the derivative into the integral it is necessary to reformulate the problem in terms of an initial position $\vec{X}$ and a mapping $\vec{x}=\vec{\phi}(t, \vec{X})$. With the corresponding derivative $\nabla\vec{\phi} = F(t, \vec{X})$ and the Jacobian $J = \det F$, the integral can be rewritten written in terms of the initial domain $\Omega(0)$ and the contents can therefore be merged:
-
-	\begin{align}
+	To drag the derivative into the integral it is necessary to reformulate the problem in terms of an initial position $\vec{X}$ and a mapping $\vec{x}=\vec{\phi}(t, \vec{X})$. With the corresponding derivative $\nabla\vec{\phi} = F(t, \vec{X})$ and the Jacobian $J = \det F$, the integral can be rewritten in terms of the initial domain $\Omega(0)$ and the contents can therefore be merged. With the square brackets we group functions, \textit{i.e.} for two functions $g$ and $f$ it holds that $[fg](x) = f(x)g(x)$.
+	\begin{align*}
 		\frac{d}{dt}\int_{\Omega(t)}\vec{f}\,dV & = \lim_{\Delta t\to 0} \frac{1}{\Delta t} \int_{\Omega (0)}\left[(\vec{f}\circ\vec{\phi})J\right](t+\Delta t, \vec{X}) - \left[(\vec{f}\circ\vec{\phi})J\right](t, \vec{X})\,dV \\
 		                                        & = \int_{\Omega (0)} \left[J\frac{\partial}{\partial t}(\vec{f}\circ\vec{\phi}) + (\vec{f}\circ\vec{\phi})\frac{\partial J}{\partial t}\right](t, \vec{X})\,dV
-	\end{align}
+	\end{align*}
 	To simplify the derivative of the Jacobian, recall Jacobi's formula.
 	\begin{equation*}
 		\frac{\partial J}{\partial t} = J\tr\left(F^{-1}\frac{\partial F}{\partial t}\right)= J\tr\left(\frac{\partial}{\partial\vec{x}}\frac{\partial \vec{\phi}}{\partial t}\right) = J(\nabla\cdot\vec{u})
@@ -72,7 +71,7 @@ The present integral form can be reduced to a differential form with a short pro
 	\partial_{t}\rho + \nabla\cdot(\rho\vec{u}) = 0
 	\label{eq:massconservation}
 \end{equation}
-In the same manner, the conservation of momentum is derived from preserving the volume-specific momentum $\rho\vec{u}$, which is modulated by body forces, such as gravity, and stresses. The latter results from the interactions between the fluid particles and are expressed through the stress tensor $\sigma$. The conservation of momentum is then:
+In the same manner, the conservation of momentum is derived from preserving the volume-specific momentum $\rho\vec{u}$, which is modulated by body forces, such as gravity $\vec{g}$, and stresses. The latter results from the interactions between the fluid particles and are expressed through the stress tensor $\sigma$. The conservation of momentum is then:
 \begin{equation}
 	\partial_t (\rho\vec{u}) + \nabla\cdot(\rho\vec{u}\otimes\vec{u}) = \nabla\cdot\sigma + \rho\vec{g}
 	\label{eq:momentumconservation_conservative}
@@ -95,11 +94,14 @@ The stress tensor $\sigma$ is taken to be the:\\
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{c|c|c}
+		$\rho$    & Density           & kg/m$^3$   \\
+		$\vec{u}$ & Velocity          & m/s        \\
+		$\vec{g}$ & Gravity           & m/s$^2$    \\
 		$p$       & Pressure          & Pa         \\
 		$\lambda$ & Lamé parameter    & Pa$\cdot$s \\
 		$\mu$     & Dynamic viscosity & Pa$\cdot$s \\
 	\end{tabular}
-	\caption{Physical quantities of stress tensor.}
+	\caption{Physical quantities in the Navier-Stokes Equations.}
 \end{table}
 As will be more thoroughly discussed in the coming section, blood is incompressible at physiological pressures and temperatures, implying $\rho=const$. Therefore, one may proceed with the simplification of the momentum and mass equations:
 \begin{equation}
@@ -269,12 +271,13 @@ To properly understand the content of the following section, it is important to 
 	\end{split}
 \end{equation*}
 Unless stated otherwise, the components of the continuous velocity $\vec{u}$ and the test functions $\vec{v}$ will be elements of $H^1(\Omega)$. With slight abuse of notation, we will write that vectorial variables will be part of a function space, meaning that each of the components is an element of that function space. The pressure $p$ and the test functions linked to the mass conservation $q$ will be elements of $L^2(\Omega)$. Note that when a fixed velocity is imposed on $\vec{u}$ at the boundary, the test functions $\vec{v}$ are forced to be zero on the same nodes. Therefore, the test function space is also sometimes referred to as $H^1_0(\Omega)$. In our particular case, we will use subsets of $H^1(\Omega)$ and $L^2(\Omega)$, $V_h$ and $Q_h$ to approximate the solutions on a valid partition $\Tau_h$ of $\Omega$. The subset consists of piecewise linear functions and therefore they are defined as follows:
-\begin{equation*}
+\begin{equation}
 	\begin{split}
 		V_h = {\{v_h \in H^1(\Omega) \mid v_{k|K} \in \mathbb{P}_1, \forall K\in \Tau_h\}}&\\
 		Q_h = {\{q_h \in L^2(\Omega) \mid q_{k|K} \in \mathbb{P}_1, \forall K\in \Tau_h\}}&\\
 	\end{split}
-\end{equation*}
+	\label{eqn:lin_spaces}
+\end{equation}
 
 \subsection{Stability Issues}
 One common question for all those starting to work with FEM discretizations of the Navier-Stokes equations is why most schemes include some sort of stabilization. The reason is twofold involving (i) first the compatibilities between the interpolations of velocity and pressures and secondly (ii) the effects of convection-dominated flows. These two problems are thoroughly discussed in many prominent publications, such as\,\cite{Bazilevs2007, Brooks1982}.
@@ -299,15 +302,15 @@ Since the Stokes problem admits any constant being added to the pressure, it is 
 The weak formulation of the problem is obtained by multiplying the equations with discrete test functions $\vec{v}_h$ and $q_h$ and integrating over $\Omega$. The domain itself has a valid partition $\Tau_h$ into triangular elements $K$ on which piecewise linear functions are defined following the classical $\mathbb{P}_1$-Lagrange elements.
 \begin{equation}
 	\begin{split}
-		\int_\Omega \vec{v}_h\cdot\nabla p_h - \vec{v}_h\cdot\left[\nabla\cdot2\mu\varepsilon(\vec{u}_h)\right] \,dV = \int_\Omega \vec{f}\,dV, \quad \vec{v}_h \in V_h&\\
+		\int_\Omega \vec{v}_h\cdot\nabla p_h - \vec{v}_h\cdot\left[\nabla\cdot2\mu\varepsilon(\vec{u}_h)\right] \,dV = \int_\Omega \vec{v}_h\cdot\vec{f}\,dV, \quad \vec{v}_h \in V_h&\\
 		\int_\Omega q_h\nabla \cdot \vec{u}_h\,dV = 0, \quad q_h \in Q_h&\\
 	\end{split}\label{eqn:weak_stokes}
 \end{equation}
 Using the Gau\ss-divergence theorem and the homogeneous boundary conditions, this problem can be rewritten into:
 \begin{equation}
 	\begin{split}
-		\int_\Omega 2\mu\varepsilon(\vec{u}):\varepsilon(\vec{v})\,dV - \int_\Omega p\nabla\cdot\vec{v}\,dV &= \int_\Omega \vec{f}\cdot\vec{v}\,dV\\
-		\int_\Omega q\nabla \cdot \vec{u}\,dV &= 0
+		\int_\Omega 2\mu\varepsilon(\vec{v}_h):\varepsilon(\vec{u}_h)\,dV - \int_\Omega p_h\nabla\cdot\vec{v}_h\,dV &= \int_\Omega \vec{v}_h\cdot\vec{f}\,dV\\
+		\int_\Omega q_h\nabla \cdot \vec{u}_h\,dV &= 0
 	\end{split}\label{eqn:weak_stokes2}
 \end{equation}
 
@@ -399,7 +402,7 @@ An interesting note is, that these schemes can also be interpreted as central di
 Thus, a first-order upwinding scheme can be seen as a central scheme with an added diffusion term of the order $\varepsilon$ to satisfy the coercivity constraint. Luckily, the VMS-type stabilization that we will employ later also tackles this problem. While the compatibility constraint is alleviated through a relaxation of the mass balance, the convection phenomena are handled by a resulting shift in the test function. This shift, as will be seen later, is proportional to the convective velocity and acts similarly to a flux delimiter.
 
 \subsection{Variational Multiscale Method}
-One strategy that allows for a stable approximation of the solution of the Navier-Stokes equations for same-order Lagrange elements under the presence of large convection terms is the Variational MultiScale method (VMS). VMS-type discretizations have in common that they split the solution into a resolved large scale $\vec{U}_h$ and a subgrid contribution $\vec{U}'$. While the large scales are solved, the subgrid scales are usually modelled, incorporating a stabilizing effect into the system\,\cite{Codina2002, Hughes2017}. This idea shares many similarities with other turbulence models, such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes. It can be shown, that the stabilization technique that is going to be introduced is closely related to an LES approach\,\cite{Hughes2017}. As hinted before, there are many VMS formulations for the Navier-Stokes equations, each of which stems from different assumptions made during the derivation. To put into context the VMS-type stabilization that is used here, we will derive the method from the most general point of view and discuss the key assumptions at the moment when they are introduced. For this purpose, the variables $\vec{u}$ and $p$ are bundled into a single vector $\vec{U} = {[\vec{u}, p]}^T$, as well as the respective test functions of the momentum and mass equations $\vec{V} = {[\vec{w}, q]}^T$. We also introduce the Navier-Stokes operator $\mathcal{L}$ and the right-hand side $\vec{F}$ in a notation consistent with\,\cite{Codina2002}.
+One strategy that allows for a stable approximation of the solution of the Navier-Stokes equations for same-order Lagrange elements under the presence of large convection terms is the Variational MultiScale method (VMS). VMS-type discretizations have in common that they split the solution into resolved large scales $\vec{U}_h = {[\vec{u}_h, p_h]}^T$ and a subgrid contribution $\vec{U}'= {[\vec{u}', p']}^T$. While the large scales are solved, the subgrid scales are usually modelled, incorporating a stabilizing effect into the system\,\cite{Codina2002, Hughes2017}. This idea shares many similarities with other turbulence models, such as the Large Eddy Simulations (LES) or the Reynolds Averaged Navier-Stokes. It can be shown, that the stabilization technique that is going to be introduced is closely related to an LES approach\,\cite{Hughes2017}. As hinted before, there are many VMS formulations for the Navier-Stokes equations, each of which stems from different assumptions made during the derivation. To put into context the VMS-type stabilization that is used here, we will derive the method from the most general point of view and discuss the key assumptions at the moment when they are introduced. To further agilitate the derivation we introduce the test functions of the momentum and mass equations $\vec{V} = {[\vec{w}, q]}^T$, the Navier-Stokes operator $\mathcal{L}$ and the right-hand side $\vec{F}$ in a notation consistent with\,\cite{Codina2002}.
 \begin{equation*}
 	\mathcal{L}(\vec{u}_{conv}, \vec{U}) = \begin{bmatrix}
 		\rho\partial_t \vec{u} + \rho(\vec{u}_{conv}\cdot\nabla)\vec{u} + \nabla p - \nabla\cdot2\mu\varepsilon(\vec{u}) \\
@@ -433,7 +436,7 @@ VMS-type methods, as described above, now introduce a decomposition of the solut
 		\vec{V} &= \vec{V}_h + \vec{V}', \qquad \vec{V} \in W_0 =: \left\{ \vec{w}, q \in H^1(\Omega) \mid \vec{w} = \vec{0}\,\text{on}\,\Gamma_{d} \right\}
 	\end{split}
 \end{equation*}
-The functions $\vec{U}_h$ and $\vec{V}_h$ belong to the finite-dimensional subspaces $W_h$ and $W_{h,0}$ of $W$ and $W_0$ that are described by classic linear elements on a triangulated mesh. The spaces of the subscales $W'$, $W_0'$ are therefore infinitely dimensional and complete the large scale space in $W$ and $W_0$.
+The functions $\vec{U}_h$ and $\vec{V}_h$ belong to the finite-dimensional subspaces $W_h$ and $W_{h,0}$ of $W$ and $W_0$ that are described by classic linear elements on a triangulated mesh, like in \autoref{eqn:lin_spaces}, respecting the essential boundary conditions. The spaces of the subscales $W'$, $W_0'$ are therefore infinitely dimensional and complete the large scale space in $W$ and $W_0$.
 \begin{equation*}
 	W' = {W} \backslash {W_h}, \quad W_0' = W_0 \backslash {W}_{h,0}
 \end{equation*}
@@ -557,15 +560,15 @@ Then the tensor $G$ is defined by \autoref{eqn:def_G}, which by construction is 
 \end{equation}
 In a series of implementations with the unit triangle as a reference, we have encountered some difficulties that have led to a more in-depth analysis of the problem. At all points, we keep in mind that the definition of the methodology might have been misunderstood, regardless of the large number of publications giving similar descriptions on how to implement it. To show the key issues, take a simple 2D example:
 \begin{align}
-	\vec{x}                                     & = \vec{x}^1 + ( \vec{x}^2 - \vec{x}^1)\xi + ( \vec{x}^3 - \vec{x}^1)\eta                                                                     \\[1em]
+	\vec{x}                                     & = \vec{x}^1 + ( \vec{x}^2 - \vec{x}^1)\xi + ( \vec{x}^3 - \vec{x}^1)\eta                                                                       \\[1em]
 	\frac{\partial \vec{x}}{\partial \vec{\xi}} & = \begin{pmatrix}
-		x^2 - x^1 & y^2 - y^1 \\
-		x^3 - x^1 & y^3 - y^1
-	\end{pmatrix}                                                                                                                 \\[1em]
+		                                                x^2 - x^1 & y^2 - y^1 \\
+		                                                x^3 - x^1 & y^3 - y^1
+	                                                \end{pmatrix}                                                                                                                        \\[1em]
 	\frac{\partial \vec{\xi}}{\partial \vec{x}} & = \frac{\partial \vec{x}}{\partial \vec{\xi}}^{-1} = \left|\frac{\partial \vec{x}}{\partial \vec{\xi}}\right|^{-1}\begin{pmatrix}
-		y^3 - y^1 & y^1 - y^2 \\[1em]
-		x^1 - x^3 & x^2 - x^1
-	\end{pmatrix}
+		                                                                                                                                                                y^3 - y^1 & y^1 - y^2 \\[1em]
+		                                                                                                                                                                x^1 - x^3 & x^2 - x^1
+	                                                                                                                                                                \end{pmatrix}
 \end{align}
 Take a unit triangle stretched by a mesh size $h$ to be the element $K$.
 \begin{equation*}
@@ -709,8 +712,8 @@ Consider first the conventional Galerkin terms. The integrals are split using pa
 \begin{equation*}
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \left[\mathcal{L}(\vec{U}_h) - \vec{F}\right] \,dV &= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right]\,dV +\\ &+ \int_{\Omega}\vec{w}_h\cdot \left[\nabla p_h - \nabla\cdot2\mu\varepsilon(\vec{u}_h)\right]\,dV + \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV\\
-		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ & + \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) \,dV + \\ &+ \oint_{\partial \Omega} \vec{n}\cdot \left(pI - 2\mu\varepsilon(\vec{u}_h)\right)\cdot\vec{w}_h \,dA + \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV\\
-		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ &+ \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) \,dV +\\ &+ \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV+ \int_{\Gamma_n} \vec{t}_{n}\cdot\vec{w}_h \,dA
+		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ & + \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{u}_h):\varepsilon(\vec{w}_h) \,dV + \\ &+ \oint_{\partial \Omega} \vec{n}\cdot \left(pI - 2\mu\varepsilon(\vec{u}_h)\right)\cdot\vec{w}_h \,dA + \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV\\
+		&= \int_{\Omega} \vec{w}_h\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\ &+ \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{u}_h):\varepsilon(\vec{w}_h) \,dV +\\ &+ \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV+ \int_{\Gamma_n} \vec{t}_{n}\cdot\vec{w}_h \,dA
 	\end{split}
 \end{equation*}
 The stabilization terms are treated similarly except for the convective term, which is also transformed. This facilitates introducing the long expressions for $\vec{U}'$ later.
@@ -734,20 +737,26 @@ Since there is a regularity in the expressions above with the ones found in the 
 	\begin{split}
 		\int_{\Omega} \vec{V}_h \cdot \mathcal{L}(\vec{U}_h + \vec{U}') \,dV
 		&= \int_{\Omega} \vec{w}_{supg}\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h - \vec{g}\right] \,dV +\\
-		&+ \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) \,dV +\\
+		&+ \int_{\Omega} -p_h\nabla\cdot\vec{w}_h + \mu\varepsilon(\vec{u}_h):\varepsilon(\vec{w}_h) \,dV +\\
 		&+ \int_{\Omega} q\nabla\cdot\vec{u}_h \,dV+ \int_{\Gamma_n} \vec{t}_{n}\cdot\vec{w}_h \,dA\\
 		&+ \int_{\Omega} \tau_M \rho(\vec{u}_h\cdot\nabla)\vec{w}_h\cdot \nabla p_h\,dV +\\
 		&+\int_{\Omega} \tau_M \left[\rho\partial_t \vec{u}_h + \rho(\vec{u}_{h}\cdot\nabla)\vec{u}_h + \nabla p_h - \rho \vec{g}\right] \cdot \nabla q_h\,dV +\\
 		&+ \int_{\Omega} -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV\\
 	\end{split}
 \end{equation*}
-The SUPG test function $\vec{w}_{supg}$ has a didactic visual interpretation, as shown for a simple 1D example in \autoref{fig:wsupg}. The functions contain an upwind component, \textit{i.e.}\,a tilt in the weight towards the provenience of the velocity that scales with the gradient in the velocity direction and stabilization parameter $\tau_M$. In other words, $\vec{w}_{supg}$ acts like an adaptive Upwind scheme that reacts to the flow conditions providing enough diffusion in flow direction to maintain stability, while retaining accuracy where the convection is minor. This method is likewise exploited in other element pairings, such as $P2$-$P1$, although no incompatibility between velocity and pressure shape functions is present there. The pressure-velocity compatibility in the presented VMS-type method comes from the term $\tau_M \nabla p_h \cdot \nabla q_h$. The reason why this term adds control over the pressure can be best seen by considering the linear system that follows from the discrete system. Take $A$ as to be a matrix composed by the blocks $A_{\vec{u}, \vec{w}}$, $A_{p, \vec{w}}$, $A_{\vec{u}, q}$, $A_{p, q}$. The subscripts of the block denote the functions that appear in it.\\
+The SUPG test function $\vec{w}_{supg}$ has a didactic visual interpretation, as shown for a simple 1D example in \autoref{fig:wsupg}. The functions contain an upwind component, \textit{i.e.}\,a tilt in the weight towards the provenience of the velocity that scales with the gradient in the velocity direction and stabilization parameter $\tau_M$. In other words, $\vec{w}_{supg}$ acts like an adaptive Upwind scheme that reacts to the flow conditions providing enough diffusion in flow direction to maintain stability, while retaining accuracy where the convection is minor. This natural consequence from the subscales was proposed before the development of VMS and was later reintriduced as a specific variant of VMS on the Navier-Stokes problem\,\cite{Brooks1982}. This method is likewise exploited in other element pairings, such as $P2$-$P1$, although no incompatibility between velocity and pressure shape functions is present there.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{chapter2/Figures/SUPG/supg.pdf}
+	\caption[SUPG test functions]{Scheme of a $\vec{w}_{supg}$ test function for a 1D case. The contribution for the Galerkin function $\vec{w}_h$ is a piecewise-constant offset tilted towards the velocity's origin.}\label{fig:wsupg}
+\end{figure}
+The pressure-velocity compatibility in the presented VMS-type method comes from the term $\tau_M \nabla p_h \cdot \nabla q_h$. The reason why this term adds control over the pressure can be best seen by considering the linear system that follows from the discrete system. Take $A$ as to be a matrix composed by the blocks $A_{\vec{u}, \vec{w}}$, $A_{p, \vec{w}}$, $A_{\vec{u}, q}$, $A_{p, q}$. The subscripts of the block denote the functions that appear in it.\\
 
 \noindent $A_{\vec{u}, \vec{w}}$ contains the discretization of:
 \begin{equation*}
 	\begin{split}
 		&\int_{\Omega} \vec{w}_{supg}\cdot\rho\left[\partial_t \vec{u}_h + (\vec{u}_h\cdot\nabla)\vec{u}_h \right] - \tau_M\rho(\vec{u}_h\cdot\nabla)\vec{w}_h\cdot\rho\vec{g}\,dV +\\
-		+&\int_{\Omega} \mu\varepsilon(\vec{w}_h):\varepsilon(\vec{u}_h) -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV\\
+		+&\int_{\Omega} \mu\varepsilon(\vec{u}_h):\varepsilon(\vec{w}_h) -\tau_C\nabla\cdot\vec{u}_h\nabla\cdot\vec{w}_h\,dV\\
 	\end{split}
 \end{equation*}
 
@@ -785,13 +794,8 @@ To complete the terms consider $B_{\vec{w}}$ and $B_q$ as to the the right-hand 
 		\int_{\Omega} \tau_M \rho \vec{g} \cdot \nabla q_h\,dV
 	\end{split}
 \end{equation*}
-In a plain Galerkin discretization the square block matrix $A_{p, q}$ is indeed 0 everywhere, requiring $A_{p, \vec{w}}$ to provide the needed information to compute $p$. This, as discussed before, is not generally the case in the same order Lagrange elements. The stabilization however ads non-zero contributions to $A_{p, q}$ that make it SPD. The latter quality can be easily seen since the matrix is diagonally dominant with strictly positive main diagonal entries.
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.7\linewidth]{chapter2/Figures/SUPG/supg.pdf}
-	\caption[SUPG test functions]{Scheme of a $\vec{w}_{supg}$ test function for a 1D case. The contribution for the Galerkin function $\vec{w}_h$ is a piecewise-constant offset tilted towards the velocity's origin.}
-	\label{fig:wsupg}
-\end{figure}
+In a plain Galerkin discretization the square block matrix $A_{p, q}$ is indeed 0 everywhere, requiring $A_{p, \vec{w}}$ to provide the needed information to compute $p$. This, as discussed before, is not generally the case in the same order Lagrange elements. The stabilization however ads non-zero contributions to $A_{p, q}$ that make it SPD\@. The latter quality can be easily seen since the matrix is diagonally dominant with strictly positive main diagonal entries.
+
 The last remaining component to discuss is the time discretization of the problem. For this, a small demonstration will be done in the following subsection considering different schemes for the time derivative, as well as methods for treating the non-linearities of the problem.
 
 \subsection{Time Discretization}
@@ -891,7 +895,7 @@ The Newton-Gregory backward polynomial (\autoref{eqn:newton_gregory}), if used, 
 \paragraph{Non-linerities in viscosity and stabilization parameters} have so far not been the focus of the discussion, due to the prominence of the convective term. Both terms can be dealt with similarly, however, sub-increments for the viscosity model will be neglected in this work due to their overall slow dynamics compared to the core of the flow.
 
 \section{Validation Cases}
-In the previous section, a VMS-type method has been derived using common models from literature and a new proposal for stabilization parameters. Further, well-known time integration schemes and treatment options for the non-linearities have been shown and briefly discussed concerning their stability, convergence and implementation. To display the theoretical thoughts, two test cases have been examined during the course of this work. The simulation framework bases on an in-house C++ library that provides mesh handling tools, a message parsing interface parallelization and a series of FEM solvers, including one for the incompressible Navier-Stokes equations\,\cite{Hachem2010, Coupez2013}. In the frame of this thesis, the latter was extended by the second-order BDF scheme, the Newton-Gregory extrapolation, as well as the complete computation of the tensor-based stabilizations (\autoref{eqn:new_metric}, \autoref{eqn:tensor_based_stab}).
+In the previous section, a VMS-type method has been derived using common models from literature and a new proposal for stabilization parameters. Further, well-known time integration schemes and treatment options for the non-linearities have been shown and briefly discussed concerning their stability, convergence and implementation. This exercise has helped us understanding the principles of VMS and proposed some extensions to the existing code library. The referenced C++ library, called \textit{CimLib}, is a Message Parsing-parallelized framework containing mesh distribution algorithms, preprocessing tools and several FEM-based solvers. The solver on which we have based the added content, namely the second-order BDF scheme, the Newton-Gregory extrapolation, and the complete computation of the tensor-based stabilizations (\autoref{eqn:new_metric}, \autoref{eqn:tensor_based_stab}), approximates the incompressible Navier-Stokes Equations with a VMS-type stabilization as described in\,\cite{Hachem2010, Coupez2013}.
 
 \subsection{Flow Past a Cylinder in 2D}
 The first case corresponds to the well-known flow past a cylinder in 2D. This test case has been thoroughly examined by the community and permits a good comparison and verification of the used methods. The case was set up following the indications of Main \textit{et\,al.}\,\cite{Main2018}, who implemented the case to validate a new shifted boundary method. The domain is given in \autoref{fig:two_figures} including the sizes of the cylinder and the edges in unit scale.
@@ -909,9 +913,9 @@ The first case corresponds to the well-known flow past a cylinder in 2D. This te
 		\end{minipage}
 	\end{align*}
 	\vspace*{-1.3cm}
-	\caption[Geometry and mesh for 2D flow past a cylinder]{Case setup of the 2D flow past a cylinder. On the left is a sketch of the computational domain following the dimensions given in\,\cite{Main2018}. On the right is a view of the used mesh.}\label{fig:two_figures}
+	\caption[Geometry and mesh for 2D flow past a cylinder]{Case setup of the 2D flow past a cylinder. On the left is a sketch of the symmetric domain following the dimensions given in\,\cite{Main2018}. On the right is a view of the used mesh.}\label{fig:two_figures}
 \end{figure}
-In this case, a uniform velocity is imposed at the left inlet, while the upper and lower boundaries enforce a zero normal velocity and no traction. The outlet on the right is set as a traction-free boundary and the cylinder ($d$\,=\,1) as a no-slip patch. The case is run for two well-studied Re numbers, 100 and 300. Both cause a regular formation of vortices in the wake of the cylinder, however, for the latter Re, these are more developed (see \autoref{fig:scovazzi_pressure} for a better image of the phenomenon at Re\,=\,300). The simulations have been run for a unit Newtonian viscosity $\mu$ and a unit density $\rho$. The control over the Re was thus exerted through the inflow velocity $u_\infty$.
+In this case, a uniform velocity is imposed at the left inlet, while the upper and lower boundaries enforce a zero normal velocity and no traction. The outlet on the right is set as a traction-free boundary and the cylinder ($d$\,=\,1) as a no-slip patch. The case is run for two well-studied Re numbers, 100 and 300. Both cause a regular formation of vortices in the wake of the cylinder, however, for the latter Re, these are more developed (see \autoref{fig:scovazzi_pressure} for a better image of the phenomenon at Re\,=\,300). The simulations have been run for a unit Newtonian viscosity $\mu$ and a unit density $\rho$. The control over the Re number was exerted through the inflow velocity $u_\infty$.
 \begin{equation*}
 	\text{Re}\,=\,\frac{\rho u_\infty d}{\mu}
 \end{equation*}
@@ -961,16 +965,16 @@ where $f$ is the frequency of vortex shedding that in our case has been computed
 	\begin{tabular}{c | c c c c c}
 		Re\,=\,100 & Proposed stab. & Tezduyar \textit{et\,al.} & Ref.\,\cite{Tezduyar2000} & Ref.\,\cite{Rajani2009} & Ref.\,\cite{Main2018} \\
 		\midrule
-		$c_D$      & 1.391          & 1.402          & 1.417 - 1.422             & 1.335                   & 1.35                  \\
-		$c_L$      & 2e-4           & 1e-3           & -                         & -                       & -                     \\
-		St         & 0.168          & 0.167          & 0.167 - 0.169             & 0.157                   & 0.167                 \\
-		           &                &                &                           &                         &                       \\[-1em]
+		$c_D$      & 1.391          & 1.402                     & 1.417 - 1.422             & 1.335                   & 1.35                  \\
+		$|c_L|$      & 2e-4           & 1e-3                      & -                         & -                       & -                     \\
+		St         & 0.168          & 0.167                     & 0.167 - 0.169             & 0.157                   & 0.167                 \\
+		           &                &                           &                           &                         &                       \\[-1em]
 		\midrule
 		Re\,=\,300 & Proposed stab. & Tezduyar \textit{et\,al.} & Ref.\,\cite{Rajani2009}   & Ref.\,\cite{mittal1997} & Ref.\,\cite{Main2018} \\
 		\midrule
-		$c_D$      & 1.414          & 1.415          & 1.367                     & 1.38                    & 1.38                  \\
-		$c_L$      & 1e-3           & 8e-4           & -                         & -                       & -                     \\
-		St         & 0.214          & 0.213          & 0.215                     & 0.213                   & 0.211                 \\
+		$c_D$      & 1.414          & 1.415                     & 1.367                     & 1.38                    & 1.38                  \\
+		$|c_L|$      & 1e-3           & 8e-4                      & -                         & -                       & -                     \\
+		St         & 0.214          & 0.213                     & 0.215                     & 0.213                   & 0.211                 \\
 	\end{tabular}
 	\caption[Drag, lift and St of the cylinder at Re\,=\,100 and Re\,=\,300]{Table summarizing the computed drag, lift and Strouhal numbers for Re\,=\,100 and Re\,=\,300. The two first columns contain values obtained from the simulations using the principal component metric tensor (\autoref{eqn:new_metric}) and the previously implemented stabilization from\,\cite{Tezduyar2000}. On the right are reference values from the literature.}\label{tab:DragLiftStrouhal}
 \end{table}

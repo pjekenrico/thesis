@@ -182,7 +182,7 @@ By clearing \autoref{eq:clearing_stent} we obtain the expressions for $l_w$ and 
 \end{table}
 
 \subsection{Deployment}
-\subsubsection*{Cylindric Deployment}
+\subsubsection*{Cylindrical Deployment}
 When deploying a stent in a cylinder of variable diameter, the wires evolve, as previously described with the angle $\alpha$ given by \autoref{eq:winding_angle}. Over an infinitesimal section of the stent, the angular progression in $\theta$ (see \autoref{fig:StentAnalysis}), describing the angle in the radial direction of the wires, is constant.
 \begin{equation*}
 	r\,d\theta = dl\sin{\alpha} = \frac{2\pi r}{wN_w}dl
@@ -272,8 +272,8 @@ To extend the obtained results to arbitrary geometries, we will generate a smoot
 	\item A smooth hull $r(t,\theta)$ is generated around the centerline to represent the vessel wall. For further computations, it needs to be decided if the minimal radius or a mean radius per section is used. Only minimal differences are expected between the two approaches since commonly the vessel wall will tend to become more regular under the influence of a fully expanded FD\,\cite{Bouillot2016}.
 	\item A distal position $t_0$ is chosen by the user from which to start deploying the device. The wirelength is discretized into small segments of fixed length $dl$ which will be swept over the entire length of the stent.
 	\item Starting from $t_0$, \autoref{eqn:compute_K} is solved. With it, $t_1$ is computed as $dl / K$ and the process is repeated on the next segments until the full length of the wires $l_w$ is reached. On the way, all values for $t$ and $K$ are stored and fed into an interpolator.
-	\item The angular progression of the wires of the cylindric stent $\theta_{cyl}$ are computed with \autoref{eqn:theta_cyl}, with half of the wires evolving in positive angular direction and the others in negative. The angle offset $\theta_0$ is set to $i2\pi/N_w$ for each wire $i$.
-	\item The cylindric wires $\theta_{cyl}$ are mapped onto the curved space with the transfer function\,\ref{eqn:rad_displ4} for each $\theta_{cyl}$. It contracts and expands the angular space over the stent surface to map a regular winding to the one intended by \autoref{eqn:winding2}. It can be solved numerically using Newton's method.
+	\item The angular progression of the wires of the cylindrical stent $\theta_{cyl}$ are computed with \autoref{eqn:theta_cyl}, with half of the wires evolving in positive angular direction and the others in negative. The angle offset $\theta_0$ is set to $i2\pi/N_w$ for each wire $i$.
+	\item The cylindrical wires $\theta_{cyl}$ are mapped onto the curved space with the transfer function\,\ref{eqn:rad_displ4} for each $\theta_{cyl}$. It contracts and expands the angular space over the stent surface to map a regular winding to the one intended by \autoref{eqn:winding2}. It can be solved numerically using Newton's method.
 	\begin{equation}
 		f(\theta, \theta_{cyl}) = \theta_{cyl}\frac{r}{r_e} -  \int_{0}^{\theta} \sqrt{1 -{\frac{ {\left(1 - \frac{\vec{R}}{R^2}\cdot \vec{r}\right)}^2}{K^2}}}\,d\theta
 		\label{eqn:rad_displ4}
@@ -332,7 +332,7 @@ The boundary layer size increases from $h_{BL,\min}$ with a growing distance to 
 The validation cases are split into three groups, (i) literature examples, (ii) in-vitro experiments and finally (iii) a real patient case that is then further analyzed in the last chapter.
 
 \subsection{Literature Examples}
-The developed virtual stenting can be evaluated by comparing the experiment results of Shapiro \textit{et\,al.}\,\cite{Shapiro2014a} on the Pipeline Embolization Device (PED\@; Covidien, Irvine, California). A 3.25\,$\times$\,20\,mm PED is bent into a $180^\circ$ toroidal segment over 10\,mm of its length. In the process, the wires remain unconstrained and thus expand to their nominal diameter. The continuous values of our model together with the angles corresponding to the MCR of the same experiment are shown on the left of \autoref{fig:angle_comparison}. The variance of the measurements is given by the range of the image over which the MCR values were extracted. The right plot presents the results of a similar deployment done by Bouillot \textit{et\,al.}\,\cite{Bouillot2016} on a constrained toroidal segment of a full 3.75\,$\times$\,16\,mm PED\@. The variance corresponds to the variability of angles extracted at the same angular locations. Note that the cylindric deployment shown in the initial sections of this chapter is likewise compared to values from Shapiro \textit{et\,al.}\,\cite{Shapiro2014a}.
+The developed virtual stenting can be evaluated by comparing the experiment results of Shapiro \textit{et\,al.}\,\cite{Shapiro2014a} on the Pipeline Embolization Device (PED\@; Covidien, Irvine, California). A 3.25\,$\times$\,20\,mm PED is bent into a $180^\circ$ toroidal segment over 10\,mm of its length. In the process, the wires remain unconstrained and thus expand to their nominal diameter. The continuous values of our model together with the angles corresponding to the MCR of the same experiment are shown on the left of \autoref{fig:angle_comparison}. The variance of the measurements is given by the range of the image over which the MCR values were extracted. The right plot presents the results of a similar deployment done by Bouillot \textit{et\,al.}\,\cite{Bouillot2016} on a constrained toroidal segment of a full 3.75\,$\times$\,16\,mm PED\@. The variance corresponds to the variability of angles extracted at the same angular locations. Note that the cylindrical deployment shown in the initial sections of this chapter is likewise compared to values from Shapiro \textit{et\,al.}\,\cite{Shapiro2014a}.
 \begin{figure}[htb]
 	\centering
 	\vspace*{-0.75cm}
