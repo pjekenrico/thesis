@@ -462,7 +462,7 @@ Codina \textit{et\,al.}\,\cite{Codina2002, Codina2004, Codina2008} studied $\vec
 	\mathcal{L}(\vec{U}_h + \vec{U}') - \vec{F} = 0
 	\label{eq:asgs}
 \end{equation}
-\autoref{eq:asgs} is a special case of \autoref{eq:oss}, called Algebraic Subgrid Scales (ASGS), in which the computation of the subgrid scales is simpler. \autoref{eq:asgs} can be rearranged to separate the scales and introduce the residual $\mathcal{R}$.
+\autoref{eq:asgs} is a special case of \autoref{eq:oss}, called Algebraic Subgrid Scales (ASGS), in which the computation of the subgrid scales is simpler. Equation\,\ref{eq:asgs} can be rearranged to separate the scales and introduce the residual $\mathcal{R}$.
 \begin{equation*}
 	\mathcal{L}(\vec{U}') = \vec{F} - \mathcal{L}(\vec{U}_h) = \mathcal{R}(\vec{U}_h)
 \end{equation*}
@@ -520,13 +520,13 @@ Here we also included the fact that $i\vec{k} \cdot \hat{\vec{u}} = \hat{\mathca
 \end{equation*}
 Contrary to what one might expect without previously knowing the derivation of the subscale model, the approximation for $\hat{p}$ is not simply reinjected into the momentum equation\,\cite{Codina2002}. This is mostly argued due to simplicity, as keeping the continuity residual $\mathcal{R}_C$ in the velocity subscales would result in a non-SPD stabilization tensor (since there is no contribution of $\vec{\mathcal{R}}_M$ on the pressure stabilization either). Instead, the velocity subscales are given by:
 \begin{equation*}
-	\hat{\vec{u}}  = \left[i\rho(\vec{u}_{h}\cdot \vec{k}) + \mu(\vec{k}\cdot\vec{k})\right]^{-1}{\hat{\vec{\mathcal{R}}}}_M
+	\hat{\vec{u}}  = {\left[{i\rho(\vec{u}_{h}\cdot \vec{k}) + \mu(\vec{k}\cdot\vec{k})}\right]}^{-1}{\hat{\vec{\mathcal{R}}}}_M
 \end{equation*}
 In\,\cite{Codina2002}, it is shown that by neglecting the boundary contributions (as done above) and applying consequently Plancherel's Theorem as well as the Mean Value Theorem, the stabilization parameters might be identified by the absolute values of the factors in front of the residuals and a mean value frequency ($\vec{k}_0$):
 \begin{equation*}
 	\begin{split}
-		\vec{u}' &\approx \left[\rho^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2(\vec{k}_0\cdot\vec{k}_0)^2\right]^{-1/2}\vec{\mathcal{R}}_M := \tau_M\vec{\mathcal{R}}_M\\
-		p' &\approx (\vec{k}_0\cdot\vec{k}_0)^{-1} \left[\rho^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2(\vec{k}_0\cdot\vec{k}_0)^2\right]^{1/2}\mathcal{R}_C := \tau_C\mathcal{R}_C
+		\vec{u}' &\approx {\left[{{\rho^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2({\vec{k}}_0\cdot\vec{k}_0)^2}}\right]}^{-1/2}\vec{\mathcal{R}}_M := \tau_M\vec{\mathcal{R}}_M\\
+		p' &\approx (\vec{k}_0\cdot\vec{k}_0)^{-1} {\left[{{\rho}^2(\vec{u}_{h}\cdot \vec{k}_0)^2 + \mu^2({\vec{k}}_0\cdot\vec{k}_0)^2}\right]}^{1/2}\mathcal{R}_C := \tau_C\mathcal{R}_C
 	\end{split}
 \end{equation*}
 Through this derivation, the subscales have been modelled as piece-wise constant functions that act on each element individually. Therefore, they can be interpreted as bubble functions enriching the space of the large scales with their modelled effects.
@@ -534,12 +534,12 @@ Through this derivation, the subscales have been modelled as piece-wise constant
 \subsubsection*{Reference Element Stabilization Tensor}
 The mean value frequency is an unknown, yet existing frequency for which the subscales are ideally solved. It is intuitive to think that it is related to some quantity proportional to a derivative operator. These are proportional to the inverse mesh size along the direction of the gradient. In\,\cite{Codina2002}, $\vec{k}_0$ is given as a product of the inverse mesh size measured by the perimeter of the element and a mesh independent factor. In other studies\,\cite{Principe2010}, the derivation is done right away from a reference domain, in this case, the unit-reference element, obtaining an expression of the shape:
 \begin{equation*}
-	\tau_M = \left[\rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}
+	\tau_M ={ \left[\rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]}^{-1/2}
 \end{equation*}
 Where $G$ is the ``metric tensor related to the isoparametric mapping''\cite{Principe2010}. The velocity $\vec{u}$ is interpolated to the cell centres from the nodes, where it resides. The illustrative derivation of\,\cite{Principe2010} tackled the problem of subscales for the Convection Diffusion Reaction equations. In other words\,\cite{Bazilevs2007, Masud2011}, these are used in an extended form for the Navier-Stokes Equations as:
 \begin{equation}
 	\begin{split}
-		\tau_M &= \left[\frac{4\rho^2}{\Delta t^2} + \rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]^{-1/2}\\
+		\tau_M &= {\left[\frac{4\rho^2}{\Delta t^2} + \rho^2 \vec{u}^{T}_{h} G\vec{u}_{h} + \mu^2G:G\right]}^{-1/2}\\
 		\tau_C &= \frac{1}{\tau_M\tr{G}}
 	\end{split}
 	\label{eqn:tensor_based_stab}
@@ -656,7 +656,7 @@ This bears the advantage, that the ellipsoid retains the stretching and orientat
 In other words, if we look for the axis of the largest variance of a set of points $X$, we need to solve the optimization given by \autoref{eqn:PCA}. Luckily, we can avoid this potentially expensive computation by considering for a short instance the Singular Value Decomposition:
 \begin{equation*}
 	\begin{split}
-		X^TX = {(U\Sigma V^T)}^T U\Sigma V^T = V^T\Sigma^T U^T U\Sigma V^T = V \Sigma^2 V^T
+		X^TX = {(U{\Sigma}V^T)}^T U\Sigma V^T = V^T\Sigma^T U^T U\Sigma V^T = V \Sigma^2 V^T
 		\label{eq:svd}
 	\end{split}
 \end{equation*}
